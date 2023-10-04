@@ -1,0 +1,17 @@
+既に git 管理しているファイルをあえて無視したい
+https://qiita.com/usamik26/items/56d0d3ba7a1300625f92
+
+
+Gitでリモートブランチを削除する方法
+https://www-creators.com/archives/1062
+
+
+Pythonで実行中のファイルの場所（パス）を取得する
+https://note.nkmk.me/python-script-file-path/
+
+
+空のディレクトリを維持するための、 .gitkeep と .gitignore の使い分け
+https://qiita.com/ndxbn/items/f124d2b183b60cb074e2
+
+git で .gitkeep は残したいけど、他のファイルは Ignore したい場合（ディレクトリだけ残したい場合）
+https://chidakiyo.hatenablog.com/entry/gitignore-tips1
