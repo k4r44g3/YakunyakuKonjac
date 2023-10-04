@@ -1,0 +1,21 @@
+# AWSの設定
+aws configure
+
+# 仮想環境作成
+cd Desktop
+python -m venv venv_YakunyakuKonjac
+cd venv_YakunyakuKonjac
+Scripts\activate.bat
+
+# インストール
+pip install PySimpleGUI
+pip install pyautogui
+pip install awscli
+pip install boto3
+pip freeze > requirements.txt
+
+# gitからクローン
+git clone https://github.com/pppp-987/YakunyakuKonjac.git
+cd YakunyakuKonjac
+
+# インタプリタを .\Scripts\python.exeに設定
