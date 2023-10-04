@@ -12,3 +12,5 @@ class UserSetting:
 
     # スクリーンショット撮影範囲(left,top,width,height)
     ss_region = (ss_top_left_x, ss_top_left_y, ss_width, ss_height)
+
+    ocr_soft = "Amazon Textract" # OCRソフト
