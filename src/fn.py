@@ -7,11 +7,19 @@ class Fn:
     """自作関数クラス
     全体に適応される"""
 
+    def get_filename():
+        """ファイル名用現在時刻の取得
+        Returns:
+            str : 現在時刻("yyyymmdd_hhmmss_fff")
+        """
+        now = datetime.datetime.now()  # 現在の時刻を取得
+        return now.strftime("%Y%m%d_%H%M%S_%f")[:-3]  # 時刻の表示（ミリ秒三桁まで）
+
     def log(*text):
         """ログの表示
             デバッグモードでのみ動作する
         Args:
-            text (all): 出力文字
+            text (*str): 出力文字
         """
         if SystemSetting.debug:  # デバッグモードなら
             print(text)
@@ -20,7 +28,7 @@ class Fn:
         """ログと現在時刻の表示
             デバッグモードでのみ動作する
         Args:
-            text (all): 出力文字
+            text (*str): 出力文字
         """
         if SystemSetting.debug:  # デバッグモードなら
             now = datetime.datetime.now()  # 現在の時刻を取得
@@ -30,7 +38,7 @@ class Fn:
         """値が少数かどうかを返す
 
         Args:
-            value (string): 確認する値
+            value (str): 確認する値
 
         Returns:
             bool: 値が少数ならTrue
@@ -46,7 +54,7 @@ class Fn:
         """値が整数かどうかを返す
 
         Args:
-            value (string): 確認する値
+            value (str): 確認する値
 
         Returns:
             bool: 値が整数ならTrue
