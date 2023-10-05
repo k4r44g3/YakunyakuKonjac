@@ -19,3 +19,6 @@ https://chidakiyo.hatenablog.com/entry/gitignore-tips1
 
 Python pillowモジュールrectangleで透明度を設定する
 https://teratail.com/questions/132373
+
+バッチファイルの作成
+https://www.javadrive.jp/command/bat/
