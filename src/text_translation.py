@@ -5,7 +5,7 @@ from user_setting import UserSetting  # ユーザーが変更可能の設定ク�
 from system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 
 
-class Translation:
+class TextTranslation:
     """翻訳機能関連のクラス"""
 
     def get_text_after_list(text_before_list):

@@ -31,6 +31,6 @@ class ScreenshotCapture:
         file_extension = SystemSetting.image_file_extension  # 拡張子
         ss_file_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
 
-        screenshot_image.save(ss_file_path)  # スクショ画像保存
+        screenshot_image.save(ss_file_path)  # 翻訳前画像保存
 
-        return ss_file_path  # スクショファイルパス
+        return ss_file_path  # 翻訳前画像ファイルパス

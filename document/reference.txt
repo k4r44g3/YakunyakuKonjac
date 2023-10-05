@@ -15,3 +15,7 @@ https://qiita.com/ndxbn/items/f124d2b183b60cb074e2
 
 git で .gitkeep は残したいけど、他のファイルは Ignore したい場合（ディレクトリだけ残したい場合）
 https://chidakiyo.hatenablog.com/entry/gitignore-tips1
+
+
+Python pillowモジュールrectangleで透明度を設定する
+https://teratail.com/questions/132373
