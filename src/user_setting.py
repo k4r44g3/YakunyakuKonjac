@@ -13,11 +13,10 @@ class UserSetting:
     # スクリーンショット撮影範囲(left,top,width,height)
     ss_region = (ss_top_left_x, ss_top_left_y, ss_width, ss_height)
 
-    ocr_soft = "Amazon Textract" # OCRソフト
+    ocr_soft = "Amazon Textract"  # OCRソフト
 
-    translation_soft = "Amazon Translate" # 翻訳ソフト
+    translation_soft = "Amazon Translate"  # 翻訳ソフト
 
-    source_language_code = "en" # 翻訳元言語
+    source_language_code = "en"  # 翻訳元言語
 
-    target_language_code = "ja" # 翻訳先言語
-    
+    target_language_code = "ja"  # 翻訳先言語

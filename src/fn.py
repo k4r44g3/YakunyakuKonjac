@@ -14,7 +14,7 @@ class Fn:
         """
         now = datetime.datetime.now()  # 現在の時刻を取得
         now_file_name = now.strftime("%Y%m%d_%H%M%S_%f")[:-3]  # 時刻の表示（ミリ秒三桁まで）
-        return now_file_name # ファイル名用現在時刻
+        return now_file_name  # ファイル名用現在時刻
 
     def log(*text):
         """ログの表示
