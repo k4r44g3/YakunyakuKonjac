@@ -10,22 +10,21 @@ class SystemSetting:
     image_file_extension = ".png"
 
     # 翻訳前画像保存先設定
-    image_before_filepath = os.path.dirname(__file__) + "/history/image_before/"  # ファイルパス
+    image_before_directory_path = os.path.dirname(__file__) + "/history/image_before/"  # ディレクトリパス
 
     # 翻訳後画像保存先設定
-    image_after_filepath = os.path.dirname(__file__) + "/history/image_after/"  # ファイルパス
+    image_after_directory_path = os.path.dirname(__file__) + "/history/image_after/"  # ディレクトリパス
 
     # 翻訳前テキスト保存先設定
-    text_before_filepath = os.path.dirname(__file__) + "/history/text_before/"  # ファイルパス
+    text_before_directory_path = os.path.dirname(__file__) + "/history/text_before/"  # ディレクトリパス
 
     # 翻訳後テキスト保存先設定
-    text_after_filepath = os.path.dirname(__file__) + "/history/text_after/"  # ファイルパス
-
+    text_after_directory_path = os.path.dirname(__file__) + "/history/text_after/"  # ディレクトリパス
 
     # オプションファイル保存先設定
-    option_filename = "option.json"  # ファイル名
-    option_filepath = os.path.dirname(__file__) + "/"  # ファイルパス このファイルのディレクトリの絶対パス
-    option_filepath += option_filename  # オプションファイルパス更新
+    option_file_name = "option.json"  # ファイル名
+    option_directory_path = os.path.dirname(__file__) + "/"  # ディレクトリパス
+    option_file_path = option_directory_path + option_file_name  # オプションファイルパス
 
     # アプリケーションの名前
     app_name = "ヤクミャクコンジャック"

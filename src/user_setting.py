@@ -14,3 +14,10 @@ class UserSetting:
     ss_region = (ss_top_left_x, ss_top_left_y, ss_width, ss_height)
 
     ocr_soft = "Amazon Textract" # OCRソフト
+
+    translation_soft = "Amazon Translate" # 翻訳ソフト
+
+    source_language_code = "en" # 翻訳元言語
+
+    target_language_code = "ja" # 翻訳先言語
+    

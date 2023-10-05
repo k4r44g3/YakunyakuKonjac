@@ -17,32 +17,33 @@ def get_screenshot():
     """
     ss_region = UserSetting.ss_region  # SS撮影範囲
 
-    screenshot = pyautogui.screenshot(region=ss_region)  # スクショ撮影
+    screenshot_image = pyautogui.screenshot(region=ss_region)  # スクショ撮影
 
-    return screenshot  # スクショ画像
+    return screenshot_image  # スクショ画像
 
 
-def save_screenshot(screenshot, filename):
+def save_screenshot(screenshot_image, file_name):
     """スクリーンショットの保存
     Args:
-        screenshot(Image): スクショ画像
-        filename(src): ファイル名(現在日時)
+        screenshot_image(Image): スクショ画像
+        file_name(src): ファイル名(現在日時)
     Returns:
-        ss_filepath(str): スクショ画像のファイルパス
+        ss_file_path(str): スクショ画像のファイルパス
     """
-    filepath = SystemSetting.image_before_filepath  # 翻訳前画像パス
+    directory_path = SystemSetting.image_before_directory_path  # 翻訳前画像のディレクトリパス
     file_extension = SystemSetting.image_file_extension  # 拡張子
-    screenshot.save(filepath + filename + file_extension)  # スクショ画像保存
+    ss_file_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
 
-    ss_filepath = filepath + filename + file_extension  # ファイルパス(絶対参照)
-    return ss_filepath
+    screenshot_image.save(ss_file_path)  # スクショ画像保存
+
+    return ss_file_path  # スクショファイルパス
 
 
-def get_text_data_dict(ss_filepath):
+def get_text_data_dict(ss_file_path):
     """画像からテキスト情報を取得
     Args:
         textract(Textract): Textractサービスクライアント
-        ss_filepath(src): スクショ画像のファイルパス
+        ss_file_path(src): スクショ画像のファイルパス
     Returns:
         text_data_dict(List[text_list,region_list]): テキスト情報リスト
             - text_list(List[text(str)]) : テキスト内容のリスト
@@ -57,10 +58,10 @@ def get_text_data_dict(ss_filepath):
         text_list = []  # テキスト内容のリスト
         region_list = []  # テキスト範囲のリスト
 
-        image_in = Image.open(ss_filepath)  # 入力画像のファイルを読み込む
+        image_in = Image.open(ss_file_path)  # 入力画像のファイルを読み込む
         w, h = image_in.size  # 画像サイズを取得
 
-        with open(ss_filepath, "rb") as file:  # 画像ファイルを開く
+        with open(ss_file_path, "rb") as file:  # 画像ファイルを開く
             result = textract.detect_document_text(Document={"Bytes": file.read()})  # 文字列を検出
 
         for block in result["Blocks"]:  # 検出されたブロックを順番に処理
@@ -83,39 +84,81 @@ def get_text_data_dict(ss_filepath):
     return text_data_list  # テキスト情報のリスト
 
 
-def save_text_before(text_before_list, filename):
-    """翻訳前テキストの保存
+def save_text_before(text_before_list, file_name):
+    """翻訳前テキストをファイルに保存
     Args:
         text_before_list(list[text_before:str]): 翻訳前テキストリスト
-        filename(src): ファイル名(現在日時)
+        file_name(src): ファイル名(現在日時)
     """
-    filepath = SystemSetting.text_before_filepath  # 翻訳前テキストパス
+    directory_path = SystemSetting.text_before_directory_path  # 翻訳前テキストのディレクトリパス
     file_extension = ".txt"  # 拡張子
-    text_filepath = filepath + filename + file_extension  # ファイルパス(絶対参照)
+    file_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
+    Fn.save_text_file(text_before_list, file_path)  # テキストファイルへの保存
 
-    file = open(text_filepath, "w",encoding="utf-8")  # 新規書き込みでテキストファイルを開く
-    # file = open(text_filepath, "w",)  # 新規書き込みでテキストファイルを開く
-    for text_before in text_before_list:  # 翻訳前テキストで走査
-        print(text_before)
-        file.write(text_before + "\n")  # ファイルに書き込む
-    file.close()  # ファイルを閉じる
+
+def get_text_after_list(text_before_list):
+    """翻訳後テキストの取得
+
+    Args:
+        text_before_list(List[text_before]) : 翻訳前テキストのリスト
+            - text_before(str) : 翻訳前テキスト
+    Returns:
+        text_after_list(List[text_after]) : 翻訳後テキストのリスト
+            - text_after(str) : 翻訳後テキスト
+    """
+
+    translation_soft = UserSetting.translation_soft  # 翻訳ソフト
+    source_language_code = UserSetting.source_language_code  # 翻訳前言語
+    target_language_code = UserSetting.target_language_code  # 翻訳後言語
+
+    # OCRソフトによって分岐
+    if translation_soft == "Amazon Translate":  # 翻訳ソフトがAmazonなら
+        translate = boto3.client("translate")  # Translate サービスクライアントを作成
+        text_after_list = []  # 翻訳語テキストのリスト作成
+
+        for text_before in text_before_list:  # 翻訳前テキストで走査
+            # 英語から日本語に翻訳
+            result = translate.translate_text(
+                Text=text_before,  # 翻訳テキスト
+                SourceLanguageCode=source_language_code,  # 翻訳前言語
+                TargetLanguageCode=target_language_code,  # 翻訳後言語
+            )
+            text_after_list.append(result["TranslatedText"])  # 翻訳後テキストのリスト作成
+    return text_after_list  # 翻訳後テキストのリスト
+
+
+def save_text_after(text_after_list, file_name):
+    """翻訳後テキストをファイルに保存
+    Args:
+        text_after_list(list[text_after:str]): 翻訳後テキストリスト
+        file_name(src): ファイル名(現在日時)
+    """
+    directory_path = SystemSetting.text_after_directory_path  # 翻訳後テキストのディレクトリパス
+    file_extension = ".txt"  # 拡張子
+    file_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
+    Fn.save_text_file(text_after_list, file_path)  # テキストファイルへの保存
+
 
 
 Fn.time_log("システム開始")
-filename = Fn.get_filename()  # ファイル名(現在日時)
-screenshot = get_screenshot()  # スクショ撮影
-ss_filepath = save_screenshot(screenshot, filename)  # スクショ保存
+file_name = Fn.get_now_file_name()  # ファイル名(現在日時)
+
+screenshot_image = get_screenshot()  # スクショ撮影
+ss_file_path = save_screenshot(screenshot_image, file_name)  # スクショ保存
 Fn.time_log("スクショ撮影")
 
 
-ss_filepath = os.path.dirname(__file__) + "/test/image_before.jpg"  # テスト用
+ss_file_path = os.path.dirname(__file__) + "/test/image_before.jpg"  # テスト用
 
 
-text_data_dict = get_text_data_dict(ss_filepath)  # 画像からテキスト情報を取得
+text_data_dict = get_text_data_dict(ss_file_path)  # 画像からテキスト情報を取得
 text_before_list = text_data_dict["text_list"]  # 翻訳前テキストリストの取得
 region_list = text_data_dict["region_list"]  # テキスト範囲のリストの取得
+save_text_before(text_before_list, file_name)  # 翻訳前テキストをファイルに保存
 
-save_text_before(text_before_list, filename)  # 翻訳前テキスト保存
-Fn.time_log("テキスト読み取り")
+Fn.time_log("文字取得")
 
-# translate = boto3.client("translate")  # Translate サービスクライアントを作成
+text_after_list = get_text_after_list(text_before_list)  # 翻訳後テキストリストの取得
+save_text_after(text_after_list, file_name)  # 翻訳後テキストをファイルに保存
+
+Fn.time_log("翻訳")
