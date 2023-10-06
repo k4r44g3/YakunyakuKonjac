@@ -6,7 +6,7 @@ from system_setting import SystemSetting  # ユーザーが変更不可能の設
 
 
 class TextTranslation:
-    """翻訳機能関連のクラス"""
+    """テキスト翻訳機能関連のクラス"""
 
     def get_text_after_list(text_before_list):
         """翻訳後テキストの取得

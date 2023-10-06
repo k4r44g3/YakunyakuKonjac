@@ -23,7 +23,12 @@ class Fn:
             text (*str): 出力文字
         """
         if SystemSetting.debug:  # デバッグモードなら
-            print(text)
+            if len(text) == 1:
+                # 要素数が1なら文字列にする
+                print(text[0])
+            else:
+                # 要素数が2以上ならタプルにする
+                print(text)
 
     def time_log(*text):
         """ログと現在時刻の表示
@@ -33,7 +38,12 @@ class Fn:
         """
         if SystemSetting.debug:  # デバッグモードなら
             now = datetime.datetime.now()  # 現在の時刻を取得
-            print(text, now.strftime("%H:%M:%S.%f")[:-3])  # 時刻の表示（ミリ秒三桁まで）
+            if len(text) == 1:
+                # 要素数が1なら文字列にする
+                print(text[0], now.strftime("%H:%M:%S.%f")[:-3])  # 時刻の表示（ミリ秒三桁まで）
+            else:
+                # 要素数が2以上ならタプルにする
+                print(text, now.strftime("%H:%M:%S.%f")[:-3])  # 時刻の表示（ミリ秒三桁まで）
 
     def isfloat(value):
         """値が少数かどうかを返す

@@ -20,3 +20,12 @@ class UserSetting:
     source_language_code = "en"  # 翻訳元言語
 
     target_language_code = "ja"  # 翻訳先言語
+
+    # ウィンドウ位置・サイズ
+    window_left_x = 0
+    window_top_y = 0
+    window_width = 300
+    window_height = 200
+
+    # 翻訳間隔
+    translation_interval_sec = 20
