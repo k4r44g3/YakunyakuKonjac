@@ -13,6 +13,7 @@ pip install pyautogui
 pip install awscli
 pip install boto3
 pip install black
+pip install opencv-python
 pip freeze > requirements.txt
 
 # gitからクローン

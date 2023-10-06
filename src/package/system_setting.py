@@ -9,7 +9,7 @@ class SystemSetting:
     # 画像ファイル形式
     image_file_extension = ".png"
 
-    package_path = os.path.dirname(__file__) +"/" # パッケージディレクトリパス
+    package_path = os.path.dirname(__file__) + "/"  # パッケージディレクトリパス
 
     history_directory_path = package_path + "../history/"  # 履歴ディレクトリパス
 
@@ -24,6 +24,12 @@ class SystemSetting:
 
     # 翻訳後テキスト保存先設定
     text_after_directory_path = history_directory_path + "text_after/"  # ディレクトリパス
+
+    # リサイズした翻訳後画像の保存先設定
+    resize_after_directory_path = history_directory_path + "resize_image_after/"  # ディレクトリパス
+
+    # リサイズした翻訳前画像の保存先設定
+    resize_before_directory_path = history_directory_path + "resize_image_before/"  # ディレクトリパス
 
     # オプションファイル保存先設定
     option_file_name = "option.json"  # ファイル名

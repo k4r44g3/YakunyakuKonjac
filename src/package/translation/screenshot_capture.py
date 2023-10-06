@@ -30,7 +30,6 @@ class ScreenshotCapture:
         directory_path = SystemSetting.image_before_directory_path  # 翻訳前画像のディレクトリパス
         file_extension = SystemSetting.image_file_extension  # 拡張子
         ss_file_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
-        print("ss"+ss_file_path)
         screenshot_image.save(ss_file_path)  # 翻訳前画像保存
 
         return ss_file_path  # 翻訳前画像ファイルパス

@@ -27,6 +27,9 @@ https://pyautogui.readthedocs.io/en/latest/screenshot.html
 Python pillowモジュールrectangleで透明度を設定する
 https://teratail.com/questions/132373
 
+【Python/PIL】縦横比を保ったまま矩形に合わせて画像をリサイズ（resize・thumnail）
+https://daeudaeu.com/pil-aspect/
+
 
 
 GUI関連
@@ -47,6 +50,8 @@ Python GUI
 http://www.dicre.com/python/gui.html
 
 
+【Python】tkinterを使ったGUIアプリケーションの作成方法
+https://office54.net/python/tkinter/tkinter-how-to-use
 
 【Python GUI】「tkinter」で関数実行中にウィンドウがフリーズしてしまう問題を「threading」を使って回避する方法
 https://karupoimou.hatenablog.com/entry/20200427/1587975580

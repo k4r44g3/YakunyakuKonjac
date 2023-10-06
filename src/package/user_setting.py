@@ -24,8 +24,12 @@ class UserSetting:
     # ウィンドウ位置・サイズ
     window_left_x = 0
     window_top_y = 0
-    window_width = 300
-    window_height = 200
+    window_width = 800
+    window_height = 600
 
     # 翻訳間隔
     translation_interval_sec = 20
+
+    # 表示画像サイズの最大
+    image_width_max = 300
+    image_height_max = 300

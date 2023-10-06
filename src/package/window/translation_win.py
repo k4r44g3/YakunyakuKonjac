@@ -1,18 +1,19 @@
-
 # ! デバッグ用
-import sys # システム関連
-import os # ディレクトリ関連
+import sys  # システム関連
+import os  # ディレクトリ関連
+
 if __name__ == "__main__":
     src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
-    sys.path.append(src_path) # モジュール検索パスを追加
+    sys.path.append(src_path)  # モジュール検索パスを追加
+    print(src_path)
 
 import PySimpleGUI as sg  # GUI
 
 from package.fn import Fn  # 自作関数クラス
+from package.debug import Debug  # デバッグ用クラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.translation.translation import Translation  # 翻訳機能関連のクラス
-
 
 
 class TranslationWin:
@@ -48,18 +49,26 @@ class TranslationWin:
                     button_text="翻訳",  # ボタンテキスト
                     key="-translation_toggle-",  # 識別子
                     size=(4 * 5, 2 * 2),  # サイズ(フォントサイズ)(w,h)
-                    expand_x = True, #  Trueの場合、要素はx方向に自動的に拡大
-                    expand_y = True, #  Trueの場合、要素はy方向に自動的に拡大
-
+                    # expand_x = True, #  Trueの場合、要素はx方向に自動的に拡大
+                    # expand_y = True, #  Trueの場合、要素はy方向に自動的に拡大
                 ),
             ],
             # todo 画像表示
-            # [  # 画像表示
-            #     sg.Image(
-            #         filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
-            #         key="-image-",
-            #         size=(300,200),  # サイズ(px)(w,h)
-            #     ),
+            [  # リサイズした翻訳後の画像表示
+                sg.Image(
+                    # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
+                    filename=Debug.resize_image_after_path, # リサイズした翻訳後画像の保存先パス
+                    key="-resize_after_image-",
+                    size=(UserSetting.image_width_max, UserSetting.image_width_max),  # サイズ(px)(w,h)
+                ),
+                # リサイズした翻訳前の画像表示
+                sg.Image(
+                    filename=Debug.resize_image_before_path, # リサイズした翻訳後画像の保存先パス
+                    key="-resize_before_image-",
+                    size=(UserSetting.image_width_max, UserSetting.image_width_max),  # サイズ(px)(w,h)
+                ),
+            ],
+            # [  
             # ],
         ]
         # GUIウィンドウ設定を返す
@@ -73,10 +82,10 @@ class TranslationWin:
                 UserSetting.window_top_y,
             ),
             # ウィンドウサイズ
-            size=(
-                UserSetting.window_width,
-                UserSetting.window_height,
-            ),
+            # size=(
+            #     UserSetting.window_width,
+            #     UserSetting.window_height,
+            # ),
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
         )

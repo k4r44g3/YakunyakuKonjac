@@ -4,10 +4,11 @@ import os  # ディレクトリ管理
 class Debug:
     """デバッグ用クラス"""
 
-    directory_path = os.path.dirname(__file__) + "/debug_history/"
+    # デバッグ用ディレクトリパス
+    debug_directory_path = os.path.dirname(__file__) + "/../debug_history/"
 
     # 翻訳前画像パス
-    ss_file_path = directory_path + "/image_before.jpg"
+    ss_file_path = debug_directory_path + "/image_before.jpg"
 
     # 翻訳前テキストリスト
     text_before_list = [
@@ -50,3 +51,12 @@ class Debug:
         "「クリスマス・キャロル」",
         "チャールズ・ディケンズ",
     ]
+
+    # 翻訳後画像パス
+    overlay_translation_image_path = debug_directory_path + "/image_after.jpg"
+
+    # リサイズした翻訳後画像の保存先パス
+    resize_image_after_path = debug_directory_path + "/resize_image_after.png"
+
+    # リサイズした翻訳前画像の保存先パス
+    resize_image_before_path = debug_directory_path + "/resize_image_before.png"

@@ -65,5 +65,4 @@ class CharacterRecognition:
         directory_path = SystemSetting.text_before_directory_path  # 翻訳前テキストのディレクトリパス
         file_extension = ".txt"  # 拡張子
         file_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
-        print("2"+file_path)
         Fn.save_text_file(text_before_list, file_path)  # テキストファイルへの保存
