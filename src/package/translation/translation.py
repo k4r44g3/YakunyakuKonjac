@@ -1,9 +1,18 @@
-from fn import Fn  # 自作関数クラス
-from debug import Debug  # デバッグ用クラス
-from screenshot_capture import ScreenshotCapture  # スクリーンショット撮影機能関連のクラス
-from character_recognition import CharacterRecognition  # 文字認識機能関連のクラス
-from text_translation import TextTranslation  # テキスト翻訳機能関連のクラス
-from translation_image import TranslationImage  # オーバーレイ翻訳画像作成機能関連のクラス
+
+
+# ! デバッグ用
+import sys # システム関連
+import os # ディレクトリ関連
+if __name__ == "__main__":
+    src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
+    sys.path.append(src_path) # モジュール検索パスを追加
+
+from package.fn import Fn  # 自作関数クラス
+from package.debug import Debug  # デバッグ用クラス
+from package.translation.screenshot_capture import ScreenshotCapture  # スクリーンショット撮影機能関連のクラス
+from package.translation.character_recognition import CharacterRecognition  # 文字認識機能関連のクラス
+from package.translation.text_translation import TextTranslation  # テキスト翻訳機能関連のクラス
+from package.translation.translation_image import TranslationImage  # オーバーレイ翻訳画像作成機能関連のクラス
 
 
 class Translation:
@@ -53,3 +62,9 @@ class Translation:
         )  # 翻訳後画像保存
 
         Fn.time_log("画像作成")
+
+
+
+# ! デバッグ用
+if __name__ == "__main__":
+    Translation.save_history()

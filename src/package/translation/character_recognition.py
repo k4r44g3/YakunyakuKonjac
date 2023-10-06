@@ -2,9 +2,9 @@ import boto3  # AWSのAIサービス
 
 from PIL import Image  # 画像処理
 
-from fn import Fn  # 自作関数クラス
-from user_setting import UserSetting  # ユーザーが変更可能の設定クラス
-from system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
+from package.fn import Fn  # 自作関数クラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 
 
 class CharacterRecognition:
@@ -65,4 +65,5 @@ class CharacterRecognition:
         directory_path = SystemSetting.text_before_directory_path  # 翻訳前テキストのディレクトリパス
         file_extension = ".txt"  # 拡張子
         file_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
+        print("2"+file_path)
         Fn.save_text_file(text_before_list, file_path)  # テキストファイルへの保存

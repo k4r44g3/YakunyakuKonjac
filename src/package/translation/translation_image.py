@@ -4,8 +4,8 @@ import os  # ディレクトリ管理
 from PIL import Image, ImageFont, ImageDraw
 
 
-from user_setting import UserSetting  # ユーザーが変更可能の設定クラス
-from system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 
 
 class TranslationImage:

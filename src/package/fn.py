@@ -1,6 +1,6 @@
 import datetime  # 現在時刻
 
-from system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
+from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
 
 class Fn:
@@ -84,7 +84,6 @@ class Fn:
             text_list(list[text:str]): テキストリスト
             filepath(src): ファイルパス
         """
-
         file = open(file_path, "w", encoding="utf-8")  # 新規書き込みでテキストファイルを開く
         # file = open(text_filepath, "w",)  # 新規書き込みでテキストファイルを開く
         for text_before in text_list:  # テキストで走査

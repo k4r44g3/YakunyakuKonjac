@@ -9,21 +9,25 @@ class SystemSetting:
     # 画像ファイル形式
     image_file_extension = ".png"
 
+    package_path = os.path.dirname(__file__) +"/" # パッケージディレクトリパス
+
+    history_directory_path = package_path + "../history/"  # 履歴ディレクトリパス
+
     # 翻訳前画像保存先設定
-    image_before_directory_path = os.path.dirname(__file__) + "/history/image_before/"  # ディレクトリパス
+    image_before_directory_path = history_directory_path + "image_before/"  # ディレクトリパス
 
     # 翻訳後画像保存先設定
-    image_after_directory_path = os.path.dirname(__file__) + "/history/image_after/"  # ディレクトリパス
+    image_after_directory_path = history_directory_path + "image_after/"  # ディレクトリパス
 
     # 翻訳前テキスト保存先設定
-    text_before_directory_path = os.path.dirname(__file__) + "/history/text_before/"  # ディレクトリパス
+    text_before_directory_path = history_directory_path + "text_before/"  # ディレクトリパス
 
     # 翻訳後テキスト保存先設定
-    text_after_directory_path = os.path.dirname(__file__) + "/history/text_after/"  # ディレクトリパス
+    text_after_directory_path = history_directory_path + "text_after/"  # ディレクトリパス
 
     # オプションファイル保存先設定
     option_file_name = "option.json"  # ファイル名
-    option_directory_path = os.path.dirname(__file__) + "/"  # ディレクトリパス
+    option_directory_path = package_path + "../"  # ディレクトリパス
     option_file_path = option_directory_path + option_file_name  # オプションファイルパス
 
     # アプリケーションの名前
