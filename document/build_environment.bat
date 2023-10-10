@@ -14,7 +14,6 @@ pip install awscli
 pip install boto3
 pip install black
 pip install opencv-python
-pip install tkinter
 pip freeze > requirements.txt
 
 @REM # gitからクローン

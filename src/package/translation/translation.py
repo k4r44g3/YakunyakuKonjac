@@ -19,7 +19,13 @@ class Translation:
     """翻訳機能関連のクラス"""
 
     def save_history():
-        """翻訳前,結果を履歴に保存する"""
+        """翻訳前,結果を履歴に保存する
+
+        Returns:
+            image_path(tuple(screenshot_image,overlay_translation_image)): 翻訳前、後画像のパス
+                - screenshot_image(str): 翻訳前画像のパス
+                - overlay_translation_image(str): 翻訳後画像のパス
+        """
         Fn.time_log("システム開始")
 
         # 保存ファイル名(現在日時)の取得
@@ -31,7 +37,7 @@ class Translation:
         Fn.time_log("スクショ撮影")
 
         # ! デバック用
-        ss_file_path = Debug.ss_file_path  # スクショ画像パス
+        # ss_file_path = Debug.ss_file_path  # スクショ画像パス
 
         # 文字認識機能
         text_data_dict = CharacterRecognition.get_text_data_dict(ss_file_path)  # 画像からテキスト情報を取得
@@ -63,13 +69,16 @@ class Translation:
 
         Fn.time_log("画像作成")
 
-        # リサイズ画像作成
-        get_resize_before_save_path = ResizedImage.get_resize_before_save_path(
-            file_name
-        )  # リサイズした翻訳前画像の保存先パス
-        get_resize_after_save_path = ResizedImage.get_resize_after_save_path(
-            file_name
-        )  # リサイズした翻訳後画像の保存先パス
+        image_path = (ss_file_path,overlay_translation_image_path) # 翻訳前、後画像のパスの取得
+        return image_path # 翻訳前、後画像のパス
+
+        # # リサイズ画像作成
+        # get_resize_before_save_path = ResizedImage.get_resize_before_save_path(
+        #     file_name
+        # )  # リサイズした翻訳前画像の保存先パス
+        # get_resize_after_save_path = ResizedImage.get_resize_after_save_path(
+        #     file_name
+        # )  # リサイズした翻訳後画像の保存先パス
 
         # アスペクト比を保ったままリサイズして保存
         # ResizedImage.save_keep_aspect_resize(ss_file_path, get_resize_before_save_path) # 翻訳前画像をリサイズして保存

@@ -25,7 +25,6 @@ class TranslationWin:
         """コンストラクタ 初期設定"""
         # todo 初期設定
         self.transition_target_win = None  # 遷移先ウィンドウ名
-        print(Debug.overlay_translation_image_path)
         self.start_win()  # ウィンドウ開始処理
 
     def start_win(self):
@@ -42,6 +41,23 @@ class TranslationWin:
 
         # todo メニューバー設定
 
+        # 最新の翻訳後画像名の取得
+        now_image_name = Fn.get_max_file_name(SystemSetting.image_after_directory_path)
+
+        # 最新の翻訳画像パスの取得
+        if now_image_name != ".gitkeep":
+            # 履歴が存在するなら最新の画像パスを取得
+            now_after_image_path = (
+                SystemSetting.image_after_directory_path + now_image_name
+            )  # 翻訳後画像の保存先パス
+            now_before_image_path = (
+                SystemSetting.image_before_directory_path + now_image_name
+            )  # 翻訳前画像の保存先パス
+        else:
+            # 履歴が存在しないならデフォルトの画像パスを取得
+            now_after_image_path = Debug.overlay_translation_image_path  # 翻訳後画像の保存先パス
+            now_before_image_path = Debug.ss_file_path  # 翻訳前画像の保存先パス
+
         # レイアウト指定
         layout = [
             # todo メニューバー
@@ -56,18 +72,18 @@ class TranslationWin:
                 ),
             ],
             # todo 画像表示
-            [  # リサイズした翻訳後の画像表示
+            [  # 翻訳後の画像表示
                 sg.Column(
                     [
                         [
                             sg.Image(
                                 # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
-                                source=Debug.overlay_translation_image_path,  # リサイズした翻訳後画像の保存先パス
+                                source=now_after_image_path,  # 翻訳後画像の保存先パス
                                 key="-after_image-",  # 識別子
                                 enable_events=True,  # イベントを取得する
                                 subsample=1,  # 画像縮小率 サイズ/n
                                 metadata={
-                                    "source": Debug.overlay_translation_image_path,  # リサイズした翻訳後画像の保存先パス
+                                    "source": now_after_image_path,  # 翻訳後画像の保存先パス
                                     "subsample": 1,  # 画像のサイズを縮小する量
                                 },  # メタデータ
                             ),
@@ -79,19 +95,19 @@ class TranslationWin:
                 ),
             ],
             [
-                # リサイズした翻訳前の画像表示
+                # 翻訳前の画像表示
                 sg.Column(
                     [
                         [
                             sg.Image(
                                 # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
-                                source=Debug.ss_file_path,  # リサイズした翻訳前画像の保存先パス
+                                source=now_before_image_path,  # 翻訳前画像の保存先パス
                                 key="-before_image-",  # 識別子
                                 enable_events=True,  # イベントを取得する
                                 subsample=1,  # 画像のサイズを縮小する量
                                 # メタデータ
                                 metadata={
-                                    "source": Debug.ss_file_path,  # リサイズした翻訳前画像の保存先パス
+                                    "source": now_before_image_path,  # 翻訳前画像の保存先パス
                                     "subsample": 1,  # 画像のサイズを縮小する量
                                 },
                             ),
@@ -167,7 +183,24 @@ class TranslationWin:
 
     def translate(self):
         """翻訳処理"""
-        Translation.save_history()  # 翻訳する
+        image_path = Translation.save_history()  # 翻訳する
+
+        ss_file_path, overlay_translation_image_path = image_path  # 翻訳前、後画像のパスの取得
+
+        # print(ss_file_path, overlay_translation_image_path)
+
+        for key in ("-after_image-", "-before_image-"):
+            # メタデータ更新
+            if key == "-after_image-":
+                self.window[key].metadata["source"] = overlay_translation_image_path
+            else:
+                self.window[key].metadata["source"] = ss_file_path
+
+            # 要素の更新
+            self.window[key].update(
+                source=self.window[key].metadata["source"],  # ファイル名
+                subsample=self.window[key].metadata["subsample"],  # 画像縮小率
+            )
 
     def image_size_change(self, key):
         """画像縮小率の変更
@@ -193,7 +226,7 @@ class TranslationWin:
         # 要素の更新
         self.window[key].update(
             source=self.window[key].metadata["source"],  # ファイル名
-            subsample=new_subsample,  # 画像縮小率
+            subsample=self.window[key].metadata["subsample"],  # 画像縮小率
         )
 
 

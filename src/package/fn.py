@@ -1,4 +1,5 @@
 import datetime  # 現在時刻
+import os  # ディレクトリ関連
 
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
@@ -89,3 +90,15 @@ class Fn:
         for text_before in text_list:  # テキストで走査
             file.write(text_before + "\n")  # ファイルに書き込む
         file.close()  # ファイルを閉じる
+
+    def get_max_file_name(dir_path):
+        """辞書順で最大のファイル名を取得
+        Args:
+            dir_path (str): ディレクトリパス
+
+        Returns:
+            max_file_name: 辞書順で最大のファイル名
+        """
+        file_list = os.listdir(dir_path)  # ファイル名のリストを取得
+        max_file_name = max(file_list)  # 辞書順で最大のファイル名を取得
+        return max_file_name  # 辞書順で最大のファイル名
