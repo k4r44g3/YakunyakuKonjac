@@ -55,3 +55,9 @@ https://office54.net/python/tkinter/tkinter-how-to-use
 
 【Python GUI】「tkinter」で関数実行中にウィンドウがフリーズしてしまう問題を「threading」を使って回避する方法
 https://karupoimou.hatenablog.com/entry/20200427/1587975580
+
+【Pyinstaller】+【venv】 簡単に軽量な .exeをつくる手順
+https://qiita.com/Yolyne/items/4bfd0d8215d00ed67da9
+
+PyInstallerでexeファイル化したものがAVASTやAVGでトロイの木馬ウイルスと誤認される問題の一時的な解決法
+https://qiita.com/nobody_gonbe/items/5ffdd1a767c67256032e
