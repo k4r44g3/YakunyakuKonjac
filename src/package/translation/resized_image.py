@@ -73,3 +73,26 @@ class ResizedImage:
         img_resized = img.resize(size=(resize_width, resize_height))  # 画像をリサイズする
 
         img_resized.save(save_path)  # リサイズ後画像保存
+
+    def save_resize_image(img_path, save_path, magnification_rate):
+        """リサイズして保存
+        Args:
+            img_path (str): 画像パス
+            file_name(src): ファイル名(現在日時)
+            magnification_rate(float): 拡大率
+        """
+
+        # リサイズ前の画像を読み込み
+        img = Image.open(img_path)
+
+        # リサイズ前画像サイズ
+        img_width = img.width
+        img_height = img.height
+
+        # リサイズするサイズ
+        resize_width = round(img_width * magnification_rate)
+        resize_height = round(img_height * magnification_rate)
+
+        img_resized = img.resize(size=(resize_width, resize_height))  # 画像をリサイズする
+
+        img_resized.save(save_path)  # リサイズ後画像保存

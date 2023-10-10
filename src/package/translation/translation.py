@@ -64,16 +64,28 @@ class Translation:
         Fn.time_log("画像作成")
 
         # リサイズ画像作成
-        get_resize_before_save_path = ResizedImage.get_resize_before_save_path(file_name) # リサイズした翻訳前画像の保存先パス
-        get_resize_after_save_path = ResizedImage.get_resize_after_save_path(file_name) # リサイズした翻訳後画像の保存先パス
+        get_resize_before_save_path = ResizedImage.get_resize_before_save_path(
+            file_name
+        )  # リサイズした翻訳前画像の保存先パス
+        get_resize_after_save_path = ResizedImage.get_resize_after_save_path(
+            file_name
+        )  # リサイズした翻訳後画像の保存先パス
 
         # アスペクト比を保ったままリサイズして保存
-        ResizedImage.save_keep_aspect_resize(ss_file_path, get_resize_before_save_path) # 翻訳前画像をリサイズして保存
-        ResizedImage.save_keep_aspect_resize(
-            overlay_translation_image_path, get_resize_after_save_path
-        ) # 翻訳後画像をリサイズして保存
+        # ResizedImage.save_keep_aspect_resize(ss_file_path, get_resize_before_save_path) # 翻訳前画像をリサイズして保存
+        # ResizedImage.save_keep_aspect_resize(
+        #     overlay_translation_image_path, get_resize_after_save_path
+        # ) # 翻訳後画像をリサイズして保存
 
-        Fn.time_log("リサイズ画像作成")
+        # magnification_rate = 0.5
+        # ResizedImage.save_resize_image(
+        #     ss_file_path, get_resize_before_save_path, magnification_rate
+        # )  # 翻訳前画像をリサイズして保存
+        # ResizedImage.save_resize_image(
+        #     overlay_translation_image_path, get_resize_after_save_path, magnification_rate
+        # )  # 翻訳後画像をリサイズして保存
+
+        # Fn.time_log("リサイズ画像作成")
 
 
 # ! デバッグ用

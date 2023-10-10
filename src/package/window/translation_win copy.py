@@ -65,10 +65,10 @@ class TranslationWin:
                                 source=Debug.overlay_translation_image_path,  # リサイズした翻訳後画像の保存先パス
                                 key="-after_image-",  # 識別子
                                 enable_events=True,  # イベントを取得する
-                                subsample=1,  # 画像縮小率 サイズ/n
+                                subsample=4,  # 画像縮小率 サイズ/n
                                 metadata={
                                     "source": Debug.overlay_translation_image_path,  # リサイズした翻訳後画像の保存先パス
-                                    "subsample": 1,  # 画像のサイズを縮小する量
+                                    "subsample": 4,  # 画像のサイズを縮小する量
                                 },  # メタデータ
                             ),
                         ],
@@ -88,11 +88,11 @@ class TranslationWin:
                                 source=Debug.ss_file_path,  # リサイズした翻訳前画像の保存先パス
                                 key="-before_image-",  # 識別子
                                 enable_events=True,  # イベントを取得する
-                                subsample=1,  # 画像のサイズを縮小する量
+                                subsample=4,  # 画像のサイズを縮小する量
                                 # メタデータ
                                 metadata={
                                     "source": Debug.ss_file_path,  # リサイズした翻訳前画像の保存先パス
-                                    "subsample": 1,  # 画像のサイズを縮小する量
+                                    "subsample": 4,  # 画像のサイズを縮小する量
                                 },
                             ),
                         ],
@@ -129,10 +129,10 @@ class TranslationWin:
         指定したボタンが押された時などのイベント処理内容
         終了処理が行われるまで繰り返す
         """
-
-        # 画像縮小率の変更
-        self.image_size_change("-after_image-")
-        self.image_size_change("-before_image-")
+        print(self.window["-after_image-"].get_size())
+        self.window["-after_image-"].metadata["default_size"] = self.window[
+            "-after_image-"
+        ].get_size()
 
         while True:  # 終了処理が行われるまで繰り返す
             # 実際に画面が表示され、ユーザーの入力待ちになる
@@ -152,7 +152,7 @@ class TranslationWin:
 
             # 画像クリックイベント
             elif event == "-after_image-" or event == "-before_image-":
-                self.image_size_change(event)  # 画像縮小率の変更
+                self.image_size_change(event)
 
     def exit_event(self):
         """イベント終了処理"""
@@ -175,9 +175,11 @@ class TranslationWin:
         Args:
             key (str): 要素識別子
         """
+        # デフォルトの画像サイズ
+        default_size = self.window[key].metadata["default_size"]
+
         # 画像縮小率の取得 サイズ/n
         subsample = self.window[key].metadata["subsample"]
-
         # 変更する画像縮小率の取得・変更
         new_subsample = None
         if subsample == 1:
@@ -187,6 +189,9 @@ class TranslationWin:
         elif subsample == 4:
             new_subsample = 2
 
+        print(new_subsample, default_size, [data * 4 / new_subsample for data in default_size])
+        new_size = (default_size[0] * (4 // new_subsample), default_size[1] * (4 // new_subsample))
+        print(default_size, new_size)
         # メタデータ更新
         self.window[key].metadata["subsample"] = new_subsample
 
@@ -194,6 +199,7 @@ class TranslationWin:
         self.window[key].update(
             source=self.window[key].metadata["source"],  # ファイル名
             subsample=new_subsample,  # 画像縮小率
+            size=new_size,
         )
 
 

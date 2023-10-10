@@ -15,8 +15,6 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.translation.translation import Translation  # 翻訳機能関連のクラス
 
-# from package.window.window import Window  # 翻訳機能関連のクラス
-
 
 class TranslationWin:
     """メインウィンドウクラス"""
@@ -24,8 +22,8 @@ class TranslationWin:
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
+        self.is_event_exists = True  # イベントが存在するかどうか
         self.transition_target_win = None  # 遷移先ウィンドウ名
-        print(Debug.overlay_translation_image_path)
         self.start_win()  # ウィンドウ開始処理
 
     def start_win(self):
@@ -57,52 +55,20 @@ class TranslationWin:
             ],
             # todo 画像表示
             [  # リサイズした翻訳後の画像表示
-                sg.Column(
-                    [
-                        [
-                            sg.Image(
-                                # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
-                                source=Debug.overlay_translation_image_path,  # リサイズした翻訳後画像の保存先パス
-                                key="-after_image-",  # 識別子
-                                enable_events=True,  # イベントを取得する
-                                subsample=1,  # 画像縮小率 サイズ/n
-                                metadata={
-                                    "source": Debug.overlay_translation_image_path,  # リサイズした翻訳後画像の保存先パス
-                                    "subsample": 1,  # 画像のサイズを縮小する量
-                                },  # メタデータ
-                            ),
-                        ],
-                    ],
-                    size=(400, 225),  # 表示サイズ
-                    scrollable=True,  # スクロールバーの有効化
-                    background_color="#888",  # 背景色
+                sg.Image(
+                    # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
+                    filename=Debug.resize_image_after_path, # リサイズした翻訳後画像の保存先パス
+                    key="-resize_after_image-",
+                    size=(UserSetting.image_width_max, UserSetting.image_width_max),  # サイズ(px)(w,h)
                 ),
-            ],
-            [
                 # リサイズした翻訳前の画像表示
-                sg.Column(
-                    [
-                        [
-                            sg.Image(
-                                # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
-                                source=Debug.ss_file_path,  # リサイズした翻訳前画像の保存先パス
-                                key="-before_image-",  # 識別子
-                                enable_events=True,  # イベントを取得する
-                                subsample=1,  # 画像のサイズを縮小する量
-                                # メタデータ
-                                metadata={
-                                    "source": Debug.ss_file_path,  # リサイズした翻訳前画像の保存先パス
-                                    "subsample": 1,  # 画像のサイズを縮小する量
-                                },
-                            ),
-                        ],
-                    ],
-                    size=(400, 225),  # 表示サイズ
-                    scrollable=True,  # スクロールバーの有効化
-                    background_color="#888",  # 背景色
+                sg.Image(
+                    filename=Debug.resize_image_before_path, # リサイズした翻訳後画像の保存先パス
+                    key="-resize_before_image-",
+                    size=(UserSetting.image_width_max, UserSetting.image_width_max),  # サイズ(px)(w,h)
                 ),
             ],
-            # [
+            # [  
             # ],
         ]
         # GUIウィンドウ設定を返す
@@ -129,11 +95,6 @@ class TranslationWin:
         指定したボタンが押された時などのイベント処理内容
         終了処理が行われるまで繰り返す
         """
-
-        # 画像縮小率の変更
-        self.image_size_change("-after_image-")
-        self.image_size_change("-before_image-")
-
         while True:  # 終了処理が行われるまで繰り返す
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
@@ -150,10 +111,6 @@ class TranslationWin:
                 Fn.time_log("自動翻訳ボタン押下イベント開始")
                 self.translate()  # 翻訳処理
 
-            # 画像クリックイベント
-            elif event == "-after_image-" or event == "-before_image-":
-                self.image_size_change(event)  # 画像縮小率の変更
-
     def exit_event(self):
         """イベント終了処理"""
         # todo 終了設定(保存など)
@@ -168,33 +125,6 @@ class TranslationWin:
     def translate(self):
         """翻訳処理"""
         Translation.save_history()  # 翻訳する
-
-    def image_size_change(self, key):
-        """画像縮小率の変更
-
-        Args:
-            key (str): 要素識別子
-        """
-        # 画像縮小率の取得 サイズ/n
-        subsample = self.window[key].metadata["subsample"]
-
-        # 変更する画像縮小率の取得・変更
-        new_subsample = None
-        if subsample == 1:
-            new_subsample = 4
-        elif subsample == 2:
-            new_subsample = 1
-        elif subsample == 4:
-            new_subsample = 2
-
-        # メタデータ更新
-        self.window[key].metadata["subsample"] = new_subsample
-
-        # 要素の更新
-        self.window[key].update(
-            source=self.window[key].metadata["source"],  # ファイル名
-            subsample=new_subsample,  # 画像縮小率
-        )
 
 
 # ! デバッグ用
