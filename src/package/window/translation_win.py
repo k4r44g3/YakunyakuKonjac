@@ -35,11 +35,11 @@ class TranslationWin:
         self.event_start()  # イベント受付開始処理(終了処理が行われるまで繰り返す)
 
     def make_win(self):
-        """GUIウィンドウ作成処理"""
+        """GUIウィンドウ作成処理
 
-        # todo ウィンドウのテーマの設定
-
-        # todo メニューバー設定
+        Returns:
+            window(sg.Window): GUIウィンドウ設定
+        """
 
         # 最新の翻訳後画像名の取得
         now_image_name = Fn.get_max_file_name(SystemSetting.image_after_directory_path)
@@ -58,9 +58,24 @@ class TranslationWin:
             now_after_image_path = Debug.overlay_translation_image_path  # 翻訳後画像の保存先パス
             now_before_image_path = Debug.ss_file_path  # 翻訳前画像の保存先パス
 
+        # todo ウィンドウのテーマの設定
+
+        # メニューバー設定
+        menuber = [
+            ["設定 (&C)", ["設定 (&O)::menu_setting::", "---", "終了 (&X)::menu_exit::"]],
+            [
+                "入力 (&I)",
+                ["入力画面 (&I)::menu_input::"],
+            ],
+            [
+                "出力 (&O)",
+                ["出力画面 (&O)::menu_output::"],
+            ],
+        ]
+
         # レイアウト指定
         layout = [
-            # todo メニューバー
+            [[sg.Menu(menuber, key="-menu-")]],  # メニューバー
             [
                 # 自動翻訳用トグルボタン
                 sg.Button(
@@ -71,7 +86,6 @@ class TranslationWin:
                     # expand_y = True, #  Trueの場合、要素はy方向に自動的に拡大
                 ),
             ],
-            # todo 画像表示
             [  # 翻訳後の画像表示
                 sg.Column(
                     [
@@ -118,8 +132,6 @@ class TranslationWin:
                     background_color="#888",  # 背景色
                 ),
             ],
-            # [
-            # ],
         ]
         # GUIウィンドウ設定を返す
         return sg.Window(
@@ -146,6 +158,7 @@ class TranslationWin:
         終了処理が行われるまで繰り返す
         """
 
+        # todo ウィンドウ初期設定
         # 画像縮小率の変更
         self.image_size_change("-after_image-")
         self.image_size_change("-before_image-")
@@ -157,7 +170,6 @@ class TranslationWin:
             Fn.time_log(event, values)
             # プログラム終了イベント処理
             if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベントが発生したら
-                self.is_end_system = True  # システムを終了させるかどうか
                 self.exit_event()  # イベント終了処理
                 break  # イベント受付終了
 
@@ -170,6 +182,20 @@ class TranslationWin:
             elif event == "-after_image-" or event == "-before_image-":
                 self.image_size_change(event)  # 画像縮小率の変更
 
+            # メニューバーの設定押下イベント
+            elif "::menu_input::" in event:
+                Fn.time_log("入力画面に遷移")
+                self.transition_target_win = "InputWin"  # 遷移先ウィンドウ名
+                self.exit_event()  # イベント終了処理
+                break  # イベント受付終了
+
+            # メニューバーの設定押下イベント
+            elif "::menu_output::" in event:
+                Fn.time_log("出力画面に遷移")
+                self.transition_target_win = "OutputWin"  # 遷移先ウィンドウ名
+                self.exit_event()  # イベント終了処理
+                break  # イベント受付終了
+
     def exit_event(self):
         """イベント終了処理"""
         # todo 終了設定(保存など)
@@ -178,6 +204,14 @@ class TranslationWin:
     def end_win(self):
         """ウィンドウ終了処理"""
         Fn.time_log("ウィンドウ終了")  # ログ出力
+
+    def get_transition_target_win(self):
+        """遷移先ウィンドウ名の取得
+
+        Returns:
+            transition_target_win(str): 遷移先ウィンドウ名
+        """
+        return self.transition_target_win
 
     # todo イベント処理記述
 

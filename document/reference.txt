@@ -22,8 +22,6 @@ https://note.nkmk.me/python-script-file-path/
 Screenshot Functions (PyAutoGUIの公式ドキュメント)
 https://pyautogui.readthedocs.io/en/latest/screenshot.html
 
-
-
 Python pillowモジュールrectangleで透明度を設定する
 https://teratail.com/questions/132373
 
@@ -49,6 +47,37 @@ https://knt60345blog.com/pysimpleguigui_button1/
 Python GUI
 http://www.dicre.com/python/gui.html
 
+PySimpleGUIでカラム要素のサイズ設定とスクロール可否を設定する
+https://serverarekore.blogspot.com/2022/01/pysimplegui_02071332490.html
+
+python PySimpleGUIでMenuBarにアプリ終了メニューを設定する
+https://mebee.info/2021/07/27/post-34645/
+
+PySimpleGUI サイズの変更
+https://note.com/hideharu092/n/n140ab2d73159
+
+
+Python関連
+
+循環import問題で見える、__name__ == "__main__"の必要性
+https://qiita.com/katsuko0303/items/6e1cbf78e7fa9a2b668c
+循環importの改善に使用
+
+【globals()の使い方】文字列のクラス名からインスタンス生成する
+https://blog.suganoo.net/entry/2017/10/16/002120
+
+PyInstallerでexeファイル化したものがAVASTやAVGでトロイの木馬ウイルスと誤認される問題の一時的な解決法
+https://qiita.com/nobody_gonbe/items/5ffdd1a767c67256032e
+
+PythonでJSONファイル・文字列の読み込み・書き込み
+https://note.nkmk.me/python-json-load-dump/
+
+
+
+
+
+
+その他
 
 【Python】tkinterを使ったGUIアプリケーションの作成方法
 https://office54.net/python/tkinter/tkinter-how-to-use
@@ -56,8 +85,18 @@ https://office54.net/python/tkinter/tkinter-how-to-use
 【Python GUI】「tkinter」で関数実行中にウィンドウがフリーズしてしまう問題を「threading」を使って回避する方法
 https://karupoimou.hatenablog.com/entry/20200427/1587975580
 
+
+
 【Pyinstaller】+【venv】 簡単に軽量な .exeをつくる手順
 https://qiita.com/Yolyne/items/4bfd0d8215d00ed67da9
 
-PyInstallerでexeファイル化したものがAVASTやAVGでトロイの木馬ウイルスと誤認される問題の一時的な解決法
-https://qiita.com/nobody_gonbe/items/5ffdd1a767c67256032e
+Pythonをexeした際にスクリプト実行パスを取得する方法
+https://syachiku.net/python%E3%82%92exe%E3%81%97%E3%81%9F%E9%9A%9B%E3%81%AB%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E5%AE%9F%E8%A1%8C%E3%83%91%E3%82%B9%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95/
+
+【pyinstaller】Pythonをexe化する方法
+https://osagoublog.com/programming/python/pyinstaller/
+
+
+
+EasyOCRとは？インストール〜文字認識の方法までわかりやすく解説
+https://camp.trainocate.co.jp/magazine/about-easyocr/

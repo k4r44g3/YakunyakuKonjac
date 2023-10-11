@@ -31,10 +31,10 @@ class SystemSetting:
     # リサイズした翻訳前画像の保存先設定
     resize_before_directory_path = history_directory_path + "resize_image_before/"  # ディレクトリパス
 
-    # オプションファイル保存先設定
-    option_file_name = "option.json"  # ファイル名
-    option_directory_path = package_path + "../"  # ディレクトリパス
-    option_file_path = option_directory_path + option_file_name  # オプションファイルパス
+    # 設定ファイル保存先設定
+    setting_file_name = "setting.json"  # ファイル名
+    setting_directory_path = package_path + "../"  # ディレクトリパス
+    setting_file_path = setting_directory_path + setting_file_name  # 設定ファイルパス
 
     # アプリケーションの名前
     app_name = "ヤクミャクコンジャック"

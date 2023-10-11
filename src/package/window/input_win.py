@@ -9,10 +9,10 @@ if __name__ == "__main__":
 
 import PySimpleGUI as sg  # GUI
 
-from fn import Fn  # 自作関数クラス
+from package.fn import Fn  # 自作関数クラス
 
 
-class OutputWin:
+class InputWin:
     """メインウィンドウクラス"""
 
     def __init__(self):
@@ -38,23 +38,28 @@ class OutputWin:
 
         # レイアウト指定
         layout = [
-            [sg.Text("出力画面")],
+            [sg.Text("入力画面")],
             [
                 sg.Text("名前"),
                 sg.Input(
-                    disabled=True, # 入力不可
+                    key="-name-",  # 識別子
+                    enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
+                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
                     default_text=self.setting["-name-"],  # デフォルト
                 ),
             ],
             [
                 sg.Text("年齢"),
                 sg.Input(
-                    disabled=True, # 入力不可
+                    key="-age-",  # 識別子
+                    enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
+                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
                     default_text=self.setting["-age-"],  # デフォルト
                 ),
             ],
             [
                 sg.Push(),  # 右に寄せる
+                sg.Button("確定", key="-confirm-"),  # 変更ボタン
                 sg.Button("戻る", key="-back-"),  # 戻るボタン
             ],
         ]
@@ -83,6 +88,11 @@ class OutputWin:
             if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベント または メニューの終了ボタン押下イベントが発生したら
                 self.exit_event()  # イベント終了処理
                 break  # イベント受付終了
+
+            # 確定ボタン押下イベント
+            elif event == "-confirm-":
+                Fn.time_log("設定確定")
+                Fn.save_setting_file(self.setting)  # 設定をjsonファイルに保存
 
             # 確定ボタン押下イベント
             elif event == "-back-":
@@ -114,4 +124,4 @@ class OutputWin:
 
 # ! デバッグ用
 if __name__ == "__main__":
-    win_instance = OutputWin()
+    win_instance = InputWin()

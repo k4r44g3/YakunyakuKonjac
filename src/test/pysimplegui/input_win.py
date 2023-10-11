@@ -9,20 +9,16 @@ if __name__ == "__main__":
 
 import PySimpleGUI as sg  # GUI
 
-from package.fn import Fn  # 自作関数クラス
-from package.debug import Debug  # デバッグ用クラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
-from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
-from package.translation.translation import Translation  # 翻訳機能関連のクラス
+from fn import Fn  # 自作関数クラス
 
 
-class TranslationWin:
+class InputWin:
     """メインウィンドウクラス"""
 
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
-        self.is_event_exists = True  # イベントが存在するかどうか
+        self.setting = Fn.load_setting_file()  # 設定ファイル読み込み
         self.transition_target_win = None  # 遷移先ウィンドウ名
         self.start_win()  # ウィンドウ開始処理
 
@@ -34,58 +30,46 @@ class TranslationWin:
         self.event_start()  # イベント受付開始処理(終了処理が行われるまで繰り返す)
 
     def make_win(self):
-        """GUIウィンドウ作成処理"""
+        """GUIウィンドウ作成処理
 
-        # todo ウィンドウのテーマの設定
-
-        # todo メニューバー設定
+        Returns:
+            window(sg.Window): GUIウィンドウ設定
+        """
 
         # レイアウト指定
         layout = [
-            # todo メニューバー
+            [sg.Text("入力画面")],
             [
-                # 自動翻訳用トグルボタン
-                sg.Button(
-                    button_text="翻訳",  # ボタンテキスト
-                    key="-translation_toggle-",  # 識別子
-                    size=(4 * 5, 2 * 2),  # サイズ(フォントサイズ)(w,h)
-                    # expand_x = True, #  Trueの場合、要素はx方向に自動的に拡大
-                    # expand_y = True, #  Trueの場合、要素はy方向に自動的に拡大
+                sg.Text("名前"),
+                sg.Input(
+                    key="-name-",  # 識別子
+                    enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
+                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
+                    default_text=self.setting["-name-"],  # デフォルト
                 ),
             ],
-            # todo 画像表示
-            [  # リサイズした翻訳後の画像表示
-                sg.Image(
-                    # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
-                    filename=Debug.resize_image_after_path, # リサイズした翻訳後画像の保存先パス
-                    key="-resize_after_image-",
-                    size=(UserSetting.image_width_max, UserSetting.image_width_max),  # サイズ(px)(w,h)
-                ),
-                # リサイズした翻訳前の画像表示
-                sg.Image(
-                    filename=Debug.resize_image_before_path, # リサイズした翻訳後画像の保存先パス
-                    key="-resize_before_image-",
-                    size=(UserSetting.image_width_max, UserSetting.image_width_max),  # サイズ(px)(w,h)
+            [
+                sg.Text("年齢"),
+                sg.Input(
+                    key="-age-",  # 識別子
+                    enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
+                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
+                    default_text=self.setting["-age-"],  # デフォルト
                 ),
             ],
-            # [  
-            # ],
+            [
+                sg.Push(),  # 右に寄せる
+                sg.Button("確定", key="-confirm-"),  # 変更ボタン
+                sg.Button("戻る", key="-back-"),  # 戻るボタン
+            ],
         ]
         # GUIウィンドウ設定を返す
         return sg.Window(
-            title=SystemSetting.app_name,  # ウィンドウタイトル
+            title="test",  # ウィンドウタイトル
             layout=layout,  # レイアウト指定
             resizable=True,  # ウィンドウサイズ変更可能
-            # ウィンドウ位置
-            location=(
-                UserSetting.window_left_x,
-                UserSetting.window_top_y,
-            ),
-            # ウィンドウサイズ
-            # size=(
-            #     UserSetting.window_width,
-            #     UserSetting.window_height,
-            # ),
+            location=(50, 50),  # ウィンドウ位置
+            size=(300, 300),  # ウィンドウサイズ
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
         )
@@ -99,17 +83,25 @@ class TranslationWin:
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
 
-            Fn.time_log(event, values)
+            Fn.time_log("event=", event, "values=", values)
             # プログラム終了イベント処理
-            if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベントが発生したら
-                self.is_end_system = True  # システムを終了させるかどうか
+            if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベント または メニューの終了ボタン押下イベントが発生したら
                 self.exit_event()  # イベント終了処理
                 break  # イベント受付終了
 
-            # 自動翻訳ボタン押下イベント
-            elif event == "-translation_toggle-":
-                Fn.time_log("自動翻訳ボタン押下イベント開始")
-                self.translate()  # 翻訳処理
+            # 確定ボタン押下イベント
+            elif event == "-confirm-":
+                Fn.time_log("設定確定")
+                current_setting = self.setting # 現在の設定
+                update_setting = values # 更新する設定
+                Fn.save_setting_file(current_setting, update_setting)  # 設定をjsonファイルに保存
+
+            # 確定ボタン押下イベント
+            elif event == "-back-":
+                Fn.time_log("メイン画面に遷移")
+                self.transition_target_win = "MainWin"  # 遷移先ウィンドウ名
+                self.exit_event()  # イベント終了処理
+                break  # イベント受付終了
 
     def exit_event(self):
         """イベント終了処理"""
@@ -119,14 +111,19 @@ class TranslationWin:
     def end_win(self):
         """ウィンドウ終了処理"""
         Fn.time_log("ウィンドウ終了")  # ログ出力
+        self.window.close()  # ウィンドウを閉じる
+
+    def get_transition_target_win(self):
+        """遷移先ウィンドウ名の取得
+
+        Returns:
+            transition_target_win(str): 遷移先ウィンドウ名
+        """
+        return self.transition_target_win
 
     # todo イベント処理記述
-
-    def translate(self):
-        """翻訳処理"""
-        Translation.save_history()  # 翻訳する
 
 
 # ! デバッグ用
 if __name__ == "__main__":
-    win_instance = TranslationWin()
+    win_instance = InputWin()
