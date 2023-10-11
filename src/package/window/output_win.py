@@ -10,7 +10,7 @@ if __name__ == "__main__":
 import PySimpleGUI as sg  # GUI
 
 from package.fn import Fn  # 自作関数クラス
-
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 
 class OutputWin:
     """メインウィンドウクラス"""
@@ -18,6 +18,7 @@ class OutputWin:
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
+        self.user_setting = UserSetting()  # ユーザ設定のインスタンス化
         self.transition_target_win = None  # 遷移先ウィンドウ名
         self.start_win()  # ウィンドウ開始処理
 
@@ -38,7 +39,22 @@ class OutputWin:
         # レイアウト指定
         layout = [
             [sg.Text("出力画面")],
-            [sg.Text("テキスト")],
+             [
+                sg.Text("ocr_soft"),
+                sg.Input(
+                    key="-ocr_soft-",  # 識別子
+                    disabled=True, # 入力不可
+                    default_text=self.user_setting.get_setting("ocr_soft"),  # デフォルト
+                ),
+            ],
+            [
+                sg.Text("translation_soft"),
+                sg.Input(
+                    key="-translation_soft-",  # 識別子
+                    disabled=True, # 入力不可
+                    default_text=self.user_setting.get_setting("translation_soft"),  # デフォルト
+                ),
+            ],
             [
                 sg.Push(),  # 右に寄せる
                 sg.Button("戻る", key="-back-"),  # 戻るボタン
@@ -50,7 +66,7 @@ class OutputWin:
             layout=layout,  # レイアウト指定
             resizable=True,  # ウィンドウサイズ変更可能
             location=(50, 50),  # ウィンドウ位置
-            size = (300,300), # ウィンドウサイズ
+            size=(300, 300),  # ウィンドウサイズ
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
         )
@@ -64,7 +80,7 @@ class OutputWin:
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
 
-            Fn.time_log("event=",event, "values=",values)
+            Fn.time_log("event=", event, "values=", values)
             # プログラム終了イベント処理
             if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベント または メニューの終了ボタン押下イベントが発生したら
                 self.exit_event()  # イベント終了処理
@@ -73,7 +89,7 @@ class OutputWin:
             # 確定ボタン押下イベント
             elif event == "-back-":
                 Fn.time_log("メイン画面に遷移")
-                self.transition_target_win = "MainWin"  # 遷移先ウィンドウ名
+                self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
                 self.exit_event()  # イベント終了処理
                 break  # イベント受付終了
 
@@ -85,7 +101,7 @@ class OutputWin:
     def end_win(self):
         """ウィンドウ終了処理"""
         Fn.time_log("ウィンドウ終了")  # ログ出力
-        self.window.close() # ウィンドウを閉じる
+        self.window.close()  # ウィンドウを閉じる
 
     def get_transition_target_win(self):
         """遷移先ウィンドウ名の取得

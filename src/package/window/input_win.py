@@ -10,6 +10,7 @@ if __name__ == "__main__":
 import PySimpleGUI as sg  # GUI
 
 from package.fn import Fn  # 自作関数クラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 
 
 class InputWin:
@@ -18,7 +19,7 @@ class InputWin:
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
-        self.setting = Fn.load_setting_file()  # 設定ファイル読み込み
+        self.user_setting = UserSetting()  # ユーザ設定のインスタンス化
         self.transition_target_win = None  # 遷移先ウィンドウ名
         self.start_win()  # ウィンドウ開始処理
 
@@ -40,21 +41,21 @@ class InputWin:
         layout = [
             [sg.Text("入力画面")],
             [
-                sg.Text("名前"),
+                sg.Text("ocr_soft"),
                 sg.Input(
-                    key="-name-",  # 識別子
+                    key="-ocr_soft-",  # 識別子
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
                     # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
-                    default_text=self.setting["-name-"],  # デフォルト
+                    default_text=self.user_setting.get_setting("ocr_soft"),  # デフォルト
                 ),
             ],
             [
-                sg.Text("年齢"),
+                sg.Text("translation_soft"),
                 sg.Input(
-                    key="-age-",  # 識別子
+                    key="-translation_soft-",  # 識別子
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
                     # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
-                    default_text=self.setting["-age-"],  # デフォルト
+                    default_text=self.user_setting.get_setting("translation_soft"),  # デフォルト
                 ),
             ],
             [
@@ -92,12 +93,13 @@ class InputWin:
             # 確定ボタン押下イベント
             elif event == "-confirm-":
                 Fn.time_log("設定確定")
-                Fn.save_setting_file(self.setting)  # 設定をjsonファイルに保存
+                update_setting = values  # 更新する設定
+                self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
             # 確定ボタン押下イベント
             elif event == "-back-":
                 Fn.time_log("メイン画面に遷移")
-                self.transition_target_win = "MainWin"  # 遷移先ウィンドウ名
+                self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
                 self.exit_event()  # イベント終了処理
                 break  # イベント受付終了
 

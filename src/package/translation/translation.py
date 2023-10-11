@@ -13,6 +13,7 @@ from package.translation.character_recognition import CharacterRecognition  # �
 from package.translation.text_translation import TextTranslation  # テキスト翻訳機能関連のクラス
 from package.translation.translation_image import TranslationImage  # オーバーレイ翻訳画像作成機能関連のクラス
 from package.translation.resized_image import ResizedImage  # リサイズ画像作成機能関連のクラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 
 
 class Translation:
@@ -28,11 +29,13 @@ class Translation:
         """
         Fn.time_log("システム開始")
 
+        user_setting = UserSetting()  # ユーザ設定のインスタンス化
+
         # 保存ファイル名(現在日時)の取得
         file_name = Fn.get_now_file_name()
 
         # スクショ撮影機能
-        screenshot_image = ScreenshotCapture.get_screenshot()  # スクショ撮影
+        screenshot_image = ScreenshotCapture.get_screenshot(user_setting)  # スクショ撮影
         ss_file_path = ScreenshotCapture.save_screenshot(screenshot_image, file_name)  # スクショ保存
         Fn.time_log("スクショ撮影")
 
@@ -40,7 +43,9 @@ class Translation:
         # ss_file_path = Debug.ss_file_path  # スクショ画像パス
 
         # 文字認識機能
-        text_data_dict = CharacterRecognition.get_text_data_dict(ss_file_path)  # 画像からテキスト情報を取得
+        text_data_dict = CharacterRecognition.get_text_data_dict(
+            user_setting, ss_file_path
+        )  # 画像からテキスト情報を取得
         text_before_list = text_data_dict["text_list"]  # 翻訳前テキストリストの取得
         text_region_list = text_data_dict["text_region_list"]  # テキスト範囲のリストの取得
         CharacterRecognition.save_text_before(text_before_list, file_name)  # 翻訳前テキストをファイルに保存
@@ -51,7 +56,9 @@ class Translation:
         # text_region_list = Debug.text_region_list  # テキスト範囲のリスト
 
         # 翻訳機能
-        text_after_list = TextTranslation.get_text_after_list(text_before_list)  # 翻訳後テキストリストの取得
+        text_after_list = TextTranslation.get_text_after_list(
+            user_setting, text_before_list
+        )  # 翻訳後テキストリストの取得
         TextTranslation.save_text_after(text_after_list, file_name)  # 翻訳後テキストをファイルに保存
         Fn.time_log("翻訳")
 
@@ -69,8 +76,8 @@ class Translation:
 
         Fn.time_log("画像作成")
 
-        image_path = (ss_file_path,overlay_translation_image_path) # 翻訳前、後画像のパスの取得
-        return image_path # 翻訳前、後画像のパス
+        image_path = (ss_file_path, overlay_translation_image_path)  # 翻訳前、後画像のパスの取得
+        return image_path  # 翻訳前、後画像のパス
 
         # # リサイズ画像作成
         # get_resize_before_save_path = ResizedImage.get_resize_before_save_path(

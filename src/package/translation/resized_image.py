@@ -9,6 +9,7 @@ from package.system_setting import SystemSetting  # ユーザーが変更不可�
 
 class ResizedImage:
     """リサイズ画像作成機能関連のクラス"""
+    #! 必要ない
 
     def get_resize_before_save_path(file_name):
         """リサイズした翻訳前画像の保存先パスの取得
@@ -40,10 +41,11 @@ class ResizedImage:
         resize_after_save_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
         return resize_after_save_path  # リサイズした翻訳後画像の保存先パス
 
-    def save_keep_aspect_resize(img_path, save_path):
+    def save_keep_aspect_resize(user_setting, img_path, save_path,):
         """アスペクト比を保ったままリサイズして保存
 
         Args:
+            user_setting(UserSetting): ユーザーが変更可能の設定
             img_path (str): 画像パス
             file_name(src): ファイル名(現在日時)
         """
@@ -56,8 +58,8 @@ class ResizedImage:
         img_height = img.height
 
         # 表示画像サイズの最大
-        image_width_max = UserSetting.image_width_max
-        image_height_max = UserSetting.image_height_max
+        image_width_max = user_setting.get_setting("image_width_max")
+        image_height_max = user_setting.get_setting("image_height_max")
 
         # 拡大率の取得
         width_magnification_rate = image_width_max / img_width  # 表示サイズを超えない横幅の拡大率

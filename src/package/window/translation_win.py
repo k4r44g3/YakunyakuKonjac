@@ -24,6 +24,7 @@ class TranslationWin:
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
+        self.user_setting = UserSetting()  # ユーザ設定のインスタンス化
         self.transition_target_win = None  # 遷移先ウィンドウ名
         self.start_win()  # ウィンドウ開始処理
 
@@ -140,13 +141,13 @@ class TranslationWin:
             resizable=True,  # ウィンドウサイズ変更可能
             # ウィンドウ位置
             location=(
-                UserSetting.window_left_x,
-                UserSetting.window_top_y,
+                self.user_setting.get_setting("window_left_x"),
+                self.user_setting.get_setting("window_top_y"),
             ),
             # ウィンドウサイズ
             # size=(
-            #     UserSetting.window_width,
-            #     UserSetting.window_height,
+            # self.user_setting.get_setting("window_width"),
+            # self.user_setting.get_setting("window_height")
             # ),
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
@@ -204,6 +205,7 @@ class TranslationWin:
     def end_win(self):
         """ウィンドウ終了処理"""
         Fn.time_log("ウィンドウ終了")  # ログ出力
+        self.window.close()  # ウィンドウを閉じる
 
     def get_transition_target_win(self):
         """遷移先ウィンドウ名の取得
@@ -220,8 +222,6 @@ class TranslationWin:
         image_path = Translation.save_history()  # 翻訳する
 
         ss_file_path, overlay_translation_image_path = image_path  # 翻訳前、後画像のパスの取得
-
-        # print(ss_file_path, overlay_translation_image_path)
 
         for key in ("-after_image-", "-before_image-"):
             # メタデータ更新

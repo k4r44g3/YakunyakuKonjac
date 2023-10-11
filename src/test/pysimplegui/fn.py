@@ -109,7 +109,7 @@ class Fn:
             default_setting(dict): デフォルトの設定
         """
         setting_file_path = os.path.dirname(__file__) + "/setting.json"  # 設定ファイルのパス
-        default_setting = {"-name-": "山田太郎", "-age-": "20"}  # デフォルトの設定
+        default_setting = {"name": "山田太郎", "age": "20"}  # デフォルトの設定
         with open(
             file=setting_file_path, mode="w"
         ) as f:  # ファイルを開く(書き込み)
@@ -146,7 +146,27 @@ class Fn:
 
         setting_file_path = os.path.dirname(__file__) + "/setting.json"  # 設定ファイルのパス
 
-        current_setting.update(update_setting) # 現在の設定を更新
+        format_update_setting = Fn.remove_hyphens_from_keys(update_setting) # 更新する設定のフォーマット
+
+        current_setting.update(format_update_setting) # 現在の設定を更新
 
         with open(setting_file_path, "w") as f:  # ファイルを開く(書き込み)
             json.dump(obj=current_setting, fp=f, indent=2)  # ファイルに読み込む
+
+    def remove_hyphens_from_keys(input_dict):
+        """キー名の両端のハイフンを取り除いた辞書を返す。
+
+        Args:
+            input_dict (dict): ハイフンを取り除く対象の辞書。
+        Returns:
+            format_dict: ハイフンを取り除いた辞書。
+        """
+        format_dict = {}  # 空辞書の作成
+        for key, value in input_dict.items():  # 辞書の各キーと値で捜査
+            # キーの両端にハイフンが含まれる場合、ハイフンを取り除く
+            if key[0] == key[-1] == "-":
+                key = key[1:-1]  # ハイフンを取り除く
+            format_dict[key] = value  # 辞書の追加
+        return format_dict  # ハイフンを取り除いた辞書
+
+

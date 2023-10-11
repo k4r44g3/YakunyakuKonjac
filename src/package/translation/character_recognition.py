@@ -10,10 +10,10 @@ from package.system_setting import SystemSetting  # ユーザーが変更不可�
 class CharacterRecognition:
     """文字認識機能関連のクラス"""
 
-    def get_text_data_dict(ss_file_path):
+    def get_text_data_dict(user_setting, ss_file_path):
         """画像からテキスト情報を取得
         Args:
-            textract(Textract): Textractサービスクライアント
+            user_setting(UserSetting): ユーザーが変更可能の設定
             ss_file_path(src): スクショ画像のファイルパス
         Returns:
             text_data_dict(List[text_list,text_region_list]): テキスト情報リスト
@@ -21,7 +21,7 @@ class CharacterRecognition:
                 - text_region_list(List[region]): テキスト範囲のリスト
                     - text_region(dict{Left:int, Top:int, Width:int, Height:int}): テキスト範囲
         """
-        ocr_soft = UserSetting.ocr_soft  # OCRソフト
+        ocr_soft = user_setting.get_setting("ocr_soft")  # OCRソフト
 
         # OCRソフトによって分岐
         if ocr_soft == "Amazon Textract":  # OCRソフトがAmazonなら

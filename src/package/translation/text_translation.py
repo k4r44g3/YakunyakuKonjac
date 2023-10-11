@@ -8,10 +8,11 @@ from package.system_setting import SystemSetting  # ユーザーが変更不可�
 class TextTranslation:
     """テキスト翻訳機能関連のクラス"""
 
-    def get_text_after_list(text_before_list):
+    def get_text_after_list(user_setting, text_before_list):
         """翻訳後テキストの取得
 
         Args:
+            user_setting(UserSetting): ユーザーが変更可能の設定
             text_before_list(List[text_before]) : 翻訳前テキストのリスト
                 - text_before(str) : 翻訳前テキスト
         Returns:
@@ -19,9 +20,9 @@ class TextTranslation:
                 - text_after(str) : 翻訳後テキスト
         """
 
-        translation_soft = UserSetting.translation_soft  # 翻訳ソフト
-        source_language_code = UserSetting.source_language_code  # 翻訳前言語
-        target_language_code = UserSetting.target_language_code  # 翻訳後言語
+        translation_soft = user_setting.get_setting("translation_soft")  # 翻訳ソフト
+        source_language_code = user_setting.get_setting("source_language_code")  # 翻訳前言語
+        target_language_code = user_setting.get_setting("target_language_code")  # 翻訳後言語
 
         # OCRソフトによって分岐
         if translation_soft == "Amazon Translate":  # 翻訳ソフトがAmazonなら

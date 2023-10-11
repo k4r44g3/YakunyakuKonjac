@@ -7,13 +7,14 @@ from package.system_setting import SystemSetting  # ユーザーが変更不可�
 class ScreenshotCapture:
     """スクリーンショット撮影機能関連のクラス"""
 
-    def get_screenshot():
+    def get_screenshot(user_setting):
         """スクリーンショットの撮影
-
+        Args:
+            user_setting(UserSetting): ユーザーが変更可能の設定
         Returns:
             Image: スクショ画像
         """
-        ss_region = UserSetting.ss_region  # SS撮影範囲
+        ss_region = user_setting.get_setting("ss_region")  # SS撮影範囲
 
         screenshot_image = pyautogui.screenshot(region=ss_region)  # スクショ撮影
 

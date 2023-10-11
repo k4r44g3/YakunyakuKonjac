@@ -4,8 +4,15 @@ from package.window.translation_win import TranslationWin  # 翻訳画面ウィ�
 from package.window.input_win import InputWin  # 入力画面ウィンドウクラス
 from package.window.output_win import OutputWin  # 出力画面ウィンドウクラス
 
-Fn.time_log("システム開始")
-# メインウィンドウの処理
+from package.window.output_win import OutputWin  # 出力画面ウィンドウクラス
+
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+
+# ユーザ設定のインスタンス化
+# user_setting = UserSetting()
+
+# Fn.time_log("システム開始")
+# # メインウィンドウの処理
 
 transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
 win_class = globals()[transition_target_win]  # 遷移先ウィンドウクラス

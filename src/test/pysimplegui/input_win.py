@@ -92,9 +92,7 @@ class InputWin:
             # 確定ボタン押下イベント
             elif event == "-confirm-":
                 Fn.time_log("設定確定")
-                current_setting = self.setting # 現在の設定
-                update_setting = values # 更新する設定
-                Fn.save_setting_file(current_setting, update_setting)  # 設定をjsonファイルに保存
+                Fn.save_setting_file(self.setting)  # 設定をjsonファイルに保存
 
             # 確定ボタン押下イベント
             elif event == "-back-":

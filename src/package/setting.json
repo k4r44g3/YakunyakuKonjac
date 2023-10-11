@@ -1,0 +1,25 @@
+{
+  "ss_left_x": 0,
+  "ss_top_y": 0,
+  "ss_right_x": 1280,
+  "ss_bottom_y": 720,
+  "ocr_soft": "Amazon Textract",
+  "translation_soft": "Amazon Translate",
+  "source_language_code": "en",
+  "target_language_code": "ja",
+  "window_left_x": 0,
+  "window_top_y": 0,
+  "window_width": 800,
+  "window_height": 600,
+  "translation_interval_sec": 20,
+  "image_width_max": 300,
+  "image_height_max": 300,
+  "ss_width": 1280,
+  "ss_height": 720,
+  "ss_region": [
+    0,
+    0,
+    1280,
+    720
+  ]
+}
