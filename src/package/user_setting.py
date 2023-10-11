@@ -2,6 +2,7 @@ import json  # jsonファイルの読み書き
 import os  # ディレクトリ関連
 
 from package.fn import Fn  # 自作関数クラス
+from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
 
 class UserSetting:
@@ -79,7 +80,7 @@ class UserSetting:
         Returns:
             default_setting(dict): デフォルトの設定
         """
-        setting_file_path = os.path.dirname(__file__) + "/setting.json"  # 設定ファイルのパス
+        setting_file_path = SystemSetting.setting_file_path # 設定ファイルのパス
         default_setting = self.default_user_setting  # デフォルトの設定の取得
         with open(file=setting_file_path, mode="w") as f:  # ファイルを開く(書き込み)
             json.dump(obj=default_setting, fp=f, indent=2)  # ファイルの新規作成
@@ -92,7 +93,7 @@ class UserSetting:
         Returns:
             setting(dict): 読み込んだ設定
         """
-        setting_file_path = os.path.dirname(__file__) + "/setting.json"  # 設定ファイルのパス
+        setting_file_path = SystemSetting.setting_file_path # 設定ファイルのパス
 
         # 設定ファイルの読み込み処理（ファイルが存在しないなら新規作成）
         if os.path.isfile(setting_file_path):  # ファイルが存在するなら
@@ -112,7 +113,7 @@ class UserSetting:
             update_setting (dict): 更新する設定
         """
 
-        setting_file_path = os.path.dirname(__file__) + "/setting.json"  # 設定ファイルのパス
+        setting_file_path = SystemSetting.setting_file_path # 設定ファイルのパス
         format_update_setting = self.remove_hyphens_from_keys(update_setting)  # 更新する設定の両端のハイフンを取り除く
         self.setting.update(format_update_setting)  # 現在の設定を更新
 

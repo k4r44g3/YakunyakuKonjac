@@ -1,4 +1,4 @@
-import os
+import os # ディレクトリ関連
 
 
 class SystemSetting:

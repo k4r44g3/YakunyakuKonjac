@@ -1,11 +1,10 @@
-import os  # ディレクトリ管理
-
+from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
 class Debug:
     """デバッグ用クラス"""
 
     # デバッグ用ディレクトリパス
-    debug_directory_path = os.path.dirname(__file__) + "/../debug_history/"
+    debug_directory_path = SystemSetting.package_path + "../debug_history/"
 
     # 翻訳前画像パス
     ss_file_path = debug_directory_path + "/image_before.png"
