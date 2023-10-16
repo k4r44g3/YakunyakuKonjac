@@ -15,25 +15,20 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.translation.translation import Translation  # 翻訳機能関連のクラス
 
-# from package.window.window import Window  # 翻訳機能関連のクラス
+from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 
-class TranslationWin:
-    """メインウィンドウクラス"""
+class TranslationWin(BaseWin):
+    """メインウィンドウクラス
+
+    Args:
+        BaseWin (BaseWin): ウィンドウの基本クラス
+    """
 
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
-        self.user_setting = UserSetting()  # ユーザ設定のインスタンス化
-        self.transition_target_win = None  # 遷移先ウィンドウ名
-        self.start_win()  # ウィンドウ開始処理
-
-    def start_win(self):
-        """ウィンドウ開始処理"""
-        Fn.time_log("ウィンドウ開始")  # ログ出力
-        self.window = self.make_win()  # GUIウィンドウ作成処理
-        self.window.finalize()  # GUIウィンドウ表示
-        self.event_start()  # イベント受付開始処理(終了処理が行われるまで繰り返す)
+        super().__init__()
 
     def make_win(self):
         """GUIウィンドウ作成処理
@@ -197,23 +192,6 @@ class TranslationWin:
                 self.exit_event()  # イベント終了処理
                 break  # イベント受付終了
 
-    def exit_event(self):
-        """イベント終了処理"""
-        # todo 終了設定(保存など)
-        self.end_win()  # ウィンドウ終了処理
-
-    def end_win(self):
-        """ウィンドウ終了処理"""
-        Fn.time_log("ウィンドウ終了")  # ログ出力
-        self.window.close()  # ウィンドウを閉じる
-
-    def get_transition_target_win(self):
-        """遷移先ウィンドウ名の取得
-
-        Returns:
-            transition_target_win(str): 遷移先ウィンドウ名
-        """
-        return self.transition_target_win
 
     # todo イベント処理記述
 
