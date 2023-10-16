@@ -3,11 +3,11 @@
   "ss_top_y": 0,
   "ss_right_x": 1280,
   "ss_bottom_y": 720,
-  "ocr_soft": "EasyOCR",
+  "ocr_soft": "Amazon Textract",
   "ocr_lang_list": [
     "en"
   ],
-  "translation_soft": "Amazon Translate",
+  "translation_soft": "Google Translator",
   "source_language_code": "en",
   "target_language_code": "ja",
   "window_left_x": 0,

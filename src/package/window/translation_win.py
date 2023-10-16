@@ -87,28 +87,6 @@ class TranslationWin:
                     # expand_y = True, #  Trueの場合、要素はy方向に自動的に拡大
                 ),
             ],
-            [  # 翻訳後の画像表示
-                sg.Column(
-                    [
-                        [
-                            sg.Image(
-                                # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
-                                source=now_after_image_path,  # 翻訳後画像の保存先パス
-                                key="-after_image-",  # 識別子
-                                enable_events=True,  # イベントを取得する
-                                subsample=1,  # 画像縮小率 サイズ/n
-                                metadata={
-                                    "source": now_after_image_path,  # 翻訳後画像の保存先パス
-                                    "subsample": 1,  # 画像のサイズを縮小する量
-                                },  # メタデータ
-                            ),
-                        ],
-                    ],
-                    size=(400, 225),  # 表示サイズ
-                    scrollable=True,  # スクロールバーの有効化
-                    background_color="#888",  # 背景色
-                ),
-            ],
             [
                 # 翻訳前の画像表示
                 sg.Column(
@@ -125,6 +103,28 @@ class TranslationWin:
                                     "source": now_before_image_path,  # 翻訳前画像の保存先パス
                                     "subsample": 1,  # 画像のサイズを縮小する量
                                 },
+                            ),
+                        ],
+                    ],
+                    size=(400, 225),  # 表示サイズ
+                    scrollable=True,  # スクロールバーの有効化
+                    background_color="#888",  # 背景色
+                ),
+            ],
+            [  # 翻訳後の画像表示
+                sg.Column(
+                    [
+                        [
+                            sg.Image(
+                                # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
+                                source=now_after_image_path,  # 翻訳後画像の保存先パス
+                                key="-after_image-",  # 識別子
+                                enable_events=True,  # イベントを取得する
+                                subsample=1,  # 画像縮小率 サイズ/n
+                                metadata={
+                                    "source": now_after_image_path,  # 翻訳後画像の保存先パス
+                                    "subsample": 1,  # 画像のサイズを縮小する量
+                                },  # メタデータ
                             ),
                         ],
                     ],
