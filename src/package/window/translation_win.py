@@ -168,7 +168,7 @@ class TranslationWin:
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
 
-            Fn.time_log(event, values)
+            # Fn.time_log(event, values)
             # プログラム終了イベント処理
             if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベントが発生したら
                 self.exit_event()  # イベント終了処理

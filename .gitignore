@@ -3,16 +3,14 @@ src/history/image_after/*
 src/history/image_before/*
 src/history/text_after/*
 src/history/text_before/*
-src/history/resize_image_after/*
-src/history/resize_image_before/*
 
 # ディレクトリのみ表示
 !src/history/image_after/.gitkeep
 !src/history/image_before/.gitkeep
 !src/history/text_after/.gitkeep
 !src/history/text_before/.gitkeep
-!src/history/resize_image_after/.gitkeep
-!src/history/resize_image_before/.gitkeep
 
 # モジュールキャッシュフォルダ
-src/__pycache__
+src/package/__pycache__/*
+src/package/translation/__pycache__/*
+src/package/window/__pycache__/*

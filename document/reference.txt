@@ -14,6 +14,9 @@ https://chidakiyo.hatenablog.com/entry/gitignore-tips1
 バッチファイルの作成
 https://www.javadrive.jp/command/bat/
 
+.gitignoreに記載したのに反映されない件
+https://qiita.com/fuwamaki/items/3ed021163e50beab7154
+
 
 処理関連
 Pythonで実行中のファイルの場所（パス）を取得する
@@ -79,6 +82,9 @@ https://note.nkmk.me/python-json-load-dump/
 
 その他
 
+
+tkinter関連
+
 【Python】tkinterを使ったGUIアプリケーションの作成方法
 https://office54.net/python/tkinter/tkinter-how-to-use
 
@@ -87,6 +93,8 @@ https://karupoimou.hatenablog.com/entry/20200427/1587975580
 
 
 
+
+exe関連
 【Pyinstaller】+【venv】 簡単に軽量な .exeをつくる手順
 https://qiita.com/Yolyne/items/4bfd0d8215d00ed67da9
 
@@ -96,7 +104,15 @@ https://syachiku.net/python%E3%82%92exe%E3%81%97%E3%81%9F%E9%9A%9B%E3%81%AB%E3%8
 【pyinstaller】Pythonをexe化する方法
 https://osagoublog.com/programming/python/pyinstaller/
 
+pyinstaller 使用時のエラー: UnicodeDecodeError: 'utf-8' コーデックはバイト 0xff をデコードできません
+https://stackoverflow.com/questions/47692960/error-when-using-pyinstaller-unicodedecodeerror-utf-8-codec-cant-decode-byt
+
+
+
 
 
 EasyOCRとは？インストール〜文字認識の方法までわかりやすく解説
 https://camp.trainocate.co.jp/magazine/about-easyocr/
+
+
+

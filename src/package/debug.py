@@ -53,9 +53,3 @@ class Debug:
 
     # 翻訳後画像パス
     overlay_translation_image_path = debug_directory_path + "/image_after.png"
-
-    # # リサイズした翻訳後画像の保存先パス
-    # resize_image_after_path = debug_directory_path + "/resize_image_after.png"
-
-    # # リサイズした翻訳前画像の保存先パス
-    # resize_image_before_path = debug_directory_path + "/resize_image_before.png"

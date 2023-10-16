@@ -5,3 +5,9 @@ https://office54.net/python/tkinter/tkinter-how-to-use
 https://karupoimou.hatenablog.com/entry/20200427/1587975580
 
 画像スクロールバーのズレの解消
+
+OCR　翻訳ソフトの実験
+
+フォルダ構成資料作成
+
+.gitignoreの作成

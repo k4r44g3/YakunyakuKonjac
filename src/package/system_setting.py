@@ -25,12 +25,6 @@ class SystemSetting:
     # 翻訳後テキスト保存先設定
     text_after_directory_path = history_directory_path + "text_after/"  # ディレクトリパス
 
-    # リサイズした翻訳後画像の保存先設定
-    resize_after_directory_path = history_directory_path + "resize_image_after/"  # ディレクトリパス
-
-    # リサイズした翻訳前画像の保存先設定
-    resize_before_directory_path = history_directory_path + "resize_image_before/"  # ディレクトリパス
-
     # 設定ファイル保存先設定
     setting_file_name = "setting.json"  # ファイル名
     setting_directory_path = package_path + "../"  # ディレクトリパス
