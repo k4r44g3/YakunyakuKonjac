@@ -15,6 +15,7 @@ class UserSetting:
         "ss_right_x": 1280,  # SS範囲の右側x座標
         "ss_bottom_y": 720,  # SS範囲の下側y座標
         "ocr_soft": "Amazon Textract",  # OCRソフト
+        "ocr_lang_list" : ["en"], # 抽出する言語のリスト
         "translation_soft": "Amazon Translate",  # 翻訳ソフト
         "source_language_code": "en",  # 翻訳元言語
         "target_language_code": "ja",  # 翻訳先言語
@@ -26,29 +27,6 @@ class UserSetting:
         "image_width_max": 300,  # 表示画像サイズの最大の横幅
         "image_height_max": 300,  # # 表示画像サイズの最大の縦幅
     }
-
-    # デフォルトの設定の更新
-    default_user_setting.update(
-        {
-            "ss_width": abs(
-                default_user_setting["ss_right_x"] - default_user_setting["ss_left_x"]
-            ),  # SS範囲の横幅
-            "ss_height": abs(
-                default_user_setting["ss_bottom_y"] - default_user_setting["ss_top_y"]
-            ),  # SS範囲の縦幅
-            # スクリーンショット撮影範囲(left, top, width, height)
-            "ss_region": (
-                default_user_setting["ss_left_x"],  # SS範囲の左側x座標
-                default_user_setting["ss_top_y"],  # SS範囲の上側y座標
-                abs(
-                    default_user_setting["ss_right_x"] - default_user_setting["ss_left_x"]
-                ),  # SS範囲の横幅
-                abs(
-                    default_user_setting["ss_bottom_y"] - default_user_setting["ss_top_y"]
-                ),  # SS範囲の縦幅
-            ),
-        }
-    )
 
     def __init__(self):
         """コンストラクタ 初期設定"""

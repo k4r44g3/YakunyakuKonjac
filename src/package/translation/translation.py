@@ -39,7 +39,7 @@ class Translation:
         Fn.time_log("スクショ撮影")
 
         # ! デバック用
-        # ss_file_path = Debug.ss_file_path  # スクショ画像パス
+        ss_file_path = Debug.ss_file_path  # スクショ画像パス
 
         # 文字認識機能
         text_data_dict = CharacterRecognition.get_text_data_dict(
@@ -63,6 +63,7 @@ class Translation:
 
         # ! デバック用
         # text_after_list = Debug.text_after_list  # 翻訳後テキストリスト
+        # text_after_list = text_before_list
 
         # 翻訳画像作成機能
         overlay_translation_image = TranslationImage.get_overlay_translation_image(

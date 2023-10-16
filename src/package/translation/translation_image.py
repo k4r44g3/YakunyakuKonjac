@@ -24,7 +24,7 @@ class TranslationImage:
 
         image_out = Image.open(ss_file_path)  # 出力画像を作成
 
-        font_path = "msmincho.ttc"  # 使用するフォントファイルのパス MS明朝
+        font_path = SystemSetting.font_file_path  # 使用するフォントファイルのパス
         font_color = "#000"  # フォントカラー
         background_color = "#FFF"  # 背景色
         background_border_color = "#000"  # 背景の枠線の色

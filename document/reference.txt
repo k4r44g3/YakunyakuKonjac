@@ -115,4 +115,11 @@ EasyOCRとは？インストール〜文字認識の方法までわかりやす�
 https://camp.trainocate.co.jp/magazine/about-easyocr/
 
 
+EasyOCR
+https://github.com/JaidedAI/EasyOCR
 
+EasyOCR API Documentation
+https://www.jaided.ai/easyocr/documentation/
+
+文字認識エンジン「EasyOCR」
+https://izutsu.aa0.netvolante.jp/pukiwiki/?EasyOCR

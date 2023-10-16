@@ -13,6 +13,10 @@ pip install PySimpleGUI
 pip install pyautogui
 pip install awscli
 pip install boto3
+pip install easyocr
+@REM pip install translate
+pip install deep-translator
+
 pip install black
 pip install opencv-python
 

@@ -11,7 +11,7 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 # ユーザ設定のインスタンス化
 # user_setting = UserSetting()
 
-# Fn.time_log("システム開始")
+Fn.time_log("システム開始")
 # # メインウィンドウの処理
 
 transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名

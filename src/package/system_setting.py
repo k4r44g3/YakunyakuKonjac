@@ -1,4 +1,4 @@
-import os # ディレクトリ関連
+import os  # ディレクトリ関連
 
 
 class SystemSetting:
@@ -29,6 +29,12 @@ class SystemSetting:
     setting_file_name = "setting.json"  # ファイル名
     setting_directory_path = package_path + "../"  # ディレクトリパス
     setting_file_path = setting_directory_path + setting_file_name  # 設定ファイルパス
+
+    # 静的ファイル保存先設定
+    static_path = package_path + "../../static/"
+
+    # 使用するフォントファイルのパス MS明朝
+    font_file_path = static_path + "msmincho.ttc"
 
     # アプリケーションの名前
     app_name = "ヤクミャクコンジャック"
