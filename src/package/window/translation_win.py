@@ -5,7 +5,6 @@ import os  # ディレクトリ関連
 if __name__ == "__main__":
     src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
-    print(src_path)
 
 import PySimpleGUI as sg  # GUI
 
@@ -30,13 +29,12 @@ class TranslationWin(BaseWin):
         # todo 初期設定
         super().__init__()
 
-    def make_win(self):
-        """GUIウィンドウ作成処理
+    def get_layout(self):
+        """ウィンドウレイアウト作成処理
 
         Returns:
-            window(sg.Window): GUIウィンドウ設定
+            layout(list): ウィンドウのレイアウト
         """
-
         # 最新の翻訳後画像名の取得
         now_image_name = Fn.get_max_file_name(SystemSetting.image_after_directory_path)
 
@@ -125,28 +123,28 @@ class TranslationWin(BaseWin):
                     ],
                     size=(400, 225),  # 表示サイズ
                     scrollable=True,  # スクロールバーの有効化
+                    
                     background_color="#888",  # 背景色
                 ),
             ],
         ]
-        # GUIウィンドウ設定を返す
-        return sg.Window(
-            title=SystemSetting.app_name,  # ウィンドウタイトル
-            layout=layout,  # レイアウト指定
+        return layout  # レイアウト
+
+    def make_win(self):
+        """GUIウィンドウ作成処理
+
+        Returns:
+            window(sg.Window): GUIウィンドウ設定
+        """
+        # GUIウィンドウ設定
+        window = sg.Window(
+            title="test",  # ウィンドウタイトル
+            layout=self.get_layout(),  # レイアウト指定
             resizable=True,  # ウィンドウサイズ変更可能
-            # ウィンドウ位置
-            location=(
-                self.user_setting.get_setting("window_left_x"),
-                self.user_setting.get_setting("window_top_y"),
-            ),
-            # ウィンドウサイズ
-            # size=(
-            # self.user_setting.get_setting("window_width"),
-            # self.user_setting.get_setting("window_height")
-            # ),
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
         )
+        return window  # GUIウィンドウ設定
 
     def event_start(self):
         """イベント受付開始処理
@@ -191,7 +189,6 @@ class TranslationWin(BaseWin):
                 self.transition_target_win = "OutputWin"  # 遷移先ウィンドウ名
                 self.exit_event()  # イベント終了処理
                 break  # イベント受付終了
-
 
     # todo イベント処理記述
 

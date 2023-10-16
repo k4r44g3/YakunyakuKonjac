@@ -26,13 +26,12 @@ class OutputWin(BaseWin):
         # todo 初期設定
         super().__init__()
 
-    def make_win(self):
-        """GUIウィンドウ作成処理
+    def get_layout(self):
+        """ウィンドウレイアウト作成処理
 
         Returns:
-            window(sg.Window): GUIウィンドウ設定
+            layout(list): ウィンドウのレイアウト
         """
-
         # レイアウト指定
         layout = [
             [sg.Text("出力画面")],
@@ -57,16 +56,7 @@ class OutputWin(BaseWin):
                 sg.Button("戻る", key="-back-"),  # 戻るボタン
             ],
         ]
-        # GUIウィンドウ設定を返す
-        return sg.Window(
-            title="test",  # ウィンドウタイトル
-            layout=layout,  # レイアウト指定
-            resizable=True,  # ウィンドウサイズ変更可能
-            location=(50, 50),  # ウィンドウ位置
-            size=(300, 300),  # ウィンドウサイズ
-            finalize=True,  # 入力待ち までの間にウィンドウを表示する
-            return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
-        )
+        return layout  # レイアウト
 
     def event_start(self):
         """イベント受付開始処理

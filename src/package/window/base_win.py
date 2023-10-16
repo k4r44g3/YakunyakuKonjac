@@ -30,12 +30,30 @@ class BaseWin:
         self.window.finalize()  # GUIウィンドウ表示
         self.event_start()  # イベント受付開始処理(終了処理が行われるまで繰り返す)
 
+    def get_layout(self):
+        """ウィンドウレイアウト作成処理
+
+        Returns:
+            layout(list): ウィンドウのレイアウト
+        """
+
     def make_win(self):
         """GUIウィンドウ作成処理
 
         Returns:
             window(sg.Window): GUIウィンドウ設定
         """
+        # GUIウィンドウ設定
+        window = sg.Window(
+            title="test",  # ウィンドウタイトル
+            layout=self.get_layout(),  # レイアウト指定
+            resizable=True,  # ウィンドウサイズ変更可能
+            location=(50, 50),  # ウィンドウ位置
+            size=(300, 300),  # ウィンドウサイズ
+            finalize=True,  # 入力待ち までの間にウィンドウを表示する
+            return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
+        )
+        return window  # GUIウィンドウ設定
 
     def event_start(self):
         """イベント受付開始処理
