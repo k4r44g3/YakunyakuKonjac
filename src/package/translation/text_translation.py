@@ -25,16 +25,16 @@ class TextTranslation:
         translation_soft = user_setting.get_setting("translation_soft")  # 翻訳ソフト
 
         # OCRソフトによって分岐
-        if translation_soft == "Amazon Translate":  # 翻訳ソフトがAmazon Translateなら
-            # Amazon Translateを使用して、翻訳後テキストを取得
+        if translation_soft == "AmazonTranslate":  # 翻訳ソフトがAmazonTranslateなら
+            # AmazonTranslateを使用して、翻訳後テキストを取得
             text_after_list = TextTranslation.amazon_translate(user_setting, text_before_list)
-        elif translation_soft == "Google Translator":
-            # Google Translatorを使用して、翻訳後テキストを取得
+        elif translation_soft == "GoogleTranslator":
+            # GoogleTranslatorを使用して、翻訳後テキストを取得
             text_after_list = TextTranslation.google_translator(user_setting, text_before_list)
         return text_after_list  # 翻訳後テキストのリスト
 
     def amazon_translate(user_setting, text_before_list):
-        """Amazon Translateを使用して、翻訳後テキストを取得
+        """AmazonTranslateを使用して、翻訳後テキストを取得
 
         Args:
             user_setting(UserSetting): ユーザーが変更可能の設定
@@ -63,7 +63,7 @@ class TextTranslation:
         return text_after_list  # 翻訳後テキストのリスト
 
     def google_translator(user_setting, text_before_list):
-        """Google Translatorを使用して、翻訳後テキストを取得
+        """GoogleTranslatorを使用して、翻訳後テキストを取得
 
         Args:
             user_setting(UserSetting): ユーザーが変更可能の設定
@@ -89,7 +89,6 @@ class TextTranslation:
             text_after_list.append(result)  # 翻訳後テキストのリスト作成
 
         return text_after_list  # 翻訳後テキストのリスト
-
 
     def save_text_after(text_after_list, file_name):
         """翻訳後テキストをファイルに保存

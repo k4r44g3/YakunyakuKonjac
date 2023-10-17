@@ -25,8 +25,8 @@ class CharacterRecognition:
         ocr_soft = user_setting.get_setting("ocr_soft")  # OCRソフト
 
         # OCRソフトによって分岐
-        if ocr_soft == "Amazon Textract":
-            # Amazon Textractを使用して画像からテキスト情報を取得
+        if ocr_soft == "AmazonTextract":
+            # AmazonTextractを使用して画像からテキスト情報を取得
             text_data_list = CharacterRecognition.amazon_textract_ocr(ss_file_path)
         elif ocr_soft == "EasyOCR":
             # EasyOCRを使用して画像からテキスト情報を取得
@@ -34,7 +34,7 @@ class CharacterRecognition:
         return text_data_list  # テキスト情報のリスト
 
     def amazon_textract_ocr(ss_file_path):
-        """Amazon Textractを使用して画像からテキスト情報を取得
+        """AmazonTextractを使用して画像からテキスト情報を取得
         Args:
             ss_file_path(src): スクショ画像のファイルパス
 

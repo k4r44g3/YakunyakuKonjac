@@ -14,9 +14,9 @@ class UserSetting:
         "ss_top_y": 0,  # SS範囲の上側y座標
         "ss_right_x": 1280,  # SS範囲の右側x座標
         "ss_bottom_y": 720,  # SS範囲の下側y座標
-        "ocr_soft": "Amazon Textract",  # OCRソフト
-        "ocr_lang_list" : ["en"], # 抽出する言語のリスト
-        "translation_soft": "Amazon Translate",  # 翻訳ソフト
+        "ocr_soft": "AmazonTextract",  # OCRソフト
+        "ocr_lang_list": ["en"],  # 抽出する言語のリスト
+        "translation_soft": "AmazonTranslate",  # 翻訳ソフト
         "source_language_code": "en",  # 翻訳元言語
         "target_language_code": "ja",  # 翻訳先言語
         "window_left_x": 0,  # ウィンドウの左側x座標
@@ -58,7 +58,7 @@ class UserSetting:
         Returns:
             default_setting(dict): デフォルトの設定
         """
-        setting_file_path = SystemSetting.setting_file_path # 設定ファイルのパス
+        setting_file_path = SystemSetting.setting_file_path  # 設定ファイルのパス
         default_setting = self.default_user_setting  # デフォルトの設定の取得
         with open(file=setting_file_path, mode="w") as f:  # ファイルを開く(書き込み)
             json.dump(obj=default_setting, fp=f, indent=2)  # ファイルの新規作成
@@ -71,7 +71,7 @@ class UserSetting:
         Returns:
             setting(dict): 読み込んだ設定
         """
-        setting_file_path = SystemSetting.setting_file_path # 設定ファイルのパス
+        setting_file_path = SystemSetting.setting_file_path  # 設定ファイルのパス
 
         # 設定ファイルの読み込み処理（ファイルが存在しないなら新規作成）
         if os.path.isfile(setting_file_path):  # ファイルが存在するなら
@@ -91,7 +91,7 @@ class UserSetting:
             update_setting (dict): 更新する設定
         """
 
-        setting_file_path = SystemSetting.setting_file_path # 設定ファイルのパス
+        setting_file_path = SystemSetting.setting_file_path  # 設定ファイルのパス
         format_update_setting = self.remove_hyphens_from_keys(update_setting)  # 更新する設定の両端のハイフンを取り除く
         self.setting.update(format_update_setting)  # 現在の設定を更新
 

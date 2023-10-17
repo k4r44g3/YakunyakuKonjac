@@ -3,11 +3,11 @@
   "ss_top_y": 0,
   "ss_right_x": 1280,
   "ss_bottom_y": 720,
-  "ocr_soft": "Amazon Textract",
+  "ocr_soft": "EasyOCR",
   "ocr_lang_list": [
     "en"
   ],
-  "translation_soft": "Google Translator",
+  "translation_soft": "AmazonTranslate",
   "source_language_code": "en",
   "target_language_code": "ja",
   "window_left_x": 0,
@@ -16,5 +16,7 @@
   "window_height": 600,
   "translation_interval_sec": 20,
   "image_width_max": 300,
-  "image_height_max": 300
+  "image_height_max": 300,
+  "EasyOCR": true,
+  "AmazonTextract": false
 }

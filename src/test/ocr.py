@@ -28,11 +28,11 @@ def get_text_data_dict(ss_file_path):
             - text_region_list(List[region]): テキスト範囲のリスト
                 - text_region(dict{Left:int, Top:int, Width:int, Height:int}): テキスト範囲
     """
-    ocr_soft = "Amazon Textract"  # OCRソフト
+    ocr_soft = "AmazonTextract"  # OCRソフト
     ocr_soft = "EasyOCR"  # OCRソフト
 
     # OCRソフトによって分岐
-    if ocr_soft == "Amazon Textract":  # OCRソフトがAmazonなら
+    if ocr_soft == "AmazonTextract":  # OCRソフトがAmazonなら
         text_data_list = amazon_textract_ocr(ss_file_path)
     if ocr_soft == "EasyOCR":  # OCRソフトがAmazonなら
         text_data_list = easy_ocr(ss_file_path)
@@ -41,7 +41,7 @@ def get_text_data_dict(ss_file_path):
 
 
 def amazon_textract_ocr(ss_file_path):
-    """Amazon Textractを使用して画像からテキスト情報を取得
+    """AmazonTextractを使用して画像からテキスト情報を取得
     Args:
         ss_file_path(src): スクショ画像のファイルパス
 
