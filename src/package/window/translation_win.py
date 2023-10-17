@@ -56,14 +56,26 @@ class TranslationWin(BaseWin):
 
         # メニューバー設定
         menuber = [
-            ["設定 (&C)", ["設定 (&O)::menu_setting::", "---", "終了 (&X)::menu_exit::"]],
+            [
+                "設定 (&C)",
+                [
+                    "撮影設定 (&Q)::transition_ShootingSettingWin::",
+                    "言語設定 (&W)::transition_LanguageSettingWin::",
+                    "表示設定 (&E)::transition_DisplaySettingWin::",
+                    "キー設定 (&R)::transition_KeySettingWin::",
+                    "テーマ設定 (&T)::transition_ThemeSettingWin::",
+                    "保存設定 (&Y)::transition_SaveSettingWin::",
+                    "環境設定 (&U)::transition_EnvironmentSettingWin::",
+                    "利用者情報 (&I)::transition_UserInfoWin::",
+                ],
+            ],
             [
                 "入力 (&I)",
-                ["入力画面 (&I)::menu_input::"],
+                ["入力画面 (&I)::transition_InputWin::"],
             ],
             [
                 "出力 (&O)",
-                ["出力画面 (&O)::menu_output::"],
+                ["出力画面 (&O)::transition_OutputWin::"],
             ],
         ]
 
@@ -86,7 +98,6 @@ class TranslationWin(BaseWin):
                     [
                         [
                             sg.Image(
-                                # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
                                 source=now_before_image_path,  # 翻訳前画像の保存先パス
                                 key="-before_image-",  # 識別子
                                 enable_events=True,  # イベントを取得する
@@ -109,7 +120,6 @@ class TranslationWin(BaseWin):
                     [
                         [
                             sg.Image(
-                                # filename=SystemSetting.image_after_directory_path + "20231005_142830_721.png",
                                 source=now_after_image_path,  # 翻訳後画像の保存先パス
                                 key="-after_image-",  # 識別子
                                 enable_events=True,  # イベントを取得する
@@ -123,7 +133,6 @@ class TranslationWin(BaseWin):
                     ],
                     size=(400, 225),  # 表示サイズ
                     scrollable=True,  # スクロールバーの有効化
-                    
                     background_color="#888",  # 背景色
                 ),
             ],
@@ -161,7 +170,7 @@ class TranslationWin(BaseWin):
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
 
-            # Fn.time_log(event, values)
+            Fn.time_log(event, values)
             # プログラム終了イベント処理
             if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベントが発生したら
                 self.exit_event()  # イベント終了処理
@@ -176,19 +185,16 @@ class TranslationWin(BaseWin):
             elif event == "-after_image-" or event == "-before_image-":
                 self.image_size_change(event)  # 画像縮小率の変更
 
-            # メニューバーの設定押下イベント
-            elif "::menu_input::" in event:
-                Fn.time_log("入力画面に遷移")
-                self.transition_target_win = "InputWin"  # 遷移先ウィンドウ名
-                self.exit_event()  # イベント終了処理
-                break  # イベント受付終了
-
-            # メニューバーの設定押下イベント
-            elif "::menu_output::" in event:
-                Fn.time_log("出力画面に遷移")
-                self.transition_target_win = "OutputWin"  # 遷移先ウィンドウ名
-                self.exit_event()  # イベント終了処理
-                break  # イベント受付終了
+            # メニューバーの押下イベント
+            elif values["-menu-"] is not None:  # 選択された項目があるなら
+                "メニューバーのイベント処理"
+                menu_key = event.split("::")[1]  # メニュー項目の識別子取得
+                # 画面遷移を行うかどうか
+                if menu_key.startswith("transition_"):# menu_keyにtransitionが含まれるなら
+                    self.transition_target_win = menu_key.split("_")[1]  # 遷移先ウィンドウ名
+                    Fn.time_log(self.transition_target_win,"に画面遷移")
+                    self.exit_event()  # イベント終了処理
+                    break  # イベント受付終了
 
     # todo イベント処理記述
 
