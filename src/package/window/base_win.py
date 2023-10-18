@@ -48,8 +48,8 @@ class BaseWin:
             title="test",  # ウィンドウタイトル
             layout=self.get_layout(),  # レイアウト指定
             resizable=True,  # ウィンドウサイズ変更可能
-            location=(50, 50),  # ウィンドウ位置
-            size=(300, 300),  # ウィンドウサイズ
+            # location=(50, 50),  # ウィンドウ位置
+            # size=(300, 300),  # ウィンドウサイズ
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
         )

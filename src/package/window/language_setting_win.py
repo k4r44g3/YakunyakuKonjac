@@ -11,6 +11,7 @@ import PySimpleGUI as sg  # GUI
 
 from package.fn import Fn  # 自作関数クラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 
@@ -32,26 +33,82 @@ class LanguageSettingWin(BaseWin):
         Returns:
             layout(list): ウィンドウのレイアウト
         """
+        # 言語情報一覧リストの取得
+        language_list = SystemSetting.language_list
+
+        # 言語名のリスト作成
+        language_name_list = []
+        for language in language_list:
+            language_name_list.append(language["ja_text"])  # 言語名取得
+
+        # 現在のOCRソフトの取得
+        now_ocr_soft = self.user_setting.get_setting("ocr_soft")
+        # 現在の翻訳ソフトの取得
+        now_translation_soft = self.user_setting.get_setting("translation_soft")
+        # 現在の翻訳前言語コードの取得
+        now_source_language_code = self.user_setting.get_setting("source_language_code")
+        # 現在の翻訳後言語コードの取得
+        now_target_language_code = self.user_setting.get_setting("target_language_code")
+
+        # 現在の翻訳前言語名の取得
+        now_source_language_name = Fn.search_dict_in_list(
+            language_list, "code", now_source_language_code
+        )["ja_text"]
+
+        # 現在の翻訳後言語名の取得
+        now_target_language_name = Fn.search_dict_in_list(
+            language_list, "code", now_target_language_code
+        )["ja_text"]
+
         # レイアウト指定
         layout = [
             [sg.Text("言語設定画面")],
+            [sg.Text("AmazonTextract は非ラテン文字の言語に対応していません。")],
             [
-                sg.Text("ocr_soft"),
-                sg.Input(
-                    key="-ocr_soft-",  # 識別子
-                    enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
-                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
-                    default_text=self.user_setting.get_setting("ocr_soft"),  # デフォルト
+                # 使用ソフト表示フレーム
+                sg.Frame(
+                    title="使用ソフト",
+                    layout=[
+                        [
+                            sg.Text("OCRソフト : " + now_ocr_soft),
+                        ],
+                        [
+                            sg.Text("翻訳ソフト : " + now_translation_soft),
+                        ],
+                    ],
                 ),
             ],
             [
-                sg.Text("translation_soft"),
-                sg.Input(
-                    key="-translation_soft-",  # 識別子
-                    enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
-                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
-                    default_text=self.user_setting.get_setting("translation_soft"),  # デフォルト
-                ),
+                # 翻訳前言語選択フレーム
+                sg.Frame(
+                    title="翻訳前言語",
+                    layout=[
+                        [
+                            sg.Listbox(
+                                values=language_name_list,
+                                size=(14, 5),
+                                key="-source_language_code-",
+                                default_values=now_source_language_name,  # デフォルト値
+                            ),
+                        ],
+                    ],
+                )
+            ],
+            [
+                # 翻訳後言語選択フレーム
+                sg.Frame(
+                    title="翻訳後言語",
+                    layout=[
+                        [
+                            sg.Listbox(
+                                language_name_list,
+                                size=(14, 5),
+                                key="-target_language_code-",
+                                default_values=now_target_language_name,  # デフォルト値
+                            ),
+                        ],
+                    ],
+                )
             ],
             [
                 sg.Push(),  # 右に寄せる
@@ -79,7 +136,7 @@ class LanguageSettingWin(BaseWin):
             # 確定ボタン押下イベント
             elif event == "-confirm-":
                 Fn.time_log("設定確定")
-                update_setting = values  # 更新する設定
+                update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
             # 確定ボタン押下イベント
@@ -90,6 +147,40 @@ class LanguageSettingWin(BaseWin):
                 break  # イベント受付終了
 
     # todo イベント処理記述
+
+    def get_update_setting(self, values):
+        """更新する設定の取得
+
+        Args:
+            values (dict): 入力フォームの値の辞書
+        Returns:
+            update_setting (dict): 更新する設定の値の辞書
+        """
+        # 言語情報一覧リストの取得
+        language_list = SystemSetting.language_list
+
+        # 翻訳前言語名取得
+        source_language_name = values["-source_language_code-"][0]
+        # 翻訳後言語名取得
+        target_language_name = values["-target_language_code-"][0]
+
+        # 翻訳前言語コード取得
+        source_language_code = Fn.search_dict_in_list(
+            language_list, "ja_text", source_language_name
+        )["code"]
+        # 翻訳後言語コード取得
+        target_language_code = Fn.search_dict_in_list(
+            language_list, "ja_text", target_language_name
+        )["code"]
+
+        # 更新する設定
+        update_setting = {}
+        # 翻訳前言語設定
+        update_setting["source_language_code"] = source_language_code
+        # 翻訳後言語設定
+        update_setting["target_language_code"] = target_language_code
+        # 更新する設定
+        return update_setting
 
 
 # ! デバッグ用

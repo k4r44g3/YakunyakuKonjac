@@ -1,0 +1,34 @@
+# 言語リスト{日本語表記、英語表記、言語コード(ISO 639-1),言語コード(ISO 639-2)}
+langage_list = [
+    {"ja_text": "アラビア語", "en_text": "Arabic", "code": "ar"},
+    {"ja_text": "中国語", "en_text": "Chinese", "code": "zh", "code2": "ch_sim"},
+    {"ja_text": "英語", "en_text": "English", "code": "en"},
+    {"ja_text": "フランス語", "en_text": "French", "code": "fr"},
+    {"ja_text": "ドイツ語", "en_text": "German", "code": "de"},
+    {"ja_text": "イタリア語", "en_text": "Italian", "code": "it"},
+    {"ja_text": "日本語", "en_text": "Japanese", "code": "ja"},
+    {"ja_text": "韓国語", "en_text": "Korean", "code": "ko"},
+    {"ja_text": "ポルトガル語", "en_text": "Portuguese", "code": "pt"},
+    {"ja_text": "ロシア語", "en_text": "Russian", "code": "ru"},
+    {"ja_text": "スペイン語", "en_text": "Spanish", "code": "es"},
+]
+
+対応言語
+Amazon Textract
+ラテン文字のみ
+
+EasyOCR
+ISO-639-1 コード
+一部 ISO-639-2 コード
+https://www.jaided.ai/easyocr/
+中国語のみch_simを使用
+
+Amazon Translate
+ISO-639 コード
+https://docs.aws.amazon.com/ja_jp/translate/latest/dg/what-is-languages.html
+
+
+GoogleTranslator
+ISO-639 コード
+https://cloud.google.com/translate/docs/languages?hl=ja
+

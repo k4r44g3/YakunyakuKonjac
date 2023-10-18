@@ -88,7 +88,18 @@ class CharacterRecognition:
                 - text_region_list(List[region]): テキスト範囲のリスト
                     - text_region(dict{Left:int, Top:int, Width:int, Height:int}): テキスト範囲
         """
-        ocr_lang_list = user_setting.get_setting("ocr_lang_list")  # 抽出する言語のリスト
+
+        language_code = user_setting.get_setting("source_language_code")
+
+        # EasyOCR用言語コードのリスト
+        EasyOCR_language_code = SystemSetting.EasyOCR_language_code
+
+        # 言語コードがEasyOCR用言語コードのリストに存在するなら
+        if language_code in EasyOCR_language_code:
+            # EasyOCR用言語コードに置き換える
+            language_code = EasyOCR_language_code[language_code]
+
+        ocr_lang_list = [language_code]  # 抽出する言語のリスト
 
         text_list = []  # テキスト内容のリスト
         text_region_list = []  # テキスト範囲のリスト

@@ -92,6 +92,8 @@ https://office54.net/python/tkinter/tkinter-how-to-use
 https://karupoimou.hatenablog.com/entry/20200427/1587975580
 
 
+【Python（PySimpleGUI）でGUIアプリ入門】自動的に表示内容を更新するGUIアプリを作る方法
+https://knt60345blog.com/pysimplegui_auto_exe1/
 
 
 exe関連
@@ -110,10 +112,9 @@ https://stackoverflow.com/questions/47692960/error-when-using-pyinstaller-unicod
 
 
 
-
+OCR関連
 EasyOCRとは？インストール〜文字認識の方法までわかりやすく解説
 https://camp.trainocate.co.jp/magazine/about-easyocr/
-
 
 EasyOCR
 https://github.com/JaidedAI/EasyOCR
@@ -123,3 +124,11 @@ https://www.jaided.ai/easyocr/documentation/
 
 文字認識エンジン「EasyOCR」
 https://izutsu.aa0.netvolante.jp/pukiwiki/?EasyOCR
+
+
+翻訳関連
+Welcome to deep_translator’s documentation!
+https://deep-translator.readthedocs.io/en/latest/index.html
+
+Pythonでdeep-translatorを用いて翻訳を行う
+https://laboratory.kazuuu.net/translation-in-python-with-deep-translator/

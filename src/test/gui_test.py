@@ -14,13 +14,14 @@ layout = (
         ],
         [
             # 松竹梅から選択する。初期値'梅'
-            sg.Combo(['松', '竹', '梅'], '梅', readonly=True, key='COMBO')
+            sg.Combo(["松", "竹", "梅"], "梅", readonly=True, key="COMBO")
         ],
+        [sg.Listbox(["松", "竹", "梅"], size=(15, 3), key="-list-")],
         [
-            sg.Radio('松', 'group_1', True, key='RADIO_MATSU'), 
-            sg.Radio('竹', 'group_1', False, key='RADIO_TAKE'), 
-            sg.Radio('梅', 'group_1', False, key='RADIO_UME'), 
-        ]
+            sg.Radio("松", "group_1", True, key="RADIO_MATSU"),
+            sg.Radio("竹", "group_1", False, key="RADIO_TAKE"),
+            sg.Radio("梅", "group_1", False, key="RADIO_UME"),
+        ],
     ],
 )
 

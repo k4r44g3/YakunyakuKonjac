@@ -38,3 +38,21 @@ class SystemSetting:
 
     # アプリケーションの名前
     app_name = "ヤクミャクコンジャック"
+
+    # 言語情報一覧リスト{日本語表記、英語表記、言語コード(ISO 639-1)}
+    language_list = [
+        {"ja_text": "アラビア語", "en_text": "Arabic", "code": "ar"},
+        {"ja_text": "中国語", "en_text": "Chinese", "code": "zh"},
+        {"ja_text": "英語", "en_text": "English", "code": "en"},
+        {"ja_text": "フランス語", "en_text": "French", "code": "fr"},
+        {"ja_text": "ドイツ語", "en_text": "German", "code": "de"},
+        {"ja_text": "イタリア語", "en_text": "Italian", "code": "it"},
+        {"ja_text": "日本語", "en_text": "Japanese", "code": "ja"},
+        {"ja_text": "韓国語", "en_text": "Korean", "code": "ko"},
+        {"ja_text": "ポルトガル語", "en_text": "Portuguese", "code": "pt"},
+        {"ja_text": "ロシア語", "en_text": "Russian", "code": "ru"},
+        {"ja_text": "スペイン語", "en_text": "Spanish", "code": "es"},
+    ]
+
+    # EasyOCR用の言語コード(ISO 639-2)のリスト((ISO 639-1):(ISO 639-2))
+    EasyOCR_language_code = {"zh": "ch_sim"}

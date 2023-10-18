@@ -190,9 +190,9 @@ class TranslationWin(BaseWin):
                 "メニューバーのイベント処理"
                 menu_key = event.split("::")[1]  # メニュー項目の識別子取得
                 # 画面遷移を行うかどうか
-                if menu_key.startswith("transition_"):# menu_keyにtransitionが含まれるなら
+                if menu_key.startswith("transition_"):  # menu_keyにtransitionが含まれるなら
                     self.transition_target_win = menu_key.split("_")[1]  # 遷移先ウィンドウ名
-                    Fn.time_log(self.transition_target_win,"に画面遷移")
+                    Fn.time_log(self.transition_target_win, "に画面遷移")
                     self.exit_event()  # イベント終了処理
                     break  # イベント受付終了
 

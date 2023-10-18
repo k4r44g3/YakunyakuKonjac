@@ -3,7 +3,7 @@
   "ss_top_y": 0,
   "ss_right_x": 1280,
   "ss_bottom_y": 720,
-  "ocr_soft": "EasyOCR",
+  "ocr_soft": "AmazonTextract",
   "ocr_lang_list": [
     "en"
   ],
@@ -16,7 +16,5 @@
   "window_height": 600,
   "translation_interval_sec": 20,
   "image_width_max": 300,
-  "image_height_max": 300,
-  "EasyOCR": true,
-  "AmazonTextract": false
+  "image_height_max": 300
 }

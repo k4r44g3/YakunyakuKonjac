@@ -53,7 +53,8 @@ class EnvironmentSettingWin(BaseWin):
                         text=ocr_soft,  # テキスト
                         group_id="ocr_radio",  # グループID
                         default=(ocr_soft == now_ocr_soft),  # デフォルトの設定
-                        key=ocr_soft,  # 識別子
+                        key="-" + ocr_soft + "-",  # 識別子
+                        enable_events=True,  # イベントを取得する
                     ),
                 ]
             )
@@ -68,7 +69,8 @@ class EnvironmentSettingWin(BaseWin):
                         text=translation_soft,  # テキスト
                         group_id="translation_radio",  # グループID
                         default=(translation_soft == now_translation_soft),  # デフォルトの設定
-                        key=translation_soft,  # 識別子
+                        key="-" + translation_soft + "-",  # 識別子
+                        enable_events=True,  # イベントを取得する
                     ),
                 ]
             )
@@ -76,6 +78,7 @@ class EnvironmentSettingWin(BaseWin):
         # レイアウト指定
         layout = [
             [sg.Text("環境設定画面")],
+            [sg.Text("AmazonTextract は非ラテン文字の言語に対応していません。")],
             [
                 # OCRソフト設定フレーム
                 sg.Frame(title="OCRソフト", layout=ocr_soft_layout),
@@ -135,13 +138,13 @@ class EnvironmentSettingWin(BaseWin):
 
         # OCRソフトの設定
         for ocr_soft in self.ocr_soft_list:  # OCRソフトの名前で走査
-            if values[ocr_soft]:  # ラジオボックスが選択されているなら
+            if values["-" + ocr_soft + "-"]:  # ラジオボックスが選択されているなら
                 update_setting["ocr_soft"] = ocr_soft  # OCRソフトの名前を取得
                 break
 
         # 翻訳ソフトの設定
         for translation_soft in self.translation_soft_list:  # 翻訳ソフトの名前で走査
-            if values[translation_soft]:  # ラジオボックスが選択されているなら
+            if values["-" + translation_soft + "-"]:  # ラジオボックスが選択されているなら
                 update_setting["translation_soft"] = translation_soft  # 翻訳ソフトの名前を取得
                 break
 

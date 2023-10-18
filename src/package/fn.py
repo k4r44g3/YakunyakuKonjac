@@ -102,3 +102,20 @@ class Fn:
         file_list = os.listdir(dir_path)  # ファイル名のリストを取得
         max_file_name = max(file_list)  # 辞書順で最大のファイル名を取得
         return max_file_name  # 辞書順で最大のファイル名
+
+    def search_dict_in_list(lst, key_name, value):
+        """与えられたリスト内の辞書から指定したキーと値に一致する辞書を取得
+
+        Args:
+            lst (list of dict): 検索対象の辞書要素が格納されたリスト
+            key_name (str): 検索に使用するキーの名前
+            value (任意の型) 検索する値
+
+        Returns:
+            dict or None: 一致する辞書（最初に見つかったもの）
+        """
+
+        for item in lst:  # リストから辞書を取り出す
+            if item[key_name] == value:
+                # 辞書のキーと値が一致するなら一致する辞書を返す
+                return item

@@ -39,7 +39,7 @@ class Translation:
         Fn.time_log("スクショ撮影")
 
         # ! デバック用
-        ss_file_path = Debug.ss_file_path  # スクショ画像パス
+        # ss_file_path = Debug.ss_file_path  # スクショ画像パス
 
         # 文字認識機能
         text_data_dict = CharacterRecognition.get_text_data_dict(
@@ -47,7 +47,7 @@ class Translation:
         )  # 画像からテキスト情報を取得
         text_before_list = text_data_dict["text_list"]  # 翻訳前テキストリストの取得
         text_region_list = text_data_dict["text_region_list"]  # テキスト範囲のリストの取得
-        CharacterRecognition.save_text_before(text_before_list, file_name)  # 翻訳前テキストをファイルに保存
+        # CharacterRecognition.save_text_before(text_before_list, file_name)  # 翻訳前テキストをファイルに保存
         Fn.time_log("文字取得")
 
         # ! デバック用
@@ -58,7 +58,7 @@ class Translation:
         text_after_list = TextTranslation.get_text_after_list(
             user_setting, text_before_list
         )  # 翻訳後テキストリストの取得
-        TextTranslation.save_text_after(text_after_list, file_name)  # 翻訳後テキストをファイルに保存
+        # TextTranslation.save_text_after(text_after_list, file_name)  # 翻訳後テキストをファイルに保存
         Fn.time_log("翻訳")
 
         # ! デバック用
