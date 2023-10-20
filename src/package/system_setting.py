@@ -33,26 +33,39 @@ class SystemSetting:
     # 静的ファイル保存先設定
     static_path = package_path + "../../static/"
 
+    # フォントディレクトリパス
+    font_path = static_path + "/font/"
+
     # 使用するフォントファイルのパス MS明朝
-    font_file_path = static_path + "msmincho.ttc"
+    font_msmincho_path = font_path + "msmincho.ttc"
+
+    # Yu Gothic のパス 和文フォント 游ゴシック
+    font_YuGothic_path = font_path + "YuGothM.ttc"
+
+    # Segoe のパス 欧文フォント
+    font_Segoe_path = font_path + "segoeui.ttf"
+    # Microsoft YaHei のパス 簡体字フォント
+    font_MicrosoftYaHei_path = font_path + "msyh.ttc"
+    # Malgun Gothic のパス ハングルフォント
+    font_MalgunGothic_path = font_path + "malgun.ttf"
 
     # アプリケーションの名前
     app_name = "ヤクミャクコンジャック"
 
-    # 言語情報一覧リスト{日本語表記、英語表記、言語コード(ISO 639-1)}
+    # 言語情報一覧リスト{日本語表記、英語表記、言語コード(ISO 639-1),フォントパス}
     language_list = [
-        {"ja_text": "アラビア語", "en_text": "Arabic", "code": "ar"},
-        {"ja_text": "中国語", "en_text": "Chinese", "code": "zh"},
-        {"ja_text": "英語", "en_text": "English", "code": "en"},
-        {"ja_text": "フランス語", "en_text": "French", "code": "fr"},
-        {"ja_text": "ドイツ語", "en_text": "German", "code": "de"},
-        {"ja_text": "イタリア語", "en_text": "Italian", "code": "it"},
-        {"ja_text": "日本語", "en_text": "Japanese", "code": "ja"},
-        {"ja_text": "韓国語", "en_text": "Korean", "code": "ko"},
-        {"ja_text": "ポルトガル語", "en_text": "Portuguese", "code": "pt"},
-        {"ja_text": "ロシア語", "en_text": "Russian", "code": "ru"},
-        {"ja_text": "スペイン語", "en_text": "Spanish", "code": "es"},
+        {"ja_text": "アラビア語", "en_text": "Arabic", "code": "ar", "font_path": font_Segoe_path},
+        {"ja_text": "中国語", "en_text": "Chinese", "code": "zh-CN","font_path": font_MicrosoftYaHei_path},
+        {"ja_text": "英語", "en_text": "English", "code": "en", "font_path": font_Segoe_path},
+        {"ja_text": "フランス語", "en_text": "French", "code": "fr", "font_path": font_Segoe_path},
+        {"ja_text": "ドイツ語", "en_text": "German", "code": "de", "font_path": font_Segoe_path},
+        {"ja_text": "イタリア語", "en_text": "Italian", "code": "it", "font_path": font_Segoe_path},
+        {"ja_text": "日本語", "en_text": "Japanese", "code": "ja", "font_path": font_YuGothic_path},
+        {"ja_text": "韓国語", "en_text": "Korean", "code": "ko","font_path": font_MalgunGothic_path},
+        {"ja_text": "ポルトガル語", "en_text": "Portuguese", "code": "pt","font_path": font_Segoe_path},
+        {"ja_text": "ロシア語", "en_text": "Russian", "code": "ru", "font_path": font_Segoe_path},
+        {"ja_text": "スペイン語", "en_text": "Spanish", "code": "es", "font_path": font_Segoe_path},
     ]
 
     # EasyOCR用の言語コード(ISO 639-2)のリスト((ISO 639-1):(ISO 639-2))
-    EasyOCR_language_code = {"zh": "ch_sim"}
+    EasyOCR_language_code = {"zh-CN": "ch_sim"}

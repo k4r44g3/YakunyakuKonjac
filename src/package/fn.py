@@ -88,7 +88,9 @@ class Fn:
         file = open(file_path, "w", encoding="utf-8")  # 新規書き込みでテキストファイルを開く
         # file = open(text_filepath, "w",)  # 新規書き込みでテキストファイルを開く
         for text_before in text_list:  # テキストで走査
-            file.write(text_before + "\n")  # ファイルに書き込む
+            if text_before is not None:
+                # テキストが存在するなら
+                file.write(text_before + "\n")  # ファイルに書き込む
         file.close()  # ファイルを閉じる
 
     def get_max_file_name(dir_path):

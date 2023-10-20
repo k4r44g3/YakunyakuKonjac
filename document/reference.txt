@@ -110,6 +110,12 @@ pyinstaller 使用時のエラー: UnicodeDecodeError: 'utf-8' コーデック�
 https://stackoverflow.com/questions/47692960/error-when-using-pyinstaller-unicodedecodeerror-utf-8-codec-cant-decode-byt
 
 
+フォント関連
+国際フォント
+https://learn.microsoft.com/ja-jp/windows/apps/design/globalizing/loc-international-fonts
+
+ISO 639-1コード一覧
+https://ja.wikipedia.org/wiki/ISO_639-1%E3%82%B3%E3%83%BC%E3%83%89%E4%B8%80%E8%A6%A7
 
 
 OCR関連

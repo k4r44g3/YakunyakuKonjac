@@ -22,6 +22,14 @@ class LanguageSettingWin(BaseWin):
         BaseWin (BaseWin): ウィンドウの基本クラス
     """
 
+    # 言語情報一覧リストの取得
+    language_list = SystemSetting.language_list
+
+    # 言語名のリスト作成
+    language_name_list = []
+    for language in language_list:
+        language_name_list.append(language["ja_text"])  # 言語名取得
+
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
@@ -33,13 +41,12 @@ class LanguageSettingWin(BaseWin):
         Returns:
             layout(list): ウィンドウのレイアウト
         """
-        # 言語情報一覧リストの取得
-        language_list = SystemSetting.language_list
 
-        # 言語名のリスト作成
-        language_name_list = []
-        for language in language_list:
-            language_name_list.append(language["ja_text"])  # 言語名取得
+        # 言語情報一覧リストのリストの取得
+        language_list = LanguageSettingWin.language_list
+
+        # 言語名のリスト
+        language_name_list = LanguageSettingWin.language_name_list
 
         # 現在のOCRソフトの取得
         now_ocr_soft = self.user_setting.get_setting("ocr_soft")
@@ -123,6 +130,18 @@ class LanguageSettingWin(BaseWin):
         指定したボタンが押された時などのイベント処理内容
         終了処理が行われるまで繰り返す
         """
+
+        # 言語名のリスト
+        language_name_list = LanguageSettingWin.language_name_list
+        # リストボックスの初期スクロール位置の設定
+        for key in ("-source_language_code-", "-target_language_code-"):
+            # 選択されている値の取得
+            value = self.window[key].get()[0]
+            # 最初に表示される要素番号の取得
+            scroll_to_index = language_name_list.index(value)
+            # リストボックスの初期スクロール位置の設定
+            self.window[key].update(scroll_to_index=scroll_to_index)
+
         while True:  # 終了処理が行われるまで繰り返す
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()

@@ -40,6 +40,7 @@ class Translation:
 
         # ! デバック用
         # ss_file_path = Debug.ss_file_path  # スクショ画像パス
+        # ss_file_path = Debug.debug_directory_path + "/ar.png"  # スクショ画像パス
 
         # 文字認識機能
         text_data_dict = CharacterRecognition.get_text_data_dict(
@@ -47,7 +48,7 @@ class Translation:
         )  # 画像からテキスト情報を取得
         text_before_list = text_data_dict["text_list"]  # 翻訳前テキストリストの取得
         text_region_list = text_data_dict["text_region_list"]  # テキスト範囲のリストの取得
-        # CharacterRecognition.save_text_before(text_before_list, file_name)  # 翻訳前テキストをファイルに保存
+        CharacterRecognition.save_text_before(text_before_list, file_name)  # 翻訳前テキストをファイルに保存
         Fn.time_log("文字取得")
 
         # ! デバック用
@@ -58,16 +59,15 @@ class Translation:
         text_after_list = TextTranslation.get_text_after_list(
             user_setting, text_before_list
         )  # 翻訳後テキストリストの取得
-        # TextTranslation.save_text_after(text_after_list, file_name)  # 翻訳後テキストをファイルに保存
+        TextTranslation.save_text_after(text_after_list, file_name)  # 翻訳後テキストをファイルに保存
         Fn.time_log("翻訳")
 
         # ! デバック用
         # text_after_list = Debug.text_after_list  # 翻訳後テキストリスト
-        # text_after_list = text_before_list
 
         # 翻訳画像作成機能
         overlay_translation_image = TranslationImage.get_overlay_translation_image(
-            ss_file_path, text_after_list, text_region_list
+            user_setting, ss_file_path, text_after_list, text_region_list
         )  # 翻訳後画像作成
 
         overlay_translation_image_path = TranslationImage.save_overlay_translation_image(
@@ -76,10 +76,14 @@ class Translation:
 
         Fn.time_log("画像作成")
 
+        # ! デバッグ用
+        # overlay_translation_image.show()  # 画像表示
+
         image_path = (ss_file_path, overlay_translation_image_path)  # 翻訳前、後画像のパスの取得
         return image_path  # 翻訳前、後画像のパス
 
 
+
 # ! デバッグ用
 if __name__ == "__main__":
-    Translation.save_history()
+    image_path = Translation.save_history()

@@ -1,5 +1,6 @@
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
+
 class Debug:
     """デバッグ用クラス"""
 
@@ -25,16 +26,16 @@ class Debug:
 
     # テキスト範囲のリスト
     text_region_list = [
-        {"left": 1118, "top": 290, "width": 1201, "height": 155},
-        {"left": 392, "top": 663, "width": 2358, "height": 126},
-        {"left": 394, "top": 823, "width": 2430, "height": 127},
-        {"left": 393, "top": 982, "width": 2456, "height": 129},
-        {"left": 393, "top": 1143, "width": 2507, "height": 131},
-        {"left": 394, "top": 1302, "width": 2434, "height": 131},
-        {"left": 394, "top": 1461, "width": 2645, "height": 131},
-        {"left": 396, "top": 1623, "width": 2080, "height": 127},
-        {"left": 1359, "top": 1999, "width": 1505, "height": 140},
-        {"left": 1682, "top": 2204, "width": 1040, "height": 138},
+        {"left": 503, "top": 130, "width": 538, "height": 69},
+        {"left": 175, "top": 297, "width": 1056, "height": 56},
+        {"left": 177, "top": 368, "width": 1089, "height": 57},
+        {"left": 177, "top": 440, "width": 1101, "height": 58},
+        {"left": 176, "top": 512, "width": 1124, "height": 57},
+        {"left": 176, "top": 583, "width": 1091, "height": 58},
+        {"left": 176, "top": 655, "width": 1184, "height": 58},
+        {"left": 177, "top": 727, "width": 932, "height": 57},
+        {"left": 608, "top": 897, "width": 673, "height": 61},
+        {"left": 754, "top": 988, "width": 466, "height": 60},
     ]
 
     # 翻訳後テキストリスト
