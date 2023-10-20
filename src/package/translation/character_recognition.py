@@ -130,14 +130,3 @@ class CharacterRecognition:
         }
 
         return text_data_list  # テキスト情報のリスト
-
-    def save_text_before(text_before_list, file_name):
-        """翻訳前テキストをファイルに保存
-        Args:
-            text_before_list(list[text_before:str]): 翻訳前テキストリスト
-            file_name(src): ファイル名(現在日時)
-        """
-        directory_path = SystemSetting.text_before_directory_path  # 翻訳前テキストのディレクトリパス
-        file_extension = ".txt"  # 拡張子
-        file_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
-        Fn.save_text_file(text_before_list, file_path)  # テキストファイルへの保存

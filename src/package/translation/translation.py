@@ -13,6 +13,7 @@ from package.translation.character_recognition import CharacterRecognition  # �
 from package.translation.text_translation import TextTranslation  # テキスト翻訳機能関連のクラス
 from package.translation.translation_image import TranslationImage  # オーバーレイ翻訳画像作成機能関連のクラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 
 
 class Translation:
@@ -22,16 +23,20 @@ class Translation:
         """翻訳前,結果を履歴に保存する
 
         Returns:
-            image_path(tuple(screenshot_image,overlay_translation_image)): 翻訳前、後画像のパス
-                - screenshot_image(str): 翻訳前画像のパス
-                - overlay_translation_image(str): 翻訳後画像のパス
+            file_name(str): 保存ファイル名(撮影日時)
         """
         Fn.time_log("システム開始")
 
         user_setting = UserSetting()  # ユーザ設定のインスタンス化
 
-        # 保存ファイル名(現在日時)の取得
-        file_name = Fn.get_now_file_name()
+        # 保存ファイルのベース名(撮影日時)の取得
+        file_base_name = Fn.get_now_file_base_name()
+
+        # 拡張子の取得
+        file_extension = SystemSetting.image_file_extension
+
+        # ファイル名の取得
+        file_name = file_base_name + file_extension
 
         # スクショ撮影機能
         screenshot_image = ScreenshotCapture.get_screenshot(user_setting)  # スクショ撮影
@@ -48,7 +53,6 @@ class Translation:
         )  # 画像からテキスト情報を取得
         text_before_list = text_data_dict["text_list"]  # 翻訳前テキストリストの取得
         text_region_list = text_data_dict["text_region_list"]  # テキスト範囲のリストの取得
-        CharacterRecognition.save_text_before(text_before_list, file_name)  # 翻訳前テキストをファイルに保存
         Fn.time_log("文字取得")
 
         # ! デバック用
@@ -59,7 +63,6 @@ class Translation:
         text_after_list = TextTranslation.get_text_after_list(
             user_setting, text_before_list
         )  # 翻訳後テキストリストの取得
-        TextTranslation.save_text_after(text_after_list, file_name)  # 翻訳後テキストをファイルに保存
         Fn.time_log("翻訳")
 
         # ! デバック用
@@ -79,9 +82,7 @@ class Translation:
         # ! デバッグ用
         # overlay_translation_image.show()  # 画像表示
 
-        image_path = (ss_file_path, overlay_translation_image_path)  # 翻訳前、後画像のパスの取得
-        return image_path  # 翻訳前、後画像のパス
-
+        return file_name  # 保存ファイル名(撮影日時)
 
 
 # ! デバッグ用

@@ -198,13 +198,12 @@ class TranslationImage:
         """オーバーレイ翻訳画像の保存
         Args:
             overlay_translation_image(Image): オーバーレイ翻訳画像
-            file_name(src): ファイル名(現在日時)
+            file_name(src): ファイル名(撮影日時)
         Returns:
             overlay_translation_image_path(str): オーバーレイ翻訳画像のファイルパス
         """
         directory_path = SystemSetting.image_after_directory_path  # 翻訳後画像のディレクトリパス
-        file_extension = SystemSetting.image_file_extension  # 拡張子
-        overlay_translation_image_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
+        overlay_translation_image_path = directory_path + file_name  # ファイルパス(絶対参照)
 
         overlay_translation_image.save(overlay_translation_image_path)  # 翻訳後画像保存
 

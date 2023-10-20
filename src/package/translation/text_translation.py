@@ -89,14 +89,3 @@ class TextTranslation:
             text_after_list.append(result)  # 翻訳後テキストのリスト作成
 
         return text_after_list  # 翻訳後テキストのリスト
-
-    def save_text_after(text_after_list, file_name):
-        """翻訳後テキストをファイルに保存
-        Args:
-            text_after_list(list[text_after:str]): 翻訳後テキストリスト
-            file_name(src): ファイル名(現在日時)
-        """
-        directory_path = SystemSetting.text_after_directory_path  # 翻訳後テキストのディレクトリパス
-        file_extension = ".txt"  # 拡張子
-        file_path = directory_path + file_name + file_extension  # ファイルパス(絶対参照)
-        Fn.save_text_file(text_after_list, file_path)  # テキストファイルへの保存

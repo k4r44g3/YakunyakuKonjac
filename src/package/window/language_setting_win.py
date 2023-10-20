@@ -33,6 +33,7 @@ class LanguageSettingWin(BaseWin):
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
+         # 継承元のコンストラクタを呼び出す
         super().__init__()
 
     def get_layout(self):

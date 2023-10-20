@@ -8,15 +8,6 @@ class Fn:
     """自作関数クラス
     全体に適応される"""
 
-    def get_now_file_name():
-        """ファイル名用現在時刻の取得
-        Returns:
-            now_file_name(str) : 現在時刻("yyyymmdd_hhmmss_fff")
-        """
-        now = datetime.datetime.now()  # 現在の時刻を取得
-        now_file_name = now.strftime("%Y%m%d_%H%M%S_%f")[:-3]  # 時刻の表示（ミリ秒三桁まで）
-        return now_file_name  # ファイル名用現在時刻
-
     def log(*text):
         """ログの表示
             デバッグモードでのみ動作する
@@ -79,6 +70,15 @@ class Fn:
         except ValueError:  # 整数に変換できなかったなら
             return False  # falseを返す
 
+    def get_now_file_base_name():
+        """ファイルのベース名用現在時刻の取得
+        Returns:
+            now_file_base_name(str) : ファイルのベース名用現在時刻("yyyymmdd_hhmmss")
+        """
+        now = datetime.datetime.now()  # 現在の時刻を取得
+        now_file_base_name = now.strftime("%Y%m%d_%H%M%S")  # 時刻の表示
+        return now_file_base_name  # ファイルのベース名用現在時刻
+
     def save_text_file(text_list, file_path):
         """テキストファイルへの保存
         Args:
@@ -105,6 +105,54 @@ class Fn:
         max_file_name = max(file_list)  # 辞書順で最大のファイル名を取得
         return max_file_name  # 辞書順で最大のファイル名
 
+    def get_history_file_name_list():
+        """履歴ファイル名のリストを取得
+
+        翻訳前、後画像の両方が存在する履歴ファイル名を取得
+        存在しないなら、該当ファイルを削除
+
+        Returns:
+            history_file_name_list: 履歴ファイル名のリスト
+        """
+
+        # 翻訳前画像保存先設定
+        image_before_directory_path = SystemSetting.image_before_directory_path  # ディレクトリパス
+
+        # 翻訳後画像保存先設定
+        image_after_directory_path = SystemSetting.image_after_directory_path  # ディレクトリパス
+
+        # 翻訳前画像ファイル名のリスト
+        before_file_name_list = os.listdir(image_before_directory_path)
+        # 翻訳後画像ファイル名のリスト
+        after_file_name_list = os.listdir(image_after_directory_path)
+
+        # 集合型に変換
+        before_file_name_set = set(before_file_name_list)
+        after_file_name_set = set(after_file_name_list)
+
+        # 共通要素の取得
+        common_file_name_set = before_file_name_set & after_file_name_set
+
+        # 片方のみに存在する要素の取得
+        before_only_file_name_set = before_file_name_set - common_file_name_set  # 翻訳前画像のみのファイル名の取得
+        after_only_file_name_set = after_file_name_set - common_file_name_set  # 翻訳後画像のみのファイル名の取得
+
+        # 翻訳前画像のみのファイルの削除
+        for before_file_name in before_only_file_name_set:
+            os.remove(image_before_directory_path + "/" + before_file_name)
+        # 翻訳後画像のみのファイルの削除
+        for after_file_name in after_only_file_name_set:
+            os.remove(image_after_directory_path + "/" + after_file_name)
+
+        # 履歴ファイル名のリストを取得
+        history_file_name_list = list(common_file_name_set)
+
+        # 昇順に並び替え
+        history_file_name_list.sort()
+
+        # .gitkeepを履歴ファイル名のリストから削除して返す
+        return history_file_name_list[1:]
+
     def search_dict_in_list(lst, key_name, value):
         """与えられたリスト内の辞書から指定したキーと値に一致する辞書を取得
 
@@ -114,7 +162,7 @@ class Fn:
             value (任意の型) 検索する値
 
         Returns:
-            dict or None: 一致する辞書（最初に見つかったもの）
+            dict: 一致する辞書（最初に見つかったもの）
         """
 
         for item in lst:  # リストから辞書を取り出す

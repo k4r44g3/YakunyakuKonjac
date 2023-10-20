@@ -24,6 +24,7 @@ class DisplaySettingWin(BaseWin):
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
+         # 継承元のコンストラクタを呼び出す
         super().__init__()
 
     def get_layout(self):
@@ -80,6 +81,7 @@ class DisplaySettingWin(BaseWin):
             elif event == "-confirm-":
                 Fn.time_log("設定確定")
                 update_setting = values  # 更新する設定
+                # * update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
             # 確定ボタン押下イベント

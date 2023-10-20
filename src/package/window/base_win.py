@@ -80,3 +80,11 @@ class BaseWin:
         return self.transition_target_win
 
     # todo イベント処理記述
+    def get_update_setting(self, values):
+        """更新する設定の取得
+
+        Args:
+            values (dict): 入力フォームの値の辞書
+        Returns:
+            update_setting (dict): 更新する設定の値の辞書
+        """
