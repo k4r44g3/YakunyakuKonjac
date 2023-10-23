@@ -4,9 +4,6 @@
   "ss_right_x": 1280,
   "ss_bottom_y": 720,
   "ocr_soft": "AmazonTextract",
-  "ocr_lang_list": [
-    "en"
-  ],
   "translation_soft": "AmazonTranslate",
   "source_language_code": "en",
   "target_language_code": "ja",
@@ -14,7 +11,7 @@
   "window_top_y": 0,
   "window_width": 800,
   "window_height": 600,
-  "translation_interval_sec": 20,
+  "translation_interval_sec": 3,
   "image_width_max": 300,
   "image_height_max": 300
 }

@@ -25,7 +25,7 @@ class Translation:
         Returns:
             file_name(str): 保存ファイル名(撮影日時)
         """
-        Fn.time_log("システム開始")
+        # Fn.time_log("翻訳開始")
 
         user_setting = UserSetting()  # ユーザ設定のインスタンス化
 

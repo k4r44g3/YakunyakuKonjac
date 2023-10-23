@@ -15,7 +15,6 @@ class UserSetting:
         "ss_right_x": 1280,  # SS範囲の右側x座標
         "ss_bottom_y": 720,  # SS範囲の下側y座標
         "ocr_soft": "AmazonTextract",  # OCRソフト
-        "ocr_lang_list": ["en"],  # 抽出する言語のリスト
         "translation_soft": "AmazonTranslate",  # 翻訳ソフト
         "source_language_code": "en",  # 翻訳元言語
         "target_language_code": "ja",  # 翻訳先言語

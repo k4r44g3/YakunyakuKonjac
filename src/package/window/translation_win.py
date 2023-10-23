@@ -37,6 +37,9 @@ class TranslationWin(BaseWin):
             file_time = Fn.convert_time_from_filename(file_name)
             self.history_file_time_list.append(file_time)
 
+        # ! デバッグ用
+        self.timeout_count = 0
+
         # 継承元のコンストラクタを呼び出す
         super().__init__()
 
@@ -158,13 +161,24 @@ class TranslationWin(BaseWin):
         layout = [
             [[sg.Menu(menuber, key="-menu-")]],  # メニューバー
             [
-                # 自動翻訳用トグルボタン
+                # 翻訳用ボタン
                 sg.Button(
                     button_text="翻訳",  # ボタンテキスト
-                    key="-translation_toggle-",  # 識別子
+                    key="-translation_button-",  # 識別子
                     size=(4 * 5, 2 * 2),  # サイズ(フォントサイズ)(w,h)
                     # expand_x = True, #  Trueの場合、要素はx方向に自動的に拡大
                     # expand_y = True, #  Trueの場合、要素はy方向に自動的に拡大
+                ),
+                # 自動翻訳用トグルボタン
+                sg.Button(
+                    button_text="自動翻訳開始",  # ボタンテキスト
+                    key="-translation_toggle-",  # 識別子
+                    size=(4 * 5, 2 * 2),  # サイズ(フォントサイズ)(w,h)
+                    # メタデータ
+                    metadata={
+                        "is_toggle_on": False,  # トグルボタンがオンかどうか
+                        "toggle_button_text": {False: "自動撮影開始", True: "自動撮影停止"},  # トグルボタンテキスト
+                    },
                 ),
             ],
             [
@@ -181,7 +195,7 @@ class TranslationWin(BaseWin):
                             # 履歴ファイル選択リストボックス
                             sg.Listbox(
                                 values=self.history_file_time_list,  # ファイル日時のリスト
-                                size=(18, 1),
+                                size=(18, 5),
                                 key="-history_file_time_list-",
                                 default_values=now_file_time,  # デフォルト値
                                 no_scrollbar=True,  # スクロールバーの非表示
@@ -239,11 +253,17 @@ class TranslationWin(BaseWin):
             scroll_to_index=len(self.history_file_time_list) - 1
         )
 
-        while True:  # 終了処理が行われるまで繰り返す
-            # 実際に画面が表示され、ユーザーの入力待ちになる
-            event, values = self.window.read()
+        # 翻訳間隔(秒)の取得
+        translation_interval_sec = self.user_setting.get_setting("translation_interval_sec")
 
-            Fn.time_log(event, values)
+        while True:  # 終了処理が行われるまで繰り返す
+            # 実際に画面が表示され、ユーザーの入力待ちになる 一定時間でタイムアウト処理
+            event, values = self.window.read(timeout=translation_interval_sec * 1000)
+
+            # ! デバッグログ
+            if event != "__TIMEOUT__":
+                Fn.time_log(event, values)
+
             # プログラム終了イベント処理
             if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベントが発生したら
                 self.exit_event()  # イベント終了処理
@@ -260,16 +280,15 @@ class TranslationWin(BaseWin):
                     self.exit_event()  # イベント終了処理
                     break  # イベント受付終了
 
+            # 翻訳ボタン押下イベント
+            elif event == "-translation_button-":
+                Fn.time_log("翻訳ボタン押下イベント開始")
+                self.translate()  # 翻訳処理
+
             # 自動翻訳ボタン押下イベント
             elif event == "-translation_toggle-":
                 Fn.time_log("自動翻訳ボタン押下イベント開始")
-                self.translate()  # 翻訳処理
-
-            # 履歴選択リストボックス押下イベント
-            elif event == "-translation_toggle-":
-                Fn.time_log("自動翻訳ボタン押下イベント開始")
-                self.translate()  # 翻訳処理
-
+                self.translation_toggle_event()  # 自動翻訳ボタン押下イベント
             # 画像クリックイベント
             elif event in ("-after_image-", "-before_image-"):
                 self.image_size_change(event)  # 画像縮小率の変更
@@ -280,6 +299,9 @@ class TranslationWin(BaseWin):
             # 履歴ファイル選択ボタンイベント
             elif event in ("-history_file_time_list_sub-", "-history_file_time_list_add-"):
                 self.history_file_select_botton(event, values)  # 履歴ファイル選択ボタンイベント
+            # タイムアウト処理
+            elif event == "__TIMEOUT__":
+                self.timeout_event()  # タイムアウトイベント
 
     # todo イベント処理記述
 
@@ -301,6 +323,44 @@ class TranslationWin(BaseWin):
 
         # 翻訳前、後画像の変更処理
         self.image_change(file_name)
+
+    def translation_toggle_event(self):
+        """自動翻訳トグルボタン押下イベント処理"""
+        # トグルボタンがオンかどうか取得
+        is_toggle_on = self.window["-translation_toggle-"].metadata["is_toggle_on"]
+
+        # オンオフ切り替え
+        is_toggle_on = not is_toggle_on
+
+        # トグルボタンに状態を保存
+        self.window["-translation_toggle-"].metadata["is_toggle_on"] = is_toggle_on
+
+        # トグルボタンの変更先テキスト取得
+        button_text = self.window["-translation_toggle-"].metadata["toggle_button_text"][
+            is_toggle_on
+        ]
+        # トグルボタンのテキスト切り替え
+        self.window["-translation_toggle-"].update(text=button_text)
+
+        # ! デバッグ用
+        if is_toggle_on:
+            # トグルボタンがオンなら
+            self.timeout_count = 0
+            Fn.time_log("翻訳開始")
+            self.translate()  # 翻訳処理
+            Fn.time_log("翻訳終了")
+
+    def timeout_event(self):
+        """タイムアウトイベント処理"""
+        # 自動翻訳トグルボタンがオンかどうか取得
+        is_translation_toggle = self.window["-translation_toggle-"].metadata["is_toggle_on"]
+        if is_translation_toggle:
+            # 自動翻訳がオンなら
+            self.timeout_count += 1
+            # print(self.timeout_count)
+            Fn.time_log("翻訳開始")
+            self.translate()  # 翻訳処理
+            Fn.time_log("翻訳終了")
 
     def image_change(self, file_name):
         """翻訳前、後画像の変更処理
