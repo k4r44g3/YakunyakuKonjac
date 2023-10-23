@@ -27,8 +27,16 @@ class TranslationWin(BaseWin):
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
-        # 履歴ファイル名のリストの取得
+        # 履歴ファイル名のリスト取得
         self.history_file_name_list = Fn.get_history_file_name_list()
+
+        # 履歴ファイル日時のリスト取得
+        self.history_file_time_list = []
+        for file_name in self.history_file_name_list:
+            # ファイル名から日時を取得
+            file_time = Fn.convert_time_from_filename(file_name)
+            self.history_file_time_list.append(file_time)
+
         # 継承元のコンストラクタを呼び出す
         super().__init__()
 
@@ -39,7 +47,6 @@ class TranslationWin(BaseWin):
             layout(list): ウィンドウのレイアウト
         """
         # 履歴ファイル名のリストの取得
-        self.history_file_name_list
 
         # 画像パスの取得
         if len(self.history_file_name_list) >= 1:
@@ -53,11 +60,14 @@ class TranslationWin(BaseWin):
             now_before_image_path = (
                 SystemSetting.image_before_directory_path + now_image_name
             )  # 翻訳前画像の保存先パス
+            # ファイル日時の取得
+            now_file_time = Fn.convert_time_from_filename(now_image_name)
 
         else:
             # 履歴が存在しないならデフォルトの画像パスを取得
             now_after_image_path = Debug.overlay_translation_image_path  # 翻訳後画像の保存先パス
             now_before_image_path = Debug.ss_file_path  # 翻訳前画像の保存先パス
+            now_file_time = None  # ファイル日時
 
         # 翻訳前の画像のフレーム
         image_before_frame = sg.Frame(
@@ -166,21 +176,21 @@ class TranslationWin(BaseWin):
                             # 前の履歴を表示するボタン
                             sg.Button(
                                 button_text="◀",  # ボタンテキスト
-                                key="-history_file_name_list_sub-",  # 識別子
+                                key="-history_file_time_list_sub-",  # 識別子
                             ),
                             # 履歴ファイル選択リストボックス
                             sg.Listbox(
-                                values=self.history_file_name_list,
-                                size=(25, 1),
-                                key="-history_file_name_list-",
-                                default_values=now_after_image_path,  # デフォルト値
+                                values=self.history_file_time_list,  # ファイル日時のリスト
+                                size=(18, 1),
+                                key="-history_file_time_list-",
+                                default_values=now_file_time,  # デフォルト値
                                 no_scrollbar=True,  # スクロールバーの非表示
                                 enable_events=True,  # イベントを取得する
                             ),
                             # 後の履歴を表示するボタン
                             sg.Button(
                                 button_text="▶",  # ボタンテキスト
-                                key="-history_file_name_list_add-",  # 識別子
+                                key="-history_file_time_list_add-",  # 識別子
                             ),
                         ],
                     ],
@@ -225,8 +235,8 @@ class TranslationWin(BaseWin):
         self.image_size_change("-before_image-")
 
         # 履歴ファイル選択リストの最初に表示される要素番号の取得
-        self.window["-history_file_name_list-"].update(
-            scroll_to_index=len(self.history_file_name_list) - 1
+        self.window["-history_file_time_list-"].update(
+            scroll_to_index=len(self.history_file_time_list) - 1
         )
 
         while True:  # 終了処理が行われるまで繰り返す
@@ -265,10 +275,10 @@ class TranslationWin(BaseWin):
                 self.image_size_change(event)  # 画像縮小率の変更
 
             # 履歴ファイル選択リストボックスイベント
-            elif event == "-history_file_name_list-":
+            elif event == "-history_file_time_list-":
                 self.history_file_list_box(values)  # 履歴ファイル選択リストボックスイベント
             # 履歴ファイル選択ボタンイベント
-            elif event in ("-history_file_name_list_sub-", "-history_file_name_list_add-"):
+            elif event in ("-history_file_time_list_sub-", "-history_file_time_list_add-"):
                 self.history_file_select_botton(event, values)  # 履歴ファイル選択ボタンイベント
 
     # todo イベント処理記述
@@ -279,12 +289,14 @@ class TranslationWin(BaseWin):
 
         # 履歴ファイル名のリストの更新
         self.history_file_name_list.append(file_name)
+        # 履歴ファイル日時のリストの更新
+        self.history_file_time_list.append(Fn.convert_time_from_filename(file_name))
 
         # 履歴ファイル選択リストの更新
-        self.window["-history_file_name_list-"].update(
-            values=self.history_file_name_list,
-            set_to_index=len(self.history_file_name_list) - 1,  # 強調表示される要素番号
-            scroll_to_index=len(self.history_file_name_list) - 1,  # 最初に表示される要素番号の取得
+        self.window["-history_file_time_list-"].update(
+            values=self.history_file_time_list,
+            set_to_index=len(self.history_file_time_list) - 1,  # 強調表示される要素番号
+            scroll_to_index=len(self.history_file_time_list) - 1,  # 最初に表示される要素番号の取得
         )
 
         # 翻訳前、後画像の変更処理
@@ -352,11 +364,15 @@ class TranslationWin(BaseWin):
         Args:
             values (dict): 入力フォームの値の辞書
         """
-        # ファイル名(撮影日時)の取得
-        file_name = values["-history_file_name_list-"][0]
+        # ファイルが選択されているなら
+        if values["-history_file_time_list-"]:
+            # ファイル日時の取得
+            file_time = values["-history_file_time_list-"][0]
+            # ファイル名(撮影日時)の取得
+            file_name = Fn.convert_filename_from_time(file_time)
 
-        # 翻訳前、後画像の変更処理
-        self.image_change(file_name)
+            # 翻訳前、後画像の変更処理
+            self.image_change(file_name)
 
     def history_file_select_botton(self, key, values):
         """履歴ファイル選択リストボックスイベントの処理
@@ -365,21 +381,21 @@ class TranslationWin(BaseWin):
             key (str): 要素識別子
             values (dict): 入力フォームの値の辞書
         """
-
+        print(self.window["-history_file_time_list-"])
         # 現在の履歴ファイル選択リストボックスの要素番号の取得
-        now_list_box_index = self.window["-history_file_name_list-"].get_indexes()[0]
+        now_list_box_index = self.window["-history_file_time_list-"].get_indexes()[0]
 
         # 変更先の要素番号
         list_box_index = None
 
-        if key == "-history_file_name_list_sub-":
+        if key == "-history_file_time_list_sub-":
             # 前の履歴を表示するボタン押下イベントなら
             if now_list_box_index != 0:
                 # 最も古い履歴でないなら
                 list_box_index = now_list_box_index - 1
-        elif key == "-history_file_name_list_add-":
+        elif key == "-history_file_time_list_add-":
             # 後の履歴を表示するボタン押下イベントなら
-            if now_list_box_index != len(self.history_file_name_list) - 1:
+            if now_list_box_index != len(self.history_file_time_list) - 1:
                 # 最も最新の履歴でないなら
                 list_box_index = now_list_box_index + 1
 
@@ -388,7 +404,7 @@ class TranslationWin(BaseWin):
             file_name = self.history_file_name_list[list_box_index]
 
             # 履歴ファイル選択リストの更新
-            self.window["-history_file_name_list-"].update(
+            self.window["-history_file_time_list-"].update(
                 set_to_index=list_box_index,  # 強調表示される要素番号
                 scroll_to_index=list_box_index,  # 最初に表示される要素番号の取得
             )

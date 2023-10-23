@@ -1,4 +1,4 @@
-import datetime  # 現在時刻
+from datetime import datetime  # 日時
 import os  # ディレクトリ関連
 
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
@@ -29,7 +29,7 @@ class Fn:
             text (*str): 出力文字
         """
         if SystemSetting.debug:  # デバッグモードなら
-            now = datetime.datetime.now()  # 現在の時刻を取得
+            now = datetime.now()  # 現在の時刻を取得
             if len(text) == 1:
                 # 要素数が1なら文字列にする
                 print(text[0], now.strftime("%H:%M:%S.%f")[:-3])  # 時刻の表示（ミリ秒三桁まで）
@@ -75,7 +75,7 @@ class Fn:
         Returns:
             now_file_base_name(str) : ファイルのベース名用現在時刻("yyyymmdd_hhmmss")
         """
-        now = datetime.datetime.now()  # 現在の時刻を取得
+        now = datetime.now()  # 現在の時刻を取得
         now_file_base_name = now.strftime("%Y%m%d_%H%M%S")  # 時刻の表示
         return now_file_base_name  # ファイルのベース名用現在時刻
 
@@ -169,3 +169,41 @@ class Fn:
             if item[key_name] == value:
                 # 辞書のキーと値が一致するなら一致する辞書を返す
                 return item
+
+    def convert_time_from_filename(file_name):
+        """ファイル名から日時を取得
+
+        Args:
+            file_name (str): ファイル名("yyyymmdd_hhmmss.拡張子")
+
+        Returns:
+            file_time (str): 日時("%Y/%m/%d %H:%M:%S")
+        """
+        # ファイルのベース名の取得
+        file_base_name = file_name.split(".")[0]
+        # "yyyymmdd_hhmmss"の形式の文字列を解析してdatetimeオブジェクトに変換
+        dt = datetime.strptime(file_base_name, "%Y%m%d_%H%M%S")
+
+        # "%Y/%m/%d %H:%M:%S"の形式にフォーマット
+        file_time = dt.strftime("%Y/%m/%d %H:%M:%S")
+        return file_time  # 日時("%Y/%m/%d %H:%M:%S")
+
+    def convert_filename_from_time(file_time):
+        """日時からファイル名を取得
+
+        Args:
+            file_time (str): 日時("%Y/%m/%d %H:%M:%S")
+
+        Returns:
+            file_name (str): ファイル名("yyyymmdd_hhmmss.拡張子")
+        """
+        # "%Y/%m/%d %H:%M:%S"の形式の文字列を解析してdatetimeオブジェクトに変換
+        dt = datetime.strptime(file_time, "%Y/%m/%d %H:%M:%S")
+        # "yyyymmdd_hhmmss"の形式にフォーマット
+        file_base_name = dt.strftime("%Y%m%d_%H%M%S")
+        # 拡張子の取得
+        image_file_extension = ".png"
+        # ファイル名の取得
+        file_name = file_base_name + image_file_extension
+
+        return file_name  # ファイル名("yyyymmdd_hhmmss.拡張子")
