@@ -22,9 +22,8 @@ class UserSetting:
         "window_top_y": 0,  # ウィンドウの上側y座標
         "window_width": 800,  # ウィンドウの横幅
         "window_height": 600,  # ウィンドウの縦幅
-        "translation_interval_sec": 20,  # 翻訳間隔(秒)
-        "image_width_max": 300,  # 表示画像サイズの最大の横幅
-        "image_height_max": 300,  # # 表示画像サイズの最大の縦幅
+        "translation_interval_sec": 10,  # 翻訳間隔(秒)
+        "translation_thread_max" : 4, # 翻訳スレッドの最大数
     }
 
     def __init__(self):

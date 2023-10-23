@@ -24,7 +24,7 @@ class SaveSettingWin(BaseWin):
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
-         # 継承元のコンストラクタを呼び出す
+        # 継承元のコンストラクタを呼び出す
         super().__init__()
 
     def get_layout(self):
@@ -73,7 +73,7 @@ class SaveSettingWin(BaseWin):
 
             Fn.time_log("event=", event, "values=", values)
             # プログラム終了イベント処理
-            if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベント または メニューの終了ボタン押下イベントが発生したら
+            if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
                 self.exit_event()  # イベント終了処理
                 break  # イベント受付終了
 

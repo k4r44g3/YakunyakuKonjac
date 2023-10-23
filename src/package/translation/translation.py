@@ -41,7 +41,7 @@ class Translation:
         # スクショ撮影機能
         screenshot_image = ScreenshotCapture.get_screenshot(user_setting)  # スクショ撮影
         ss_file_path = ScreenshotCapture.save_screenshot(screenshot_image, file_name)  # スクショ保存
-        Fn.time_log("スクショ撮影")
+        # Fn.time_log("スクショ撮影")
 
         # ! デバック用
         # ss_file_path = Debug.ss_file_path  # スクショ画像パス
@@ -53,7 +53,7 @@ class Translation:
         )  # 画像からテキスト情報を取得
         text_before_list = text_data_dict["text_list"]  # 翻訳前テキストリストの取得
         text_region_list = text_data_dict["text_region_list"]  # テキスト範囲のリストの取得
-        Fn.time_log("文字取得")
+        # Fn.time_log("文字取得")
 
         # ! デバック用
         # text_before_list = Debug.text_before_list  # 翻訳前テキストリスト
@@ -63,7 +63,7 @@ class Translation:
         text_after_list = TextTranslation.get_text_after_list(
             user_setting, text_before_list
         )  # 翻訳後テキストリストの取得
-        Fn.time_log("翻訳")
+        # Fn.time_log("翻訳")
 
         # ! デバック用
         # text_after_list = Debug.text_after_list  # 翻訳後テキストリスト
@@ -77,7 +77,7 @@ class Translation:
             overlay_translation_image, file_name
         )  # 翻訳後画像保存
 
-        Fn.time_log("画像作成")
+        # Fn.time_log("画像作成")
 
         # ! デバッグ用
         # overlay_translation_image.show()  # 画像表示

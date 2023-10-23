@@ -130,7 +130,7 @@ class ShootingSettingWin(BaseWin):
                 Fn.time_log(event, values)
 
             # プログラム終了イベント処理
-            if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベント または メニューの終了ボタン押下イベントが発生したら
+            if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
                 self.exit_event()  # イベント終了処理
                 break  # イベント受付終了
 

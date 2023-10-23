@@ -17,7 +17,7 @@ from package.window.user_info_win import UserInfoWin  # 利用者情報画面ウ
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 
 # ユーザ設定のインスタンス化
-# user_setting = UserSetting()
+user_setting = UserSetting()
 
 Fn.time_log("システム開始")
 

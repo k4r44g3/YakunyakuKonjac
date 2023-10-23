@@ -52,6 +52,7 @@ class BaseWin:
             # size=(300, 300),  # ウィンドウサイズ
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
+            enable_close_attempted_event = True # タイトルバーの[X]ボタン押下時にイベントが返される
         )
         return window  # GUIウィンドウ設定
 

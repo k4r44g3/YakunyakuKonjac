@@ -27,6 +27,10 @@ class TranslationWin(BaseWin):
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
+        # 継承元のコンストラクタを呼び出す
+        super().__init__()
+
+    def start_win(self):
         # 履歴ファイル名のリスト取得
         self.history_file_name_list = Fn.get_history_file_name_list()
 
@@ -40,8 +44,15 @@ class TranslationWin(BaseWin):
         # ! デバッグ用
         self.timeout_count = 0
 
-        # 継承元のコンストラクタを呼び出す
-        super().__init__()
+        # 現在の翻訳スレッド数
+        self.thread_count = 0
+        # 翻訳スレッド数の最大数
+        self.thread_max = self.user_setting.get_setting("translation_thread_max")
+
+        print(self.thread_max)
+
+        # 継承元メソッドを呼び出す
+        super().start_win()
 
     def get_layout(self):
         """ウィンドウレイアウト作成処理
@@ -234,6 +245,7 @@ class TranslationWin(BaseWin):
             resizable=True,  # ウィンドウサイズ変更可能
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
+            enable_close_attempted_event=True,  # タイトルバーの[X]ボタン押下,Alt+F4時にイベントが返される
         )
         return window  # GUIウィンドウ設定
 
@@ -261,11 +273,11 @@ class TranslationWin(BaseWin):
             event, values = self.window.read(timeout=translation_interval_sec * 1000)
 
             # ! デバッグログ
-            if event != "__TIMEOUT__":
-                Fn.time_log(event, values)
+            # if event != "__TIMEOUT__":
+            #     Fn.time_log(event, values)
 
             # プログラム終了イベント処理
-            if event == sg.WIN_CLOSED:  # 右上の閉じるボタン押下イベントが発生したら
+            if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
                 self.exit_event()  # イベント終了処理
                 break  # イベント受付終了
 
@@ -282,13 +294,16 @@ class TranslationWin(BaseWin):
 
             # 翻訳ボタン押下イベント
             elif event == "-translation_button-":
-                Fn.time_log("翻訳ボタン押下イベント開始")
-                self.translate()  # 翻訳処理
+                self.translate_thread_start()  # 翻訳処理を別スレッドで開始
 
             # 自動翻訳ボタン押下イベント
             elif event == "-translation_toggle-":
-                Fn.time_log("自動翻訳ボタン押下イベント開始")
                 self.translation_toggle_event()  # 自動翻訳ボタン押下イベント
+
+            # 翻訳処理のスレッド終了イベント
+            elif event == "-translate_thread_end-":
+                self.translate_thread_end(values)  # 翻訳処理のスレッド終了イベント
+
             # 画像クリックイベント
             elif event in ("-after_image-", "-before_image-"):
                 self.image_size_change(event)  # 画像縮小率の変更
@@ -298,17 +313,37 @@ class TranslationWin(BaseWin):
                 self.history_file_list_box(values)  # 履歴ファイル選択リストボックスイベント
             # 履歴ファイル選択ボタンイベント
             elif event in ("-history_file_time_list_sub-", "-history_file_time_list_add-"):
-                self.history_file_select_botton(event, values)  # 履歴ファイル選択ボタンイベント
+                self.history_file_select_botton(event)  # 履歴ファイル選択ボタンイベント
             # タイムアウト処理
             elif event == "__TIMEOUT__":
                 self.timeout_event()  # タイムアウトイベント
 
     # todo イベント処理記述
 
-    def translate(self):
-        """翻訳処理"""
-        file_name = Translation.save_history()  # 翻訳する
+    def translate_thread_start(self):
+        """翻訳処理を別スレッドで開始する処理"""
 
+        if self.thread_count < self.thread_max:
+            # 翻訳スレッド最大数を超えていないなら
+            self.thread_count += 1
+            Fn.time_log("スレッド開始 : " + str(self.thread_count))
+            # 翻訳処理関数を別スレッドで実行、処理終了時にイベントを返す
+            self.window.perform_long_operation(Translation.save_history, "-translate_thread_end-")
+        else:
+            Fn.time_log("スレッド数オーバー")
+
+    def translate_thread_end(self, value):
+        """翻訳処理のスレッド終了イベント処理
+
+        Args:
+        values (dict): 入力フォームの値の辞書
+        """
+
+        self.thread_count -= 1
+        Fn.time_log("スレッド終了 : " + str(self.thread_count))
+
+        # 履歴ファイル名取得
+        file_name = value["-translate_thread_end-"]
         # 履歴ファイル名のリストの更新
         self.history_file_name_list.append(file_name)
         # 履歴ファイル日時のリストの更新
@@ -342,25 +377,31 @@ class TranslationWin(BaseWin):
         # トグルボタンのテキスト切り替え
         self.window["-translation_toggle-"].update(text=button_text)
 
-        # ! デバッグ用
+
         if is_toggle_on:
             # トグルボタンがオンなら
             self.timeout_count = 0
-            Fn.time_log("翻訳開始")
-            self.translate()  # 翻訳処理
-            Fn.time_log("翻訳終了")
+            self.translate_thread_start()  # 翻訳処理を別スレッドで開始
 
     def timeout_event(self):
         """タイムアウトイベント処理"""
+
         # 自動翻訳トグルボタンがオンかどうか取得
         is_translation_toggle = self.window["-translation_toggle-"].metadata["is_toggle_on"]
         if is_translation_toggle:
             # 自動翻訳がオンなら
-            self.timeout_count += 1
-            # print(self.timeout_count)
-            Fn.time_log("翻訳開始")
-            self.translate()  # 翻訳処理
-            Fn.time_log("翻訳終了")
+            self.translate_thread_start()  # 翻訳処理を別スレッドで開始
+
+            # self.timeout_count += 1
+
+            # 翻訳間隔(秒)の取得
+            # translation_interval_sec = self.user_setting.get_setting("translation_interval_sec")
+
+            # イベントタイムアウトの時間(ms)の取得
+            # event_timeout_ms = SystemSetting.event_timeout_ms
+
+            # if self.timeout_count % (1000 / event_timeout_ms * translation_interval_sec) == 0:
+            # 翻訳間隔(秒)経過したなら
 
     def image_change(self, file_name):
         """翻訳前、後画像の変更処理
@@ -434,14 +475,12 @@ class TranslationWin(BaseWin):
             # 翻訳前、後画像の変更処理
             self.image_change(file_name)
 
-    def history_file_select_botton(self, key, values):
+    def history_file_select_botton(self, key):
         """履歴ファイル選択リストボックスイベントの処理
 
         Args:
             key (str): 要素識別子
-            values (dict): 入力フォームの値の辞書
         """
-        print(self.window["-history_file_time_list-"])
         # 現在の履歴ファイル選択リストボックスの要素番号の取得
         now_list_box_index = self.window["-history_file_time_list-"].get_indexes()[0]
 
