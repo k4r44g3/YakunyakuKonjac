@@ -2,7 +2,7 @@
   "ss_left_x": 0,
   "ss_top_y": 0,
   "ss_right_x": 1280,
-  "ss_bottom_y": 720,
+  "ss_bottom_y": 1000,
   "ocr_soft": "AmazonTextract",
   "translation_soft": "AmazonTranslate",
   "source_language_code": "en",
@@ -11,7 +11,7 @@
   "window_top_y": 0,
   "window_width": 800,
   "window_height": 600,
-  "translation_interval_sec": 3,
+  "translation_interval_sec": 2,
   "image_width_max": 300,
   "image_height_max": 300
 }

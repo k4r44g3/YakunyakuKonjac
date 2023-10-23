@@ -10,10 +10,10 @@ class UserSetting:
 
     # デフォルトの設定
     default_user_setting = {
-        "ss_left_x": 0,  # SS範囲の左側x座標
-        "ss_top_y": 0,  # SS範囲の上側y座標
-        "ss_right_x": 1280,  # SS範囲の右側x座標
-        "ss_bottom_y": 720,  # SS範囲の下側y座標
+        "ss_left_x": 0,  # 撮影範囲の左側x座標
+        "ss_top_y": 0,  # 撮影範囲の上側y座標
+        "ss_right_x": 1280,  # 撮影範囲の右側x座標
+        "ss_bottom_y": 720,  # 撮影範囲の下側y座標
         "ocr_soft": "AmazonTextract",  # OCRソフト
         "translation_soft": "AmazonTranslate",  # 翻訳ソフト
         "source_language_code": "en",  # 翻訳元言語
@@ -22,7 +22,7 @@ class UserSetting:
         "window_top_y": 0,  # ウィンドウの上側y座標
         "window_width": 800,  # ウィンドウの横幅
         "window_height": 600,  # ウィンドウの縦幅
-        "translation_interval_sec": 20,  # 翻訳間隔
+        "translation_interval_sec": 20,  # 翻訳間隔(秒)
         "image_width_max": 300,  # 表示画像サイズの最大の横幅
         "image_height_max": 300,  # # 表示画像サイズの最大の縦幅
     }
