@@ -1,41 +1,55 @@
-import PySimpleGUI as sg
-import time
-
-# My function that takes a long time to do...
-def my_long_operation(i):
-    time.sleep(10)
-    return i * 2
-
-
-def main():
-    layout = [  [sg.Text('My Window')],
-                [sg.Button('Go'), sg.Button('Threaded')]  ]
-
-    window = sg.Window('Window Title', layout, keep_on_top=True)
-
-    while True:
-        event, values = window.read(timeout=1000)
-        if event == sg.WIN_CLOSED:
-            break
-        
-        print(event,values)
-        if event == 'Go':
-            print("長時間処理開始")
-            out=my_long_operation(1)
-            print(out)
-            print("長時間処理終了")
-        elif event  == 'Threaded':
-            print("長時間処理開始")
-            window.perform_long_operation(lambda: my_long_operation(1), '-fn_end-')
-        elif event  == '-fn_end-':
-            print(values)
-            print("長時間処理終了")
-
-        elif event == "__TIMEOUT__":
-            print("time_out")
-
-    window.close()
-
-if __name__ == '__main__':
-    main()
-
+[
+    "フリー百科事典ウィキペディア",
+    "enwikipedia org wiki/メイン",
+    None,
+    "メインページ",
+    "話す",
+    "読む",
+    "ソースを見る",
+    "履歴を見る",
+    "ツール",
+    "ウィキペディアへようこそ、",
+    "誰でも編集できる無料の百科事典。",
+    "英語記事6,733,259件",
+    "本日の注目記事より",
+    "南アジアのカワイルカはハクジラ属のハクジラです",
+    "プラタニスタ。彼らはインド北部の淡水生息地に生息しています。",
+    "亜大陸。",
+    "だった",
+    "歴史的には1つの種であると考えられていましたが、",
+    "しかし、ガンジ ス川イルカ（写真）とインダス川イルカ",
+    "2021年には分岐し、別の種として記載された",
+    "ガンジス川のイルカ",
+    "約55万年前。南アジアのカワイルカは小さいですが、",
+    "ずんぐりしたクジラ類",
+    "鼻またはロストラ、広い足ひれ、および",
+    "小さな背びれ。濁った川の水の中で暮らしており、エコーロケーションを頼りに航行しています。",
+    "持っている",
+    "レンズのない目:",
+    "頭蓋骨にはメロンの上に大きなトサカがあり、メロンの方向を定めるのに役立ちます。",
+    "エコーロケーション信号とし て",
+    "獲物。主に魚とエビです。彼らは世界中で活動しています",
+    "小さなグループで。両方の種は、IUCNレッドリストによって絶滅危惧種の哺乳類としてリストされています。選考科目",
+    "脅威には、ダム、堰堤、漁網、化学汚染と音響汚染の両方が含まれます。",
+    "(記事全文__)",
+    "Dacontl foa+ured",
+    "てけ",
+    "ヴィンク",
+    "OCc",
+    "IC",
+    "に",
+    "チェクン",
+    "ダトル",
+    "~f テンデネン",
+    "オンコ",
+    "「メデ",
+    "Vo",
+    "E",
+    "ページ",
+    "彼らは",
+    "長さ",
+    "彼らは",
+    "小さい、",
+    "彼らは",
+    "日",
+]

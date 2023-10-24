@@ -23,7 +23,7 @@ class UserSetting:
         "window_width": 800,  # ウィンドウの横幅
         "window_height": 600,  # ウィンドウの縦幅
         "translation_interval_sec": 10,  # 翻訳間隔(秒)
-        "translation_thread_max" : 4, # 翻訳スレッドの最大数
+        "translation_thread_max": 4,  # 翻訳スレッドの最大数
     }
 
     def __init__(self):

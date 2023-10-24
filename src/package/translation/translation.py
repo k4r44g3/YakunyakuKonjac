@@ -45,7 +45,7 @@ class Translation:
 
         # ! デバック用
         # ss_file_path = Debug.ss_file_path  # スクショ画像パス
-        # ss_file_path = Debug.debug_directory_path + "/ar.png"  # スクショ画像パス
+        # ss_file_path = Debug.debug_directory_path + "/test.png"  # スクショ画像パス
 
         # 文字認識機能
         text_data_dict = CharacterRecognition.get_text_data_dict(

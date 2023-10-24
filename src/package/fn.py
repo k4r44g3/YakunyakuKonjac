@@ -1,4 +1,5 @@
 from datetime import datetime  # 日時
+import time  # 時間測定
 import os  # ディレクトリ関連
 
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
@@ -7,6 +8,14 @@ from package.system_setting import SystemSetting  # ユーザーが変更不可�
 class Fn:
     """自作関数クラス
     全体に適応される"""
+
+    def sleep(ms):
+        """指定された時間だけプログラムを一時停止
+
+        Args:
+            ms (int): 停止時間(ミリ秒)
+        """
+        time.sleep(ms * 1000)
 
     def log(*text):
         """ログの表示

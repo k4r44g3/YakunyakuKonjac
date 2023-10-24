@@ -49,6 +49,9 @@ class TranslationWin(BaseWin):
         # 翻訳スレッド数の最大数
         self.thread_max = self.user_setting.get_setting("translation_thread_max")
 
+        # スレッド数がオーバーするかどうか
+        self.is_thread_over = False
+
         print(self.thread_max)
 
         # 継承元メソッドを呼び出す
@@ -265,16 +268,13 @@ class TranslationWin(BaseWin):
             scroll_to_index=len(self.history_file_time_list) - 1
         )
 
-        # 翻訳間隔(秒)の取得
-        translation_interval_sec = self.user_setting.get_setting("translation_interval_sec")
-
         while True:  # 終了処理が行われるまで繰り返す
             # 実際に画面が表示され、ユーザーの入力待ちになる 一定時間でタイムアウト処理
-            event, values = self.window.read(timeout=translation_interval_sec * 1000)
+            # ! タイムアウト処理の削除
+            event, values = self.window.read()
 
             # ! デバッグログ
-            # if event != "__TIMEOUT__":
-            #     Fn.time_log(event, values)
+            # Fn.time_log(event, values)
 
             # プログラム終了イベント処理
             if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
@@ -300,6 +300,10 @@ class TranslationWin(BaseWin):
             elif event == "-translation_toggle-":
                 self.translation_toggle_event()  # 自動翻訳ボタン押下イベント
 
+            # 自動翻訳タイミング取得スレッド停止イベント
+            elif event == "-auto_translate_thread_end-":
+                self.auto_translate_thread_start()  # 自動翻訳のタイミングを取得するスレッドの開始処理
+
             # 翻訳処理のスレッド終了イベント
             elif event == "-translate_thread_end-":
                 self.translate_thread_end(values)  # 翻訳処理のスレッド終了イベント
@@ -314,9 +318,9 @@ class TranslationWin(BaseWin):
             # 履歴ファイル選択ボタンイベント
             elif event in ("-history_file_time_list_sub-", "-history_file_time_list_add-"):
                 self.history_file_select_botton(event)  # 履歴ファイル選択ボタンイベント
-            # タイムアウト処理
-            elif event == "__TIMEOUT__":
-                self.timeout_event()  # タイムアウトイベント
+            # # タイムアウト処理
+            # elif event == "__TIMEOUT__":
+            #     self.timeout_event()  # タイムアウトイベント
 
     # todo イベント処理記述
 
@@ -328,9 +332,10 @@ class TranslationWin(BaseWin):
             self.thread_count += 1
             Fn.time_log("スレッド開始 : " + str(self.thread_count))
             # 翻訳処理関数を別スレッドで実行、処理終了時にイベントを返す
-            self.window.perform_long_operation(Translation.save_history, "-translate_thread_end-")
+            self.window.start_thread(Translation.save_history, "-translate_thread_end-")
         else:
             Fn.time_log("スレッド数オーバー")
+            self.is_thread_over = True  # スレッド数がオーバーするかどうか
 
     def translate_thread_end(self, value):
         """翻訳処理のスレッド終了イベント処理
@@ -341,6 +346,12 @@ class TranslationWin(BaseWin):
 
         self.thread_count -= 1
         Fn.time_log("スレッド終了 : " + str(self.thread_count))
+
+        if self.is_thread_over:
+            # スレッド数がオーバーしていたなら、余裕が出来たスレッドで翻訳処理を開始する
+            # 翻訳処理を別スレッドで開始
+            self.translate_thread_start()
+            self.is_thread_over = False  # スレッド数がオーバーするかどうか
 
         # 履歴ファイル名取得
         file_name = value["-translate_thread_end-"]
@@ -377,31 +388,29 @@ class TranslationWin(BaseWin):
         # トグルボタンのテキスト切り替え
         self.window["-translation_toggle-"].update(text=button_text)
 
-
         if is_toggle_on:
             # トグルボタンがオンなら
             self.timeout_count = 0
-            self.translate_thread_start()  # 翻訳処理を別スレッドで開始
+            # self.translate_thread_start()  # 翻訳処理を別スレッドで開始
+            self.auto_translate_thread_start()
 
-    def timeout_event(self):
-        """タイムアウトイベント処理"""
-
+    def auto_translate_thread_start(self):
+        """自動翻訳のタイミングを取得するスレッドの開始処理"""
         # 自動翻訳トグルボタンがオンかどうか取得
         is_translation_toggle = self.window["-translation_toggle-"].metadata["is_toggle_on"]
         if is_translation_toggle:
             # 自動翻訳がオンなら
+
+            # 翻訳処理関数を別スレッドで実行、処理終了時にイベントを返す
             self.translate_thread_start()  # 翻訳処理を別スレッドで開始
 
-            # self.timeout_count += 1
-
             # 翻訳間隔(秒)の取得
-            # translation_interval_sec = self.user_setting.get_setting("translation_interval_sec")
+            translation_interval_sec = self.user_setting.get_setting("translation_interval_sec")
 
-            # イベントタイムアウトの時間(ms)の取得
-            # event_timeout_ms = SystemSetting.event_timeout_ms
-
-            # if self.timeout_count % (1000 / event_timeout_ms * translation_interval_sec) == 0:
-            # 翻訳間隔(秒)経過したなら
+            # 一時停止後、自動翻訳タイミング取得スレッド停止イベントの識別子を返す
+            self.window.start_thread(
+                lambda: Fn.sleep(translation_interval_sec / 1000), "-auto_translate_thread_end-"
+            )
 
     def image_change(self, file_name):
         """翻訳前、後画像の変更処理

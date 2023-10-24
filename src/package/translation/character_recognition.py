@@ -2,6 +2,7 @@ import boto3  # AWSのAIサービス
 
 from PIL import Image  # 画像処理
 import easyocr  # OCRライブラリ
+import logging  # エラーログ記録
 
 from package.fn import Fn  # 自作関数クラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
@@ -66,8 +67,11 @@ class CharacterRecognition:
                     "width": int(box["Width"] * w),  # テキスト範囲の横幅
                     "height": int(box["Height"] * h),  # テキスト範囲の縦幅
                 }
-                text_list.append(text)  # テキスト内容のリスト
-                text_region_list.append(text_region)  # テキスト範囲のリスト
+
+                if text is not None:
+                    # テキストが存在するなら
+                    text_list.append(text)  # テキスト内容のリスト
+                    text_region_list.append(text_region)  # テキスト範囲のリスト
 
         # テキスト情報のリスト作成
         text_data_list = {
@@ -105,8 +109,15 @@ class CharacterRecognition:
         text_region_list = []  # テキスト範囲のリスト
 
         # ! NVIDIAのGPUの場合、処理速度高速
-        reader = easyocr.Reader(lang_list=ocr_lang_list)  # OCRの作成
-        result = reader.readtext(ss_file_path)  # # 画像内のテキストを抽出する
+        # 警告ロギングを非表示にする
+        logging.getLogger().setLevel(logging.ERROR)
+
+        # OCRの作成
+        reader = easyocr.Reader(lang_list=ocr_lang_list)
+        # ロギングの設定をデフォルトに戻す
+        logging.getLogger().setLevel(logging.WARNING)
+        # 画像内のテキストを抽出する
+        result = reader.readtext(ss_file_path)
 
         # 段落ごとに走査
         for text_box in result:
@@ -120,8 +131,10 @@ class CharacterRecognition:
             text = text_box[1]  # テキスト内容の取得
             # confidence = text_box[2] # 信頼度の取得
 
-            text_list.append(text)  # テキスト内容のリスト
-            text_region_list.append(text_region)  # テキスト範囲のリスト
+            if text is not None:
+                # テキストが存在するなら
+                text_list.append(text)  # テキスト内容のリスト
+                text_region_list.append(text_region)  # テキスト範囲のリスト
 
         # テキスト情報のリスト作成
         text_data_list = {

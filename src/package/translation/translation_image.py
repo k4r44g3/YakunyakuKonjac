@@ -105,36 +105,38 @@ class TranslationImage:
         font_size_list = []  # フォントサイズのリスト
         # ブロックごとに走査
         for text_after, text_region in zip(text_after_list, text_region_list):
-            # テキストボックスの幅と高さを取得
-            text_box_width = text_region["width"]
-            text_box_height = text_region["height"]
+            if text_after is not None:
+                # 翻訳後テキストが存在するなら
+                # テキストボックスの幅と高さを取得
+                text_box_width = text_region["width"]
+                text_box_height = text_region["height"]
 
-            font_size = 2  # フォントサイズの初期値
-            font_image = ImageFont.truetype(font_path, font_size)  # フォントオブジェクトの作成
+                font_size = 2  # フォントサイズの初期値
+                font_image = ImageFont.truetype(font_path, font_size)  # フォントオブジェクトの作成
 
-            # テキストボックスと同じサイズの、テキスト描画用イメージオブジェクトを作成
-            image = Image.new("RGB", (text_box_width, text_box_height))
-            # 画像に図形やテキストを描画するオブジェクトの作成
-            draw = ImageDraw.Draw(image)
+                # テキストボックスと同じサイズの、テキスト描画用イメージオブジェクトを作成
+                image = Image.new("RGB", (text_box_width, text_box_height))
+                # 画像に図形やテキストを描画するオブジェクトの作成
+                draw = ImageDraw.Draw(image)
 
-            while True:
-                # 指定したフォントサイズでテキストのバウンディングボックスを計算
-                font_image = font_image.font_variant(size=font_size)  # フォントサイズの更新
-                # テキスト範囲の取得
-                now_text_region = draw.textbbox((0, 0), text=text_after, font=font_image)
-                # 現在のフォントでのテキストサイズの取得
-                now_text_width = now_text_region[2] - now_text_region[0]  # テキストサイズの横幅取得
-                # テキストサイズの縦幅
-                # ? 欧米文字などは文字によって縦幅が違う
-                now_text_height = font_size * 1.5  # テキストサイズの横幅取得
+                while True:
+                    # 指定したフォントサイズでテキストのバウンディングボックスを計算
+                    font_image = font_image.font_variant(size=font_size)  # フォントサイズの更新
+                    # テキスト範囲の取得
+                    now_text_region = draw.textbbox((0, 0), text=text_after, font=font_image)
+                    # 現在のフォントでのテキストサイズの取得
+                    now_text_width = now_text_region[2] - now_text_region[0]  # テキストサイズの横幅取得
+                    # テキストサイズの縦幅
+                    # ? 欧米文字などは文字によって縦幅が違う
+                    now_text_height = font_size * 1.5  # テキストサイズの横幅取得
 
-                if now_text_width < text_box_width and now_text_height < text_box_height:
-                    # テキストボックスに収まらないなら
-                    font_size += 2
-                else:
-                    # テキストボックスに収まるなら
-                    font_size_list.append(font_size - 2)  # 収まるサイズに戻して保存
-                    break
+                    if now_text_width < text_box_width and now_text_height < text_box_height:
+                        # テキストボックスに収まらないなら
+                        font_size += 2
+                    else:
+                        # テキストボックスに収まるなら
+                        font_size_list.append(font_size - 2)  # 収まるサイズに戻して保存
+                        break
 
         return font_size_list  # テキストボックスに収まる最大のフォントサイズのリスト
 
@@ -183,16 +185,18 @@ class TranslationImage:
             text_region_list,  # テキスト範囲のリスト
             font_size_list,  # フォントサイズのリスト
         ):
-            # フォントの設定
-            font_image = ImageFont.truetype(font_path, font_size)
+            if text_after is not None:
+                # 翻訳後テキストが存在するなら
+                # フォントの設定
+                font_image = ImageFont.truetype(font_path, font_size)
 
-            # 翻訳されたテキストを指定した座標に描画
-            draw.text(
-                (text_region["left"], text_region["top"]),
-                text_after,
-                fill=font_color,
-                font=font_image,
-            )
+                # 翻訳されたテキストを指定した座標に描画
+                draw.text(
+                    (text_region["left"], text_region["top"]),
+                    text_after,
+                    fill=font_color,
+                    font=font_image,
+                )
 
     def save_overlay_translation_image(overlay_translation_image, file_name):
         """オーバーレイ翻訳画像の保存

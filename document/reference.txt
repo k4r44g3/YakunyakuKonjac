@@ -60,6 +60,20 @@ PySimpleGUI サイズの変更
 https://note.com/hideharu092/n/n140ab2d73159
 
 
+Window.perform_long_operation Method
+https://pysimplegui.trinket.io/demo-programs#/multi-threaded/window-perform_long_operation-method
+
+PySimpleGUI Window.perform_long_operation
+https://www.pysimplegui.org/en/latest/cookbook/#recipe-long-operations-multi-threading
+
+PySimpleGUIでマルチスレッドで内容を更新する
+https://qiita.com/mo256man/items/7902087f9943a51d4754
+
+start_thread
+https://www.pysimplegui.org/en/latest/call%20reference/#start_thread
+
+
+
 Python関連
 
 循環import問題で見える、__name__ == "__main__"の必要性

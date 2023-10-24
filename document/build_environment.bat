@@ -20,6 +20,9 @@ pip install deep-translator
 pip install black
 pip install opencv-python
 
+Scripts\python.exe -m PySimpleGUI.PySimpleGUI upgrade
+
+
 @REM パッケージ一覧出力ファイルの作成
 pip freeze > requirements.txt
 

@@ -46,5 +46,7 @@ while True:
     print(event, values)
     if event is None:
         break
+    if event == "BUTTON":
+        window.timer_start(1000, key="__TIMER EVENT__", repeating=True)
 
 window.close()
