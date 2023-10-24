@@ -19,12 +19,6 @@ class SystemSetting:
     # 翻訳後画像保存先設定
     image_after_directory_path = history_directory_path + "image_after/"  # ディレクトリパス
 
-    # 翻訳前テキスト保存先設定
-    text_before_directory_path = history_directory_path + "text_before/"  # ディレクトリパス
-
-    # 翻訳後テキスト保存先設定
-    text_after_directory_path = history_directory_path + "text_after/"  # ディレクトリパス
-
     # 設定ファイル保存先設定
     setting_file_name = "setting.json"  # ファイル名
     setting_directory_path = package_path + "../"  # ディレクトリパス

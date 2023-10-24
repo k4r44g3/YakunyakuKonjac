@@ -52,8 +52,6 @@ class TranslationWin(BaseWin):
         # スレッド数がオーバーするかどうか
         self.is_thread_over = False
 
-        print(self.thread_max)
-
         # 継承元メソッドを呼び出す
         super().start_win()
 
@@ -209,7 +207,7 @@ class TranslationWin(BaseWin):
                             # 履歴ファイル選択リストボックス
                             sg.Listbox(
                                 values=self.history_file_time_list,  # ファイル日時のリスト
-                                size=(18, 5),
+                                size=(18, 1),
                                 key="-history_file_time_list-",
                                 default_values=now_file_time,  # デフォルト値
                                 no_scrollbar=True,  # スクロールバーの非表示
@@ -490,34 +488,36 @@ class TranslationWin(BaseWin):
         Args:
             key (str): 要素識別子
         """
-        # 現在の履歴ファイル選択リストボックスの要素番号の取得
-        now_list_box_index = self.window["-history_file_time_list-"].get_indexes()[0]
+        if len(self.history_file_name_list) >= 1:
+            # 履歴が存在するなら
+            # 現在の履歴ファイル選択リストボックスの要素番号の取得
+            now_list_box_index = self.window["-history_file_time_list-"].get_indexes()[0]
 
-        # 変更先の要素番号
-        list_box_index = None
+            # 変更先の要素番号
+            list_box_index = None
 
-        if key == "-history_file_time_list_sub-":
-            # 前の履歴を表示するボタン押下イベントなら
-            if now_list_box_index != 0:
-                # 最も古い履歴でないなら
-                list_box_index = now_list_box_index - 1
-        elif key == "-history_file_time_list_add-":
-            # 後の履歴を表示するボタン押下イベントなら
-            if now_list_box_index != len(self.history_file_time_list) - 1:
-                # 最も最新の履歴でないなら
-                list_box_index = now_list_box_index + 1
+            if key == "-history_file_time_list_sub-":
+                # 前の履歴を表示するボタン押下イベントなら
+                if now_list_box_index != 0:
+                    # 最も古い履歴でないなら
+                    list_box_index = now_list_box_index - 1
+            elif key == "-history_file_time_list_add-":
+                # 後の履歴を表示するボタン押下イベントなら
+                if now_list_box_index != len(self.history_file_time_list) - 1:
+                    # 最も最新の履歴でないなら
+                    list_box_index = now_list_box_index + 1
 
-        if list_box_index is not None:
-            # 変更先の要素番号が存在するなら
-            file_name = self.history_file_name_list[list_box_index]
+            if list_box_index is not None:
+                # 変更先の要素番号が存在するなら
+                file_name = self.history_file_name_list[list_box_index]
 
-            # 履歴ファイル選択リストの更新
-            self.window["-history_file_time_list-"].update(
-                set_to_index=list_box_index,  # 強調表示される要素番号
-                scroll_to_index=list_box_index,  # 最初に表示される要素番号の取得
-            )
-            # 翻訳前、後画像の変更処理
-            self.image_change(file_name)
+                # 履歴ファイル選択リストの更新
+                self.window["-history_file_time_list-"].update(
+                    set_to_index=list_box_index,  # 強調表示される要素番号
+                    scroll_to_index=list_box_index,  # 最初に表示される要素番号の取得
+                )
+                # 翻訳前、後画像の変更処理
+                self.image_change(file_name)
 
 
 # ! デバッグ用

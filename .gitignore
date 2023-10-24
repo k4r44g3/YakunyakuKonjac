@@ -1,14 +1,10 @@
 # 履歴フォルダ
 src/history/image_after/*
 src/history/image_before/*
-src/history/text_after/*
-src/history/text_before/*
 
 # ディレクトリのみ表示
 !src/history/image_after/.gitkeep
 !src/history/image_before/.gitkeep
-!src/history/text_after/.gitkeep
-!src/history/text_before/.gitkeep
 
 # モジュールキャッシュフォルダ
 src/package/__pycache__/*

@@ -1,39 +1,48 @@
 import PySimpleGUI as sg
 import time
 
+
 # My function that takes a long time to do...
-def my_long_operation():
-    time.sleep(15)
-    return 'My return value'
+def my_long_operation(id):
+    time.sleep(10)
+    return id
 
 
 def main():
-    layout = [  [sg.Text('My Window')],
-                [sg.Input(key='-IN-')],
-                [sg.Text(key='-OUT-')],
-                [sg.Button('Go'), sg.Button('Threaded'), sg.Button('Dummy')]  ]
+    layout = [
+        [sg.Text("My Window")],
+        [sg.Input(key="-IN-")],
+        [sg.Text(key="-OUT-")],
+        [sg.Button("Threaded"), sg.Button("cancel")],
+    ]
 
-    window = sg.Window('Window Title', layout, keep_on_top=True)
+    window = sg.Window("Window Title", layout, keep_on_top=True)
 
-    while True:             # Event Loop
+    thread_dict = {}
+    thread_count = 0
+    while True:  # Event Loop
         event, values = window.read()
         if event == sg.WIN_CLOSED:
             break
 
-        window['-OUT-'].update(f'{event, values}')  # show the event and values in the window
-        window.refresh()                            # make sure it's shown immediately
-
-        if event == 'Go':
-            return_value = my_long_operation()
-            window['-OUT-'].update(f'direct return value = {return_value}')
-        elif event  == 'Threaded':
+        if event == "Threaded":
             # Let PySimpleGUI do the threading for you...
-            print(window.start_thread(my_long_operation, '-OPERATION DONE-'))
-        elif event  == '-OPERATION DONE-':
-            window['-OUT-'].update(f'indirect return value = {values[event]}')
+            id = thread_count
+            thread_id = window.start_thread(
+                lambda: my_long_operation(id), "-end-"
+            )
+            thread_dict[id] = thread_id
+            print(thread_dict)
+            thread_count += 1
+        elif event == "-end-":
+            print(values["-end-"])
+            thread_dict.pop(values["-end-"])
+            print(thread_dict)
+        elif event == "cansel":
+            pass
 
     window.close()
 
-if __name__ == '__main__':
-    main()
 
+if __name__ == "__main__":
+    main()
