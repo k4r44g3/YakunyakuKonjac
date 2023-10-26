@@ -1,12 +1,15 @@
 # ! デバッグ用
 import sys  # システム関連
 import os  # ディレクトリ関連
+import threading  # スレッド関連
+import bisect  # 二分探索
+
+import PySimpleGUI as sg  # GUI
 
 if __name__ == "__main__":
     src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
 
-import PySimpleGUI as sg  # GUI
 
 from package.fn import Fn  # 自作関数クラス
 from package.debug import Debug  # デバッグ用クラス
@@ -15,6 +18,9 @@ from package.system_setting import SystemSetting  # ユーザーが変更不可�
 from package.translation.translation import Translation  # 翻訳機能関連のクラス
 
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
+
+from package.thread.translate_timing_thread import TranslateTimingThread  # 自動翻訳のタイミングを取得するスレッドクラス
+from package.thread.translate_thread import TranslateThread  # 翻訳処理を行うスレッドクラス
 
 
 class TranslationWin(BaseWin):
@@ -27,6 +33,8 @@ class TranslationWin(BaseWin):
     def __init__(self):
         """コンストラクタ 初期設定"""
         # todo 初期設定
+        # 自動翻訳のタイミングを取得するスレッド
+        self.translate_timing_thread = None
         # 継承元のコンストラクタを呼び出す
         super().__init__()
 
@@ -298,9 +306,9 @@ class TranslationWin(BaseWin):
             elif event == "-translation_toggle-":
                 self.translation_toggle_event()  # 自動翻訳ボタン押下イベント
 
-            # 自動翻訳タイミング取得スレッド停止イベント
-            elif event == "-auto_translate_thread_end-":
-                self.auto_translate_thread_start()  # 自動翻訳のタイミングを取得するスレッドの開始処理
+            # 翻訳開始タイミングイベント
+            elif event == "-translate_thread_start-":
+                self.translate_thread_start()  # 翻訳処理を別スレッドで開始
 
             # 翻訳処理のスレッド終了イベント
             elif event == "-translate_thread_end-":
@@ -329,44 +337,66 @@ class TranslationWin(BaseWin):
             # 翻訳スレッド最大数を超えていないなら
             self.thread_count += 1
             Fn.time_log("スレッド開始 : " + str(self.thread_count))
-            # 翻訳処理関数を別スレッドで実行、処理終了時にイベントを返す
-            self.window.start_thread(Translation.save_history, "-translate_thread_end-")
+
+            # 翻訳処理を行うスレッド作成
+            self.translate_thread = threading.Thread(
+                target=lambda: TranslateThread.run(
+                    window=self.window,
+                ),  # スレッドで実行するメソッド
+                daemon=True,  # メインスレッド終了時に終了する
+            )
+
+            # 翻訳処理を行うスレッド開始、処理終了時にイベントを返す
+            self.translate_thread.start()
+
         else:
+            # 翻訳スレッド最大数を超えているなら
             Fn.time_log("スレッド数オーバー")
             self.is_thread_over = True  # スレッド数がオーバーするかどうか
 
-    def translate_thread_end(self, value):
+    def translate_thread_end(self, values):
         """翻訳処理のスレッド終了イベント処理
 
         Args:
-        values (dict): 入力フォームの値の辞書
+            values (dict): 各要素の値の辞書
         """
 
         self.thread_count -= 1
         Fn.time_log("スレッド終了 : " + str(self.thread_count))
 
+        # 余裕が出来たスレッドで翻訳処理を開始する処理
         if self.is_thread_over:
-            # スレッド数がオーバーしていたなら、余裕が出来たスレッドで翻訳処理を開始する
-            # 翻訳処理を別スレッドで開始
-            self.translate_thread_start()
-            self.is_thread_over = False  # スレッド数がオーバーするかどうか
+            # スレッド数がオーバーしていたなら
+            if self.window["-translation_toggle-"].metadata["is_toggle_on"]:
+                # 自動翻訳トグルボタンがオンなら
+                # 翻訳処理を別スレッドで開始
+                self.translate_thread_start()
+            # スレッド数がオーバーするかどうか
+            self.is_thread_over = False
 
         # 履歴ファイル名取得
-        file_name = value["-translate_thread_end-"]
+        file_name = values["-translate_thread_end-"]
+
+        # 履歴ファイル日時取得
+        file_time = Fn.convert_time_from_filename(file_name)
+
+        # 二分探索を使用して新しい要素を挿入する位置を探す
+        insert_index = bisect.bisect_left(self.history_file_name_list, file_name)
+
         # 履歴ファイル名のリストの更新
-        self.history_file_name_list.append(file_name)
+        self.history_file_name_list.insert(insert_index, file_name)
         # 履歴ファイル日時のリストの更新
-        self.history_file_time_list.append(Fn.convert_time_from_filename(file_name))
+        self.history_file_time_list.insert(insert_index, file_time)
 
         # 履歴ファイル選択リストの更新
         self.window["-history_file_time_list-"].update(
             values=self.history_file_time_list,
+            # 最新の画像を表示する
             set_to_index=len(self.history_file_time_list) - 1,  # 強調表示される要素番号
             scroll_to_index=len(self.history_file_time_list) - 1,  # 最初に表示される要素番号の取得
         )
-
         # 翻訳前、後画像の変更処理
-        self.image_change(file_name)
+        self.image_change(max(self.history_file_name_list))
 
     def translation_toggle_event(self):
         """自動翻訳トグルボタン押下イベント処理"""
@@ -389,26 +419,28 @@ class TranslationWin(BaseWin):
         if is_toggle_on:
             # トグルボタンがオンなら
             self.timeout_count = 0
-            # self.translate_thread_start()  # 翻訳処理を別スレッドで開始
-            self.auto_translate_thread_start()
 
-    def auto_translate_thread_start(self):
+            # 自動翻訳のタイミングを取得するスレッドの開始
+            self.translate_timing_thread_start()
+
+    def translate_timing_thread_start(self):
         """自動翻訳のタイミングを取得するスレッドの開始処理"""
         # 自動翻訳トグルボタンがオンかどうか取得
         is_translation_toggle = self.window["-translation_toggle-"].metadata["is_toggle_on"]
         if is_translation_toggle:
             # 自動翻訳がオンなら
 
-            # 翻訳処理関数を別スレッドで実行、処理終了時にイベントを返す
-            self.translate_thread_start()  # 翻訳処理を別スレッドで開始
-
-            # 翻訳間隔(秒)の取得
-            translation_interval_sec = self.user_setting.get_setting("translation_interval_sec")
-
-            # 一時停止後、自動翻訳タイミング取得スレッド停止イベントの識別子を返す
-            self.window.start_thread(
-                lambda: Fn.sleep(translation_interval_sec / 1000), "-auto_translate_thread_end-"
+            # 自動翻訳のタイミングを取得するスレッド作成
+            self.translate_timing_thread = threading.Thread(
+                # スレッドで実行するメソッド
+                target=lambda: TranslateTimingThread.run(
+                    user_setting=self.user_setting,
+                    window=self.window,
+                ),
+                daemon=True,  # メインスレッド終了時に終了する
             )
+            # 自動翻訳のタイミングを取得するスレッド開始、タイミング毎にイベントを返す
+            self.translate_timing_thread.start()
 
     def image_change(self, file_name):
         """翻訳前、後画像の変更処理
@@ -470,7 +502,7 @@ class TranslationWin(BaseWin):
         """履歴ファイル選択リストボックスイベントの処理
 
         Args:
-            values (dict): 入力フォームの値の辞書
+            values (dict): 各要素の値の辞書
         """
         # ファイルが選択されているなら
         if values["-history_file_time_list-"]:

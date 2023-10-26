@@ -21,6 +21,9 @@ user_setting = UserSetting()
 
 Fn.time_log("システム開始")
 
+# 翻訳前、後画像の両方が存在しない履歴ファイルを削除
+Fn.delete_unique_history_file()
+
 # メインウィンドウの処理
 transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
 win_class = globals()[transition_target_win]  # 遷移先ウィンドウクラスの取得

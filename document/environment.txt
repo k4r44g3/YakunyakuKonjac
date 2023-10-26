@@ -16,4 +16,4 @@
     venv_YakunyakuKonjac\YakunyakuKonjac\document\delete_history.batの実行
 
 設定のリセット
-    
+    venv_YakunyakuKonjac\YakunyakuKonjac\document\reset_setting.batの実行

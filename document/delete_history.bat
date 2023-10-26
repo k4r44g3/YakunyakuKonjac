@@ -16,5 +16,6 @@ cd ..\..
 rmdir /s /q src\package\__pycache__
 rmdir /s /q src\package\translation\__pycache__
 rmdir /s /q src\package\window\__pycache__
+rmdir /s /q src\package\thread\__pycache__
 
 pause

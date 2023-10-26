@@ -172,7 +172,7 @@ class LanguageSettingWin(BaseWin):
         """更新する設定の取得
 
         Args:
-            values (dict): 入力フォームの値の辞書
+            values (dict): 各要素の値の辞書
         Returns:
             update_setting (dict): 更新する設定の値の辞書
         """

@@ -33,6 +33,7 @@ class TranslationImage:
         Returns:
             overlay_translation_image(Image): オーバーレイ翻訳画像
         """
+        #! 画像が見つからない　削除しているため
         image_out = Image.open(ss_file_path)  # 出力画像を作成
 
         draw = ImageDraw.Draw(image_out)  # 画像に図形やテキストを描画するオブジェクトの作成

@@ -15,7 +15,7 @@ class Fn:
         Args:
             ms (int): 停止時間(ミリ秒)
         """
-        time.sleep(ms * 1000)
+        time.sleep(ms / 1000)
 
     def log(*text):
         """ログの表示
@@ -142,6 +142,46 @@ class Fn:
         # 共通要素の取得
         common_file_name_set = before_file_name_set & after_file_name_set
 
+        # # 片方のみに存在する要素の取得
+        # before_only_file_name_set = before_file_name_set - common_file_name_set  # 翻訳前画像のみのファイル名の取得
+        # after_only_file_name_set = after_file_name_set - common_file_name_set  # 翻訳後画像のみのファイル名の取得
+
+        # # 翻訳前画像のみのファイルの削除
+        # for before_file_name in before_only_file_name_set:
+        #     os.remove(image_before_directory_path + "/" + before_file_name)
+        # # 翻訳後画像のみのファイルの削除
+        # for after_file_name in after_only_file_name_set:
+        #     os.remove(image_after_directory_path + "/" + after_file_name)
+
+        # 履歴ファイル名のリストを取得
+        history_file_name_list = list(common_file_name_set)
+
+        # 昇順に並び替え
+        history_file_name_list.sort()
+
+        # .gitkeepを履歴ファイル名のリストから削除して返す
+        return history_file_name_list[1:]
+
+    def delete_unique_history_file():
+        """翻訳前、後画像の両方が存在しない履歴ファイルを削除"""
+        # 翻訳前画像保存先設定
+        image_before_directory_path = SystemSetting.image_before_directory_path  # ディレクトリパス
+
+        # 翻訳後画像保存先設定
+        image_after_directory_path = SystemSetting.image_after_directory_path  # ディレクトリパス
+
+        # 翻訳前画像ファイル名のリスト
+        before_file_name_list = os.listdir(image_before_directory_path)
+        # 翻訳後画像ファイル名のリスト
+        after_file_name_list = os.listdir(image_after_directory_path)
+
+        # 集合型に変換
+        before_file_name_set = set(before_file_name_list)
+        after_file_name_set = set(after_file_name_list)
+
+        # 共通要素の取得
+        common_file_name_set = before_file_name_set & after_file_name_set
+
         # 片方のみに存在する要素の取得
         before_only_file_name_set = before_file_name_set - common_file_name_set  # 翻訳前画像のみのファイル名の取得
         after_only_file_name_set = after_file_name_set - common_file_name_set  # 翻訳後画像のみのファイル名の取得
@@ -152,15 +192,6 @@ class Fn:
         # 翻訳後画像のみのファイルの削除
         for after_file_name in after_only_file_name_set:
             os.remove(image_after_directory_path + "/" + after_file_name)
-
-        # 履歴ファイル名のリストを取得
-        history_file_name_list = list(common_file_name_set)
-
-        # 昇順に並び替え
-        history_file_name_list.sort()
-
-        # .gitkeepを履歴ファイル名のリストから削除して返す
-        return history_file_name_list[1:]
 
     def search_dict_in_list(lst, key_name, value):
         """与えられたリスト内の辞書から指定したキーと値に一致する辞書を取得
