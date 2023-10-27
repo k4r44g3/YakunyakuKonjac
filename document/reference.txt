@@ -164,3 +164,10 @@ https://github.com/boppreh/keyboard
 
 文字一覧 (ASCII)
 https://tools.m-bsys.com/data/charlist_ascii.php
+
+
+【python】マウスドラッグで画像から範囲指定する
+https://qiita.com/8_hisakichi_8/items/47f6d37e6f425f29c8a8
+
+Pythonのcanvasに表示した四角形を変形する
+https://water2litter.net/rum/post/python_tkinter_canvas_rectangle_modification/

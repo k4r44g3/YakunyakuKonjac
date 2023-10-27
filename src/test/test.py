@@ -1,88 +1,95 @@
-import PySimpleGUI as sg
-import time
-import threading
+import tkinter as tk
 
 
-# My function that takes a long time to do...
-class Thread_cls:
-    def my_long_operation(id, window):
-        time.sleep(10)
-        print("処理終了")
-        # ウィンドウが閉じられているかどうか取得
-        print(window.was_closed())
-        # ウィンドウが閉じられていないなら
-        if not window.was_closed():
-            window.write_event_value("-end-", id)
-        else:
-            print("ウィンドウ終了")
+class DragAreaGetter:
+    """ドラッグした領域の座標を取得するクラス
 
+    Returns:
+        region(dict{left, top, width, height}): スクリーンショット撮影範囲
+    """
 
-class Win1:
-    def main():
-        layout = [
-            [sg.Text("My Window")],
-            [sg.Input(key="-IN-")],
-            [sg.Text(key="-OUT-")],
-            [sg.Button("Threaded"), sg.Button("cancel")],
-        ]
+    # ドラッグ領域の座標を保存するクラス変数
+    region = None
 
-        window = sg.Window("Window Title", layout)
+    def __init__(self, root):
+        # 主要なウィンドウの設定
+        self.root = root
+        self.root.attributes("-alpha", 0.5)  # ウィンドウの透明度を設定
+        self.root.attributes("-fullscreen", True)  # フルスクリーンモードでウィンドウを表示
+        self.root.attributes("-topmost", True)  # ウィンドウを最前面に表示
 
-        thread_dict = {}
-        thread_count = 0
-        ignore_thread_events = False
-        while True:  # Event Loop
-            event, values = window.read()
-            if event == sg.WIN_CLOSED:
-                if thread_dict:  # There are still running threads
-                    ignore_thread_events = True  # Set the flag to ignore thread events
-                break
+        # Canvasの設定（ドラッグ範囲を表示するためのキャンバス）
+        self.canvas = tk.Canvas(root, bg="black", bd=0, highlightthickness=0)
+        self.canvas.pack(fill=tk.BOTH, expand=tk.TRUE)
 
-            if event == "Threaded":
-                # Let PySimpleGUI do the threading for you...
-                id = thread_count
-                # thread = threading.Thread(target=lambda: my_long_operation(id))
-                # スレッド作成
-                thread = threading.Thread(
-                    target=Thread_cls.my_long_operation,
-                    args=(id, window),
-                    daemon=True,
-                )
-                # スレッド開始
-                thread.start()
-                # スレッドの辞書作成
-                thread_dict[id] = thread
-                print(id, "スレッド開始")
-                print(thread_dict)
-                thread_count += 1
-            elif event == "-end-":
-                id = values["-end-"]
-                thread_dict.pop(id)
-                print(id, "スレッド停止")
-                print(thread_dict)
-            elif event == "cancel":
-                # print(list(thread_dict.values()))
-                for thread in thread_dict.values():
-                    print(thread)
-                break
+        # ドラッグ時の四角形と座標の初期値
+        self.rect = None
+        self.start_x = None
+        self.start_y = None
+        self.end_x = None
+        self.end_y = None
 
-        window.close()
+        # マウスイベントのバインド
+        self.canvas.bind("<ButtonPress-1>", self.on_button_press)
+        self.canvas.bind("<B1-Motion>", self.on_mouse_drag)
+        self.canvas.bind("<ButtonRelease-1>", self.on_button_release)
 
+    def on_button_press(self, event):
+        """マウスの左ボタンが押されたときのイベントハンドラ"""
+        # ドラッグの開始地点を記録
+        self.start_x = event.x_root
+        self.start_y = event.y_root
 
-class Win2:
-    def main():
-        layout = [
-            [sg.Text("test")],
-        ]
+        # まだ矩形がなければ、新しい矩形を作成
+        if not self.rect:
+            self.rect = self.canvas.create_rectangle(
+                self.start_x,
+                self.start_y,
+                self.start_x,
+                self.start_y,
+                fill="white",
+                outline="white",
+            )
 
-        window = sg.Window("Window2", layout)
+    def on_mouse_drag(self, event):
+        """マウスがドラッグされている間のイベントハンドラ"""
+        # 現在のマウスの座標を取得
+        cur_x = event.x_root
+        cur_y = event.y_root
 
-        while True:  # Event Loop
-            event, values = window.read()
-            if event == sg.WIN_CLOSED:
-                break
+        # 矩形のサイズを更新
+        self.canvas.coords(self.rect, self.start_x, self.start_y, cur_x, cur_y)
 
+    def on_button_release(self, event):
+        """マウスの左ボタンが離されたときのイベントハンドラ"""
+        # ドラッグの終了地点を記録
+        self.end_x = event.x_root
+        self.end_y = event.y_root
 
-if __name__ == "__main__":
-    Win1.main()
-    Win2.main()
+        # 座標を辞書にして保存
+        self.get_region()
+
+        # アプリケーションを終了
+        self.root.quit()
+
+        # アプリケーションを削除
+        self.root.destroy()
+
+    def get_region(self):
+        """ドラッグの開始地点と終了地点の座標を辞書にして返す"""
+        # 座標をクラス変数に保存
+        DragAreaGetter.region = {
+            "left": min(self.start_x, self.end_x),  # ドラッグ範囲の左側x座標
+            "top": min(self.start_y, self.end_y),  # ドラッグ範囲の上側y座標
+            "right": max(self.start_x, self.end_x),  # ドラッグ範囲の右側x座標
+            "bottom": max(self.start_y, self.end_y),  # ドラッグ範囲の下側y座標
+        }
+
+    @classmethod
+    def run(cls):
+        """クラスメソッドでアプリケーションを実行"""
+        root = tk.Tk()
+        app = DragAreaGetter(root)
+        root.mainloop()
+        # ドラッグ領域の座標を返す
+        return cls.region

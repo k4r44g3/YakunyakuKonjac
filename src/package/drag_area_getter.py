@@ -1,7 +1,3 @@
-import PySimpleGUI as sg
-import keyboard
-
-
 import tkinter as tk
 
 
@@ -91,7 +87,11 @@ class DragAreaGetter:
 
     @classmethod
     def run(cls):
-        """クラスメソッドでアプリケーションを実行"""
+        """ドラッグした領域の座標を取得する
+
+        Returns:
+            region(dict{left, top, width, height}): スクリーンショット撮影範囲
+        """
         root = tk.Tk()
         app = DragAreaGetter(root)
         root.mainloop()
@@ -99,35 +99,7 @@ class DragAreaGetter:
         return cls.region
 
 
-class Win1:
-    def main():
-        # 1. レイアウト
-        layout = [
-            [
-                sg.Button(button_text="ボタン", key="-button-"),
-            ],
-        ]
-
-        # 2. ウィンドウの生成
-        window = sg.Window(
-            title="Window title",
-            layout=layout,
-            grab_anywhere=True,
-            return_keyboard_events=True,
-        )
-        window.finalize()
-
-        # 3. GUI処理
-        while True:
-            event, values = window.read(timeout=None)
-
-            if event is None:
-                break
-            elif event == "-button-":
-                region = DragAreaGetter.run()
-                print(region)
-        window.close()
-
-
 if __name__ == "__main__":
-    Win1.main()
+    # アプリケーションの実行
+    region = DragAreaGetter.run()
+    print(region)
