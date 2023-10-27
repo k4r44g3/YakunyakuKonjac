@@ -152,3 +152,15 @@ https://deep-translator.readthedocs.io/en/latest/index.html
 
 Pythonでdeep-translatorを用いて翻訳を行う
 https://laboratory.kazuuu.net/translation-in-python-with-deep-translator/
+
+
+キーボード関連
+【Python】キーボード、キー入力判定方法
+https://kuku81kuku81.hatenablog.com/entry/2022/06/07_python_keyinputjudgement
+
+keyboard
+https://github.com/boppreh/keyboard
+
+
+文字一覧 (ASCII)
+https://tools.m-bsys.com/data/charlist_ascii.php

@@ -1,8 +1,6 @@
 from package.fn import Fn  # 自作関数クラス
 
 from package.window.translation_win import TranslationWin  # 翻訳画面ウィンドウクラス
-from package.window.input_win import InputWin  # 入力画面ウィンドウクラス
-from package.window.output_win import OutputWin  # 出力画面ウィンドウクラス
 
 from package.window.display_setting_win import DisplaySettingWin  # 表示設定画面ウィンドウクラス
 from package.window.environment_setting_win import EnvironmentSettingWin  # 環境設定画面ウィンドウクラス

@@ -22,17 +22,8 @@ class LanguageSettingWin(BaseWin):
         BaseWin (BaseWin): ウィンドウの基本クラス
     """
 
-    # 言語情報一覧リストの取得
-    language_list = SystemSetting.language_list
-
-    # 言語名のリスト作成
-    language_name_list = []
-    for language in language_list:
-        language_name_list.append(language["ja_text"])  # 言語名取得
-
     def __init__(self):
         """コンストラクタ 初期設定"""
-        # todo 初期設定
         # 継承元のコンストラクタを呼び出す
         super().__init__()
 
@@ -44,10 +35,12 @@ class LanguageSettingWin(BaseWin):
         """
 
         # 言語情報一覧リストのリストの取得
-        language_list = LanguageSettingWin.language_list
+        self.language_list = SystemSetting.language_list
 
-        # 言語名のリスト
-        language_name_list = LanguageSettingWin.language_name_list
+        # 言語名のリスト作成
+        self.language_name_list = []
+        for language in self.language_list:
+            self.language_name_list.append(language["ja_text"])  # 言語名取得
 
         # 現在のOCRソフトの取得
         now_ocr_soft = self.user_setting.get_setting("ocr_soft")
@@ -60,12 +53,12 @@ class LanguageSettingWin(BaseWin):
 
         # 現在の翻訳前言語名の取得
         now_source_language_name = Fn.search_dict_in_list(
-            language_list, "code", now_source_language_code
+            self.language_list, "code", now_source_language_code
         )["ja_text"]
 
         # 現在の翻訳後言語名の取得
         now_target_language_name = Fn.search_dict_in_list(
-            language_list, "code", now_target_language_code
+            self.language_list, "code", now_target_language_code
         )["ja_text"]
 
         # レイアウト指定
@@ -93,7 +86,7 @@ class LanguageSettingWin(BaseWin):
                     layout=[
                         [
                             sg.Listbox(
-                                values=language_name_list,
+                                values=self.language_name_list,
                                 size=(14, 5),
                                 key="-source_language_code-",
                                 default_values=now_source_language_name,  # デフォルト値
@@ -109,7 +102,7 @@ class LanguageSettingWin(BaseWin):
                     layout=[
                         [
                             sg.Listbox(
-                                language_name_list,
+                                values = self.language_name_list,
                                 size=(14, 5),
                                 key="-target_language_code-",
                                 default_values=now_target_language_name,  # デフォルト値
@@ -132,14 +125,12 @@ class LanguageSettingWin(BaseWin):
         終了処理が行われるまで繰り返す
         """
 
-        # 言語名のリスト
-        language_name_list = LanguageSettingWin.language_name_list
         # リストボックスの初期スクロール位置の設定
         for key in ("-source_language_code-", "-target_language_code-"):
             # 選択されている値の取得
             value = self.window[key].get()[0]
             # 最初に表示される要素番号の取得
-            scroll_to_index = language_name_list.index(value)
+            scroll_to_index = self.language_name_list.index(value)
             # リストボックスの初期スクロール位置の設定
             self.window[key].update(scroll_to_index=scroll_to_index)
 
@@ -176,8 +167,6 @@ class LanguageSettingWin(BaseWin):
         Returns:
             update_setting (dict): 更新する設定の値の辞書
         """
-        # 言語情報一覧リストの取得
-        language_list = SystemSetting.language_list
 
         # 翻訳前言語名取得
         source_language_name = values["-source_language_code-"][0]
@@ -186,11 +175,11 @@ class LanguageSettingWin(BaseWin):
 
         # 翻訳前言語コード取得
         source_language_code = Fn.search_dict_in_list(
-            language_list, "ja_text", source_language_name
+            self.language_list, "ja_text", source_language_name
         )["code"]
         # 翻訳後言語コード取得
         target_language_code = Fn.search_dict_in_list(
-            language_list, "ja_text", target_language_name
+            self.language_list, "ja_text", target_language_name
         )["code"]
 
         # 更新する設定

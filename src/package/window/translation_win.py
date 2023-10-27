@@ -32,7 +32,6 @@ class TranslationWin(BaseWin):
 
     def __init__(self):
         """コンストラクタ 初期設定"""
-        # todo 初期設定
         # 自動翻訳のタイミングを取得するスレッド
         self.translate_timing_thread = None
         # 継承元のコンストラクタを呼び出す
@@ -167,14 +166,7 @@ class TranslationWin(BaseWin):
                     "利用者情報 (&I)::transition_UserInfoWin::",
                 ],
             ],
-            [
-                "入力 (&I)",
-                ["入力画面 (&I)::transition_InputWin::"],
-            ],
-            [
-                "出力 (&O)",
-                ["出力画面 (&O)::transition_OutputWin::"],
-            ],
+
         ]
 
         # レイアウト指定
@@ -192,7 +184,7 @@ class TranslationWin(BaseWin):
                 # 自動翻訳用トグルボタン
                 sg.Button(
                     button_text="自動翻訳開始",  # ボタンテキスト
-                    key="-translation_toggle-",  # 識別子
+                    key="-toggle_auto_translation-",  # 識別子
                     size=(4 * 5, 2 * 2),  # サイズ(フォントサイズ)(w,h)
                     # メタデータ
                     metadata={
@@ -275,12 +267,12 @@ class TranslationWin(BaseWin):
         )
 
         while True:  # 終了処理が行われるまで繰り返す
-            # 実際に画面が表示され、ユーザーの入力待ちになる 一定時間でタイムアウト処理
+            # 実際に画面が表示され、ユーザーの入力待ちになる
             # ! タイムアウト処理の削除
             event, values = self.window.read()
 
             # ! デバッグログ
-            # Fn.time_log(event, values)
+            # Fn.time_log(event)
 
             # プログラム終了イベント処理
             if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
@@ -303,8 +295,8 @@ class TranslationWin(BaseWin):
                 self.translate_thread_start()  # 翻訳処理を別スレッドで開始
 
             # 自動翻訳ボタン押下イベント
-            elif event == "-translation_toggle-":
-                self.translation_toggle_event()  # 自動翻訳ボタン押下イベント
+            elif event == "-toggle_auto_translation-":
+                self.toggle_auto_translation_event()  # 自動翻訳ボタン押下イベント
 
             # 翻訳開始タイミングイベント
             elif event == "-translate_thread_start-":
@@ -367,7 +359,7 @@ class TranslationWin(BaseWin):
         # 余裕が出来たスレッドで翻訳処理を開始する処理
         if self.is_thread_over:
             # スレッド数がオーバーしていたなら
-            if self.window["-translation_toggle-"].metadata["is_toggle_on"]:
+            if self.window["-toggle_auto_translation-"].metadata["is_toggle_on"]:
                 # 自動翻訳トグルボタンがオンなら
                 # 翻訳処理を別スレッドで開始
                 self.translate_thread_start()
@@ -398,23 +390,23 @@ class TranslationWin(BaseWin):
         # 翻訳前、後画像の変更処理
         self.image_change(max(self.history_file_name_list))
 
-    def translation_toggle_event(self):
+    def toggle_auto_translation_event(self):
         """自動翻訳トグルボタン押下イベント処理"""
         # トグルボタンがオンかどうか取得
-        is_toggle_on = self.window["-translation_toggle-"].metadata["is_toggle_on"]
+        is_toggle_on = self.window["-toggle_auto_translation-"].metadata["is_toggle_on"]
 
         # オンオフ切り替え
         is_toggle_on = not is_toggle_on
 
         # トグルボタンに状態を保存
-        self.window["-translation_toggle-"].metadata["is_toggle_on"] = is_toggle_on
+        self.window["-toggle_auto_translation-"].metadata["is_toggle_on"] = is_toggle_on
 
         # トグルボタンの変更先テキスト取得
-        button_text = self.window["-translation_toggle-"].metadata["toggle_button_text"][
+        button_text = self.window["-toggle_auto_translation-"].metadata["toggle_button_text"][
             is_toggle_on
         ]
         # トグルボタンのテキスト切り替え
-        self.window["-translation_toggle-"].update(text=button_text)
+        self.window["-toggle_auto_translation-"].update(text=button_text)
 
         if is_toggle_on:
             # トグルボタンがオンなら
@@ -426,8 +418,10 @@ class TranslationWin(BaseWin):
     def translate_timing_thread_start(self):
         """自動翻訳のタイミングを取得するスレッドの開始処理"""
         # 自動翻訳トグルボタンがオンかどうか取得
-        is_translation_toggle = self.window["-translation_toggle-"].metadata["is_toggle_on"]
-        if is_translation_toggle:
+        is_toggle_auto_translation = self.window["-toggle_auto_translation-"].metadata[
+            "is_toggle_on"
+        ]
+        if is_toggle_auto_translation:
             # 自動翻訳がオンなら
 
             # 自動翻訳のタイミングを取得するスレッド作成

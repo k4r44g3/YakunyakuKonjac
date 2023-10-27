@@ -11,7 +11,7 @@ class TranslateTimingThread:
     """自動翻訳のタイミングを取得するスレッドクラス"""
 
     def run(user_setting, window):
-        """
+        """自動翻訳のタイミングを取得
         Args:
             user_setting(UserSetting): ユーザーが変更可能の設定
             window(sg.Window): Windowオブジェクト

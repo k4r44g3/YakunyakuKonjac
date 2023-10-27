@@ -1,5 +1,4 @@
-import keyboard  # キーボード
-import re  # 正規表現
+import keyboard
 
 # 各キーの長押し状態を格納する辞書を初期化
 pressed_keys = {}
@@ -14,18 +13,14 @@ while True:
     if event_type == keyboard.KEY_DOWN:
         # キーが長押しされていない場合
         if key_code not in pressed_keys:
-            # 押されたキー名の表示
-            print(key_name)
-            # キー名がASCII印字可能文字かどうか
-            is_ascii_char_key = bool(re.match(r"^[!-~]$", key_name))
-            # キー名がファンクションキーかどうか
-            is_function_key = bool(re.match(r"^f([1-9]|1[0-2])$", key_name))
-
-            if is_ascii_char_key or is_function_key:
-                # キーがASCII印字可能文字、ファンクションキーのどちらかなら
-                print("イベント発行")
             # キー長押し状態の保存
             pressed_keys[key_code] = key_name
+            # 押されたキーが修飾キー以外なら
+            if pressed_keys.values() not in ["shift", "ctrl", "alt"]:
+                out_list = []
+                # print(list(pressed_keys.items()))
+                print(keyboard.get_hotkey_name(list(pressed_keys.values())))
+                # print(keyboard.key_to_scan_codes(30))
 
     # イベントがキーの解放イベントである場合
     elif event_type == keyboard.KEY_UP:

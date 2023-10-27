@@ -12,7 +12,7 @@ class TranslateThread:
     """翻訳処理を行うスレッドクラス"""
 
     def run(window):
-        """
+        """ 翻訳処理
         Args:
             window(sg.Window): Windowオブジェクト
         """

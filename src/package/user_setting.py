@@ -24,6 +24,39 @@ class UserSetting:
         "window_height": 600,  # ウィンドウの縦幅
         "translation_interval_sec": 10,  # 翻訳間隔(秒)
         "translation_thread_max": 4,  # 翻訳スレッドの最大数
+        # キーバインド設定情報の辞書
+        "key_binding_info_list": [
+            {
+                "text": "翻訳",
+                "gui_key": "-translate_key-",
+                "key_name": "f1",
+                "scan_code": 59,
+            },
+            {
+                "text": "自動翻訳切替",
+                "gui_key": "-auto_translation_toggle-",
+                "key_name": "f2",
+                "scan_code": 60,
+            },
+            {
+                "text": "撮影範囲設定",
+                "gui_key": "-set_ss_region_key-",
+                "key_name": "f3",
+                "scan_code": 61,
+            },
+            {
+                "text": "撮影設定へ遷移",
+                "gui_key": "-transition_to_shooting_key-",
+                "key_name": "f4",
+                "scan_code": 62,
+            },
+            {
+                "text": "言語設定へ遷移",
+                "gui_key": "-transition_to_language_key-",
+                "key_name": "f5",
+                "scan_code": 63,
+            },
+        ],
     }
 
     def __init__(self):
