@@ -42,24 +42,27 @@ class Thread_cls:
             event_type = key_event.event_type  # イベントタイプの取得
             key_name = key_event.name  # キー名の取得
             scan_code = key_event.scan_code  # スキャンコードの取得
-            if event_type == keyboard.KEY_DOWN:
-                # イベントがキーの押下イベントである場合
-                if scan_code not in pressed_keys:
-                    # キーが長押しされていない場合
-                    # キー名がASCII印字可能文字かどうか
-                    is_ascii_char_key = bool(re.match(r"^[!-~]$", key_name))
-                    # キー名がファンクションキーかどうか
-                    is_function_key = bool(re.match(r"^f([1-9]|1[0-2])$", key_name))
 
-                    # 押下されたキー名のチェック
-                    if is_ascii_char_key or is_function_key:
-                        # キーがASCII印字可能文字、ファンクションキーのどちらかなら
+            # キー名がASCII印字可能文字かどうか
+            is_ascii_char_key = bool(re.match(r"^[!-~]$", key_name))
+            # キー名がファンクションキーかどうか
+            is_function_key = bool(re.match(r"^f([1-9]|1[0-2])$", key_name))
+
+            # 押下されたキー名のチェック
+            if is_ascii_char_key or is_function_key:
+                # キーがASCII印字可能文字、ファンクションキーのどちらかなら
+                if event_type == keyboard.KEY_DOWN:
+                    # イベントがキーの押下イベントである場合
+                    if scan_code not in pressed_keys:
+                        # キーが長押しされていない場合
+
                         key = "-keyboard_event-"
                         value = {
                             "key_name": key_name,  # キー名
                             "scan_code": scan_code,  # スキャンコード
                             "setting_target_key": setting_target_key,  # 設定変更対象のキー名
                         }
+                        print(pressed_keys)
                         # スレッドから、キーイベントを送信
                         window.write_event_value(key, value)
 
@@ -67,6 +70,7 @@ class Thread_cls:
                     # イベントがキーの解放イベントである場合
                     # キーが離されたので、長押し状態をリセットする
                     pressed_keys.pop(scan_code, None)
+                    print(pressed_keys)
 
             # キーイベントの取得
             key_event = keyboard.read_event()

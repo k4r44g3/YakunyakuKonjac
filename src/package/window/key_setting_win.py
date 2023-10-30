@@ -35,7 +35,7 @@ class KeySettingWin(BaseWin):
         Returns:
             layout(list): ウィンドウのレイアウト
         """
-        # キーバインド設定情報の辞書\
+        # キーバインド設定情報の辞書
         self.key_binding_info_list = self.user_setting.get_setting("key_binding_info_list")
 
         # キーバインド設定のレイアウト
@@ -133,6 +133,8 @@ class KeySettingWin(BaseWin):
                     self.window.metadata["is_key_input_waiting_state"] = True
                     # キーイベントを取得するスレッド作成
                     thread = threading.Thread(
+                        # スレッド名
+                        name="入力キー名取得スレッド",
                         # スレッドで実行するメソッド
                         target=lambda: GetKeyEventThread.run(
                             self.window,  # Windowオブジェクト

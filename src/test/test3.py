@@ -18,8 +18,8 @@ while True:
             # 押されたキーが修飾キー以外なら
             if pressed_keys.values() not in ["shift", "ctrl", "alt"]:
                 out_list = []
-                # print(list(pressed_keys.items()))
-                print(keyboard.get_hotkey_name(list(pressed_keys.values())))
+                print(list(pressed_keys.items()))
+                # print(keyboard.get_hotkey_name(list(pressed_keys.values())))
                 # print(keyboard.key_to_scan_codes(30))
 
     # イベントがキーの解放イベントである場合

@@ -21,6 +21,9 @@ from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 from package.thread.translate_timing_thread import TranslateTimingThread  # 自動翻訳のタイミングを取得するスレッドクラス
 from package.thread.translate_thread import TranslateThread  # 翻訳処理を行うスレッドクラス
+from package.thread.watch_for_key_event import WatchForKeyEvent  # 指定したキーイベントが発生するかどうか監視するスレッドクラス
+
+from package.drag_area_getter import DragAreaGetter  # ドラッグした領域の座標を取得するクラス
 
 
 class TranslationWin(BaseWin):
@@ -166,7 +169,6 @@ class TranslationWin(BaseWin):
                     "利用者情報 (&I)::transition_UserInfoWin::",
                 ],
             ],
-
         ]
 
         # レイアウト指定
@@ -245,13 +247,12 @@ class TranslationWin(BaseWin):
             layout=self.get_layout(),  # レイアウト指定
             resizable=True,  # ウィンドウサイズ変更可能
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
-            return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
             enable_close_attempted_event=True,  # タイトルバーの[X]ボタン押下,Alt+F4時にイベントが返される
         )
         return window  # GUIウィンドウ設定
 
     def event_start(self):
-        """イベント受付開始処理
+        """イベント受付開始処理5
         指定したボタンが押された時などのイベント処理内容
         終了処理が行われるまで繰り返す
         """
@@ -265,6 +266,20 @@ class TranslationWin(BaseWin):
         self.window["-history_file_time_list-"].update(
             scroll_to_index=len(self.history_file_time_list) - 1
         )
+
+        # 指定したキーイベントが発生するかどうか監視するスレッド
+        thread = threading.Thread(
+            # スレッド名
+            name="キーイベント取得スレッド",
+            # スレッドで実行するメソッド
+            target=lambda: WatchForKeyEvent.run(
+                self.window,  # Windowオブジェクト
+                self.user_setting.get_setting("key_binding_info_list"),  # キーバインド情報のリスト
+            ),
+            daemon=True,  # メインスレッド終了時に終了する
+        )
+        # スレッド開始
+        thread.start()
 
         while True:  # 終了処理が行われるまで繰り返す
             # 実際に画面が表示され、ユーザーの入力待ちになる
@@ -281,7 +296,7 @@ class TranslationWin(BaseWin):
 
             # メニューバーの押下イベント
             elif values["-menu-"] is not None:  # 選択された項目があるなら
-                "メニューバーのイベント処理"
+                # メニューバーのイベント処理
                 menu_key = event.split("::")[1]  # メニュー項目の識別子取得
                 # 画面遷移を行うかどうか
                 if menu_key.startswith("transition_"):  # menu_keyにtransitionが含まれるなら
@@ -316,9 +331,32 @@ class TranslationWin(BaseWin):
             # 履歴ファイル選択ボタンイベント
             elif event in ("-history_file_time_list_sub-", "-history_file_time_list_add-"):
                 self.history_file_select_botton(event)  # 履歴ファイル選択ボタンイベント
-            # # タイムアウト処理
-            # elif event == "__TIMEOUT__":
-            #     self.timeout_event()  # タイムアウトイベント
+
+            # キーイベントが発生したなら
+            if "-keyboard_event-" in values:
+                event_name = values["-keyboard_event-"]  # 対応するイベント名
+                # 翻訳イベント
+                if event_name == "-translate_key-":
+                    self.translate_thread_start()  # 翻訳処理を別スレッドで開始
+                # 自動翻訳切替イベント
+                elif event_name == "-auto_translation_toggle-":
+                    self.toggle_auto_translation_event()  # 自動翻訳ボタン押下イベント
+                # 撮影範囲設定イベント
+                elif event_name == "-set_ss_region_key-":
+                    # 撮影範囲設定イベント処理
+                    self.set_ss_region_event()
+                # 撮影設定へ遷移するイベント
+                elif event_name == "-transition_to_shooting_key-":
+                    self.transition_target_win = "ShootingSettingWin"  # 遷移先ウィンドウ名
+                    Fn.time_log(self.transition_target_win, "に画面遷移")
+                    self.exit_event()  # イベント終了処理
+                    break  # イベント受付終了
+                # 言語設定へ遷移するイベント
+                elif event_name == "-transition_to_language_key-":
+                    self.transition_target_win = "LanguageSettingWin"  # 遷移先ウィンドウ名
+                    Fn.time_log(self.transition_target_win, "に画面遷移")
+                    self.exit_event()  # イベント終了処理
+                    break  # イベント受付終了
 
     # todo イベント処理記述
 
@@ -332,6 +370,8 @@ class TranslationWin(BaseWin):
 
             # 翻訳処理を行うスレッド作成
             self.translate_thread = threading.Thread(
+                # スレッド名
+                name="翻訳スレッド : " + str(self.thread_count),
                 target=lambda: TranslateThread.run(
                     window=self.window,
                 ),  # スレッドで実行するメソッド
@@ -426,6 +466,8 @@ class TranslationWin(BaseWin):
 
             # 自動翻訳のタイミングを取得するスレッド作成
             self.translate_timing_thread = threading.Thread(
+                # スレッド名
+                name="自動翻訳タイミング取得スレッド",
                 # スレッドで実行するメソッド
                 target=lambda: TranslateTimingThread.run(
                     user_setting=self.user_setting,
@@ -544,6 +586,20 @@ class TranslationWin(BaseWin):
                 )
                 # 翻訳前、後画像の変更処理
                 self.image_change(file_name)
+
+    def set_ss_region_event(self):
+        """撮影範囲設定ボタン押下イベント処理"""
+        # ドラッグした領域の座標を取得する
+        now_ss_region = DragAreaGetter.run()
+
+        # 更新する設定
+        update_setting = {}
+        update_setting["ss_left_x"] = now_ss_region["left"]
+        update_setting["ss_top_y"] = now_ss_region["top"]
+        update_setting["ss_right_x"] = now_ss_region["right"]
+        update_setting["ss_bottom_y"] = now_ss_region["bottom"]
+
+        self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
 
 # ! デバッグ用

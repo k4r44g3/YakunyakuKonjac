@@ -1,10 +1,4 @@
-import os  # ディレクトリ関連
-import threading
-
 from package.fn import Fn  # 自作関数クラス
-from package.debug import Debug  # デバッグ用クラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
-from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 
 
 class TranslateTimingThread:
@@ -23,7 +17,7 @@ class TranslateTimingThread:
             # ウィンドウが閉じているかどうか
             not (window.was_closed())
             # 自動翻訳トグルボタンがオンかどうか
-            and window["-translation_toggle-"].metadata["is_toggle_on"]
+            and window["-toggle_auto_translation-"].metadata["is_toggle_on"]
         ):
             # ウィンドウが開いてあるかつ、自動翻訳トグルボタンがオンなら
             # スレッドから、翻訳イベントを送信

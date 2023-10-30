@@ -1,9 +1,5 @@
 import os  # ディレクトリ関連
-import threading
 
-from package.fn import Fn  # 自作関数クラス
-from package.debug import Debug  # デバッグ用クラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.translation.translation import Translation  # 翻訳機能関連のクラス
 
@@ -12,7 +8,7 @@ class TranslateThread:
     """翻訳処理を行うスレッドクラス"""
 
     def run(window):
-        """ 翻訳処理
+        """翻訳処理
         Args:
             window(sg.Window): Windowオブジェクト
         """
