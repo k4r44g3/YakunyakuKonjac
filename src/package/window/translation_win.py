@@ -641,8 +641,6 @@ class TranslationWin(BaseWin):
         # スレッドが終了するまで停止
         thread.join()
 
-        print(GetDragAreaThread.region)
-
         # 撮影範囲がドラッグ選択されたなら
         if GetDragAreaThread.region is not None:
             # 更新する設定

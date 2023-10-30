@@ -290,7 +290,6 @@ class KeySettingWin(BaseWin):
         update_index = self.key_binding_event_list.index(
             self.window.metadata["is_key_input_waiting_event"]
         )
-        print(update_index, self.key_binding_event_list)
 
         # キーバインド設定リストの更新
         self.key_binding_info_list[update_index] = new_key_binding_info

@@ -86,7 +86,6 @@ class TextTranslation:
         for text_before in text_before_list:  # 翻訳前テキストで走査
             # 英語から日本語に翻訳
             result = google_translator.translate(text=text_before)
-            # print(result)
             text_after_list.append(result)  # 翻訳後テキストのリスト作成
 
         return text_after_list  # 翻訳後テキストのリスト
