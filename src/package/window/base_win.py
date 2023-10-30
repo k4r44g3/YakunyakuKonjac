@@ -47,8 +47,10 @@ class BaseWin:
             title="test",  # ウィンドウタイトル
             layout=self.get_layout(),  # レイアウト指定
             resizable=True,  # ウィンドウサイズ変更可能
-            # location=(50, 50),  # ウィンドウ位置
-            # size=(300, 300),  # ウィンドウサイズ
+            location=(
+                self.user_setting.get_setting("window_left_x") + 50,
+                self.user_setting.get_setting("window_top_y") + 50,
+            ),  # ウィンドウ位置
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             enable_close_attempted_event=True,  # タイトルバーの[X]ボタン押下時にイベントが返される
             # メタデータ

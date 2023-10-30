@@ -16,6 +16,7 @@ pip install awscli
 pip install boto3
 pip install easyocr
 pip install deep-translator
+pip install keyboard
 pip install black
 
 @REM パッケージ一覧出力ファイルの作成

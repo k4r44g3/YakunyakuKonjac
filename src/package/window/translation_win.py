@@ -246,6 +246,14 @@ class TranslationWin(BaseWin):
             title="test",  # ウィンドウタイトル
             layout=self.get_layout(),  # レイアウト指定
             resizable=True,  # ウィンドウサイズ変更可能
+            location=(
+                self.user_setting.get_setting("window_left_x"),
+                self.user_setting.get_setting("window_top_y"),
+            ),  # ウィンドウ位置
+            size=(
+                self.user_setting.get_setting("window_width"),
+                self.user_setting.get_setting("window_height"),
+            ),  # ウィンドウサイズ
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             enable_close_attempted_event=True,  # タイトルバーの[X]ボタン押下,Alt+F4時にイベントが返される
             # メタデータ
@@ -256,7 +264,7 @@ class TranslationWin(BaseWin):
         return window  # GUIウィンドウ設定
 
     def event_start(self):
-        """イベント受付開始処理5
+        """イベント受付開始処理
         指定したボタンが押された時などのイベント処理内容
         終了処理が行われるまで繰り返す
         """
@@ -351,15 +359,34 @@ class TranslationWin(BaseWin):
                 # 撮影設定へ遷移するイベント
                 elif event_name == "-transition_to_shooting_key-":
                     self.transition_target_win = "ShootingSettingWin"  # 遷移先ウィンドウ名
-                    Fn.time_log(self.transition_target_win, "に画面遷移")
                     self.window_close()  # プログラム終了イベント処理
                 # 言語設定へ遷移するイベント
                 elif event_name == "-transition_to_language_key-":
                     self.transition_target_win = "LanguageSettingWin"  # 遷移先ウィンドウ名
-                    Fn.time_log(self.transition_target_win, "に画面遷移")
                     self.window_close()  # プログラム終了イベント処理
 
     # todo イベント処理記述
+
+    def window_close(self):
+        """プログラム終了イベント処理
+
+        閉じるボタン押下,Alt+F4イベントが発生したら
+        """
+        # ウィンドウ位置、サイズの取得
+        location = self.window.CurrentLocation()  # ウィンドウ位置
+        size = self.window.current_size_accurate()  # ウィンドウサイズ
+
+        # 更新する設定
+        update_setting = {}
+        update_setting["window_left_x"] = location[0]
+        update_setting["window_top_y"] = location[1]
+        update_setting["window_width"] = size[0]
+        update_setting["window_height"] = size[1]
+
+        self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
+
+        self.exit_event()  # イベント終了処理
+        self.window.metadata["is_exit"] = True  # イベント受付終了
 
     def translate_thread_start(self):
         """翻訳処理を別スレッドで開始する処理"""
