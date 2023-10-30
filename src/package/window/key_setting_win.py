@@ -82,7 +82,10 @@ class KeySettingWin(BaseWin):
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             return_keyboard_events=True,  # Trueの場合、キー押下がイベントとして処理される
             enable_close_attempted_event=True,  # タイトルバーの[X]ボタン押下時にイベントが返される
-            metadata={"is_key_input_waiting_state": False},  # キー入力待ち状態かどうか
+            metadata={
+                "is_key_input_waiting_state": False,  # キー入力待ち状態かどうか
+                "is_exit": False,  # ウィンドウを閉じるかどうか
+            },
         )
         return window  # GUIウィンドウ設定
 
@@ -97,31 +100,28 @@ class KeySettingWin(BaseWin):
             key_binding_info["gui_key"] for key_binding_info in self.key_binding_info_list
         ]
 
-        while True:  # 終了処理が行われるまで繰り返す
+        # 終了処理が行われるまで繰り返す
+        while not self.window.metadata["is_exit"]:
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
 
             # Fn.time_log("event=", event, "values=", values)
             # プログラム終了イベント処理
             if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
-                self.exit_event()  # イベント終了処理
-                break  # イベント受付終了
+                self.window_close()  # プログラム終了イベント処理
 
             if not self.window.metadata["is_key_input_waiting_state"]:
                 # キー入力待ち状態でないなら
                 # 確定ボタン押下イベント
                 if event == "-confirm-":
-                    Fn.time_log("設定確定")
                     # 更新する設定の取得
                     update_setting = self.get_update_setting(self.key_binding_info_list)
                     self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
                 # 確定ボタン押下イベント
                 elif event == "-back-":
-                    Fn.time_log("メイン画面に遷移")
                     self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
-                    self.exit_event()  # イベント終了処理
-                    break  # イベント受付終了
+                    self.window_close()  # プログラム終了イベント処理
 
                 # キー設定ボタン押下イベント
                 elif event in key_binding_event_list:

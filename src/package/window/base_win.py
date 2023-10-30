@@ -51,6 +51,10 @@ class BaseWin:
             # size=(300, 300),  # ウィンドウサイズ
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             enable_close_attempted_event=True,  # タイトルバーの[X]ボタン押下時にイベントが返される
+            # メタデータ
+            metadata={
+                "is_exit": False,  # ウィンドウを閉じるかどうか
+            },
         )
         return window  # GUIウィンドウ設定
 
@@ -87,3 +91,11 @@ class BaseWin:
         Returns:
             update_setting (dict): 更新する設定の値の辞書
         """
+
+    def window_close(self):
+        """プログラム終了イベント処理
+
+        閉じるボタン押下,Alt+F4イベントが発生したら
+        """
+        self.exit_event()  # イベント終了処理
+        self.window.metadata["is_exit"] = True  # イベント受付終了

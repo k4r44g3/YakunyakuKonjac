@@ -248,6 +248,10 @@ class TranslationWin(BaseWin):
             resizable=True,  # ウィンドウサイズ変更可能
             finalize=True,  # 入力待ち までの間にウィンドウを表示する
             enable_close_attempted_event=True,  # タイトルバーの[X]ボタン押下,Alt+F4時にイベントが返される
+            # メタデータ
+            metadata={
+                "is_exit": False,  # ウィンドウを閉じるかどうか
+            },
         )
         return window  # GUIウィンドウ設定
 
@@ -281,7 +285,8 @@ class TranslationWin(BaseWin):
         # スレッド開始
         thread.start()
 
-        while True:  # 終了処理が行われるまで繰り返す
+        # 終了処理が行われるまで繰り返す
+        while not self.window.metadata["is_exit"]:
             # 実際に画面が表示され、ユーザーの入力待ちになる
             # ! タイムアウト処理の削除
             event, values = self.window.read()
@@ -291,8 +296,7 @@ class TranslationWin(BaseWin):
 
             # プログラム終了イベント処理
             if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
-                self.exit_event()  # イベント終了処理
-                break  # イベント受付終了
+                self.window_close()  # プログラム終了イベント処理
 
             # メニューバーの押下イベント
             elif values["-menu-"] is not None:  # 選択された項目があるなら
@@ -302,8 +306,7 @@ class TranslationWin(BaseWin):
                 if menu_key.startswith("transition_"):  # menu_keyにtransitionが含まれるなら
                     self.transition_target_win = menu_key.split("_")[1]  # 遷移先ウィンドウ名
                     Fn.time_log(self.transition_target_win, "に画面遷移")
-                    self.exit_event()  # イベント終了処理
-                    break  # イベント受付終了
+                    self.window_close()  # プログラム終了イベント処理
 
             # 翻訳ボタン押下イベント
             elif event == "-translation_button-":
@@ -349,14 +352,12 @@ class TranslationWin(BaseWin):
                 elif event_name == "-transition_to_shooting_key-":
                     self.transition_target_win = "ShootingSettingWin"  # 遷移先ウィンドウ名
                     Fn.time_log(self.transition_target_win, "に画面遷移")
-                    self.exit_event()  # イベント終了処理
-                    break  # イベント受付終了
+                    self.window_close()  # プログラム終了イベント処理
                 # 言語設定へ遷移するイベント
                 elif event_name == "-transition_to_language_key-":
                     self.transition_target_win = "LanguageSettingWin"  # 遷移先ウィンドウ名
                     Fn.time_log(self.transition_target_win, "に画面遷移")
-                    self.exit_event()  # イベント終了処理
-                    break  # イベント受付終了
+                    self.window_close()  # プログラム終了イベント処理
 
     # todo イベント処理記述
 

@@ -102,7 +102,7 @@ class LanguageSettingWin(BaseWin):
                     layout=[
                         [
                             sg.Listbox(
-                                values = self.language_name_list,
+                                values=self.language_name_list,
                                 size=(14, 5),
                                 key="-target_language_code-",
                                 default_values=now_target_language_name,  # デフォルト値
@@ -134,28 +134,25 @@ class LanguageSettingWin(BaseWin):
             # リストボックスの初期スクロール位置の設定
             self.window[key].update(scroll_to_index=scroll_to_index)
 
-        while True:  # 終了処理が行われるまで繰り返す
+        # 終了処理が行われるまで繰り返す
+        while not self.window.metadata["is_exit"]:
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
 
             Fn.time_log("event=", event, "values=", values)
             # プログラム終了イベント処理
             if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
-                self.exit_event()  # イベント終了処理
-                break  # イベント受付終了
+                self.window_close()  # プログラム終了イベント処理
 
             # 確定ボタン押下イベント
             elif event == "-confirm-":
-                Fn.time_log("設定確定")
                 update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
             # 確定ボタン押下イベント
             elif event == "-back-":
-                Fn.time_log("メイン画面に遷移")
                 self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
-                self.exit_event()  # イベント終了処理
-                break  # イベント受付終了
+                self.window_close()  # プログラム終了イベント処理
 
     # todo イベント処理記述
 
