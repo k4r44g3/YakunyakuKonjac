@@ -18,10 +18,10 @@ class UserSetting:
         "translation_soft": "AmazonTranslate",  # 翻訳ソフト
         "source_language_code": "en",  # 翻訳元言語
         "target_language_code": "ja",  # 翻訳先言語
-        "window_left_x": 0,  # ウィンドウの左側x座標
-        "window_top_y": 0,  # ウィンドウの上側y座標
-        "window_width": 800,  # ウィンドウの横幅
-        "window_height": 600,  # ウィンドウの縦幅
+        "window_left_x": None,  # ウィンドウの左側x座標
+        "window_top_y": None,  # ウィンドウの上側y座標
+        "window_width": None,  # ウィンドウの横幅
+        "window_height": None,  # ウィンドウの縦幅
         "translation_interval_sec": 10,  # 翻訳間隔(秒)
         "translation_thread_max": 4,  # 翻訳スレッドの最大数
         # キーバインド設定情報の辞書

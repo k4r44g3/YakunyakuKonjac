@@ -19,7 +19,12 @@ class GetKeyEventThread:
         # キーイベントの取得
         key_event = keyboard.read_event()
 
-        while not (window.was_closed()) and window.metadata["is_key_input_waiting_state"]:
+        while (
+            (not window.was_closed())  # ウィンドウが閉じていない
+            and window.metadata["is_key_input_waiting_state"]  # キー入力待ち状態なら
+            # 設定変更対象のキー名が等しいなら
+            and window.metadata["is_key_input_waiting_event"] == setting_target_key
+        ):
             # ウィンドウが閉じてないかつ、キー入力待ち状態なら
             event_type = key_event.event_type  # イベントタイプの取得
             key_name = key_event.name  # キー名の取得

@@ -113,4 +113,4 @@ class GetDragAreaThread:
         app = GetDragAreaThread(root)
         root.mainloop()
         # ドラッグ領域の座標を返す
-        return cls.region
+        # return cls.region
