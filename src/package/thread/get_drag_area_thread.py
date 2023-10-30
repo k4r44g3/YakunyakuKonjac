@@ -1,11 +1,9 @@
-import PySimpleGUI as sg
-
 import threading
 import tkinter as tk
 
 
-class DragAreaGetter:
-    """ドラッグした領域の座標を取得するクラス
+class GetDragAreaThread:
+    """ドラッグした領域の座標を取得するスレッド
 
     Returns:
         region(dict{left, top, width, height}): スクリーンショット撮影範囲
@@ -86,14 +84,15 @@ class DragAreaGetter:
         # ドラッグされたなら
         if self.start_x != self.end_x and self.start_y != self.end_y:
             # 座標をクラス変数に保存
-            DragAreaGetter.region = {
+            GetDragAreaThread.region = {
                 "left": min(self.start_x, self.end_x),  # ドラッグ範囲の左側x座標
                 "top": min(self.start_y, self.end_y),  # ドラッグ範囲の上側y座標
                 "right": max(self.start_x, self.end_x),  # ドラッグ範囲の右側x座標
                 "bottom": max(self.start_y, self.end_y),  # ドラッグ範囲の下側y座標
             }
         else:
-            print("クリック")
+            # 戻り値なし
+            GetDragAreaThread.region = None
 
     def on_key_press(self, event):
         """キーが押されたときのイベントハンドラ"""
@@ -104,63 +103,14 @@ class DragAreaGetter:
         self.root.destroy()
 
     @classmethod
-    def run(cls, window):
+    def run(cls):
         """ドラッグした領域の座標を取得する
 
         Returns:
             region(dict{left, top, width, height}): スクリーンショット撮影範囲
         """
         root = tk.Tk()
-        app = DragAreaGetter(root)
+        app = GetDragAreaThread(root)
         root.mainloop()
         # ドラッグ領域の座標を返す
         return cls.region
-
-
-class Win1:
-    def main():
-        # 1. レイアウト
-        layout = [
-            [
-                sg.Button(button_text="ボタン", key="-button-"),
-            ],
-        ]
-
-        # 2. ウィンドウの生成
-        window = sg.Window(
-            title="Window title",
-            layout=layout,
-            grab_anywhere=True,
-            return_keyboard_events=True,
-        )
-        window.finalize()
-
-        # 3. GUI処理
-        while True:
-            event, values = window.read(timeout=None)
-
-            if event is None:
-                break
-            elif event == "-button-":
-                # ボタンを無効にする
-                print("start")
-                # キーイベントを取得するスレッド作成
-                thread = threading.Thread(
-                    # スレッド名
-                    name="キーイベント取得スレッド",
-                    # スレッドで実行するメソッド
-                    target=lambda: DragAreaGetter.run(window),
-                    daemon=True,  # メインスレッド終了時に終了する
-                )
-                # スレッド開始
-                thread.start()
-
-                # スレッドが終了するまで停止
-                thread.join()
-                print("end")
-                print(DragAreaGetter.region)
-        window.close()
-
-
-if __name__ == "__main__":
-    Win1.main()

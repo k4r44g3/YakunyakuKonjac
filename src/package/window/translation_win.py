@@ -21,9 +21,10 @@ from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 from package.thread.translate_timing_thread import TranslateTimingThread  # 自動翻訳のタイミングを取得するスレッドクラス
 from package.thread.translate_thread import TranslateThread  # 翻訳処理を行うスレッドクラス
-from package.thread.watch_for_key_event import WatchForKeyEvent  # 指定したキーイベントが発生するかどうか監視するスレッドクラス
 
-from package.drag_area_getter import DragAreaGetter  # ドラッグした領域の座標を取得するクラス
+# 指定したキーイベントが発生するかどうか監視するスレッドクラス
+from package.thread.watch_for_key_event_thread import WatchForKeyEventThread
+from package.thread.get_drag_area_thread import GetDragAreaThread  # ドラッグした領域の座標を取得するスレッド
 
 
 class TranslationWin(BaseWin):
@@ -284,7 +285,7 @@ class TranslationWin(BaseWin):
             # スレッド名
             name="キーイベント取得スレッド",
             # スレッドで実行するメソッド
-            target=lambda: WatchForKeyEvent.run(
+            target=lambda: WatchForKeyEventThread.run(
                 self.window,  # Windowオブジェクト
                 self.user_setting.get_setting("key_binding_info_list"),  # キーバインド情報のリスト
             ),
@@ -617,17 +618,32 @@ class TranslationWin(BaseWin):
 
     def set_ss_region_event(self):
         """撮影範囲設定ボタン押下イベント処理"""
-        # ドラッグした領域の座標を取得する
-        now_ss_region = DragAreaGetter.run()
+        # ドラッグした領域の座標を取得するスレッド作成
+        thread = threading.Thread(
+            # スレッド名
+            name="撮影範囲設定スレッド",
+            # スレッドで実行するメソッド
+            target=lambda: GetDragAreaThread.run(),
+            daemon=True,  # メインスレッド終了時に終了する
+        )
+        # スレッド開始
+        thread.start()
 
-        # 更新する設定
-        update_setting = {}
-        update_setting["ss_left_x"] = now_ss_region["left"]
-        update_setting["ss_top_y"] = now_ss_region["top"]
-        update_setting["ss_right_x"] = now_ss_region["right"]
-        update_setting["ss_bottom_y"] = now_ss_region["bottom"]
+        # スレッドが終了するまで停止
+        thread.join()
 
-        self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
+        print(GetDragAreaThread.region)
+
+        # 撮影範囲がドラッグ選択されたなら
+        if GetDragAreaThread.region is not None:
+            # 更新する設定
+            update_setting = {}
+            update_setting["ss_left_x"] = GetDragAreaThread.region["left"]
+            update_setting["ss_top_y"] = GetDragAreaThread.region["top"]
+            update_setting["ss_right_x"] = GetDragAreaThread.region["right"]
+            update_setting["ss_bottom_y"] = GetDragAreaThread.region["bottom"]
+
+            self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
 
 # ! デバッグ用

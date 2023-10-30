@@ -4,7 +4,7 @@ import re  # 正規表現
 from package.fn import Fn  # 自作関数クラス
 
 
-class WatchForKeyEvent:
+class WatchForKeyEventThread:
     """指定したキーイベントが発生するかどうか監視するスレッドクラス"""
 
     def run(window, key_binding_info_list):
