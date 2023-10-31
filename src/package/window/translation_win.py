@@ -40,6 +40,9 @@ class TranslationWin(BaseWin):
         self.translate_timing_thread = None
         # 継承元のコンストラクタを呼び出す
         super().__init__()
+        # todo 初期設定
+        # ウィンドウ開始処理
+        self.start_win()
 
     def start_win(self):
         # 履歴ファイル名のリスト取得
@@ -68,6 +71,8 @@ class TranslationWin(BaseWin):
         Returns:
             layout(list): ウィンドウのレイアウト
         """
+        # ウィンドウのテーマを設定
+        sg.theme(self.user_setting.get_setting("window_theme"))
         # 履歴ファイル名のリストの取得
 
         # 画像パスの取得
@@ -492,7 +497,7 @@ class TranslationWin(BaseWin):
         self.window["-history_file_time_list-"].update(
             values=self.history_file_time_list,
             # 最新の画像を表示する
-            set_to_index=len(self.history_file_time_list) - 1,  # 強調表示される要素番号
+            set_to_index=len(self.history_file_time_list) - 1,  # 値の設定
             scroll_to_index=len(self.history_file_time_list) - 1,  # 最初に表示される要素番号の取得
         )
 
@@ -650,7 +655,7 @@ class TranslationWin(BaseWin):
 
                 # 履歴ファイル選択リストの更新
                 self.window["-history_file_time_list-"].update(
-                    set_to_index=list_box_index,  # 強調表示される要素番号
+                    set_to_index=list_box_index,  # 値の設定
                     scroll_to_index=list_box_index,  # 最初に表示される要素番号の取得
                 )
                 # 翻訳前、後画像の変更処理

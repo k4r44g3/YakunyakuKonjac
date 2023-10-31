@@ -26,6 +26,9 @@ class LanguageSettingWin(BaseWin):
         """コンストラクタ 初期設定"""
         # 継承元のコンストラクタを呼び出す
         super().__init__()
+        # todo 初期設定
+        # ウィンドウ開始処理
+        self.start_win()
 
     def get_layout(self):
         """ウィンドウレイアウト作成処理
@@ -33,6 +36,8 @@ class LanguageSettingWin(BaseWin):
         Returns:
             layout(list): ウィンドウのレイアウト
         """
+        # ウィンドウのテーマを設定
+        sg.theme(self.user_setting.get_setting("window_theme"))
 
         # 言語情報一覧リストのリストの取得
         self.language_list = SystemSetting.language_list
@@ -130,7 +135,7 @@ class LanguageSettingWin(BaseWin):
             # 選択されている値の取得
             value = self.window[key].get()[0]
             # 最初に表示される要素番号の取得
-            scroll_to_index = self.language_name_list.index(value)
+            scroll_to_index = self.language_name_list.index(value) - 1
             # リストボックスの初期スクロール位置の設定
             self.window[key].update(scroll_to_index=scroll_to_index)
 

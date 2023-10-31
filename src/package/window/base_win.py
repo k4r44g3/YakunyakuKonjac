@@ -20,7 +20,6 @@ class BaseWin:
         """コンストラクタ 初期設定"""
         self.user_setting = UserSetting()  # ユーザ設定のインスタンス化
         self.transition_target_win = None  # 遷移先ウィンドウ名
-        self.start_win()  # ウィンドウ開始処理
 
     def start_win(self):
         """ウィンドウ開始処理"""

@@ -25,6 +25,14 @@ class ThemeSettingWin(BaseWin):
         """コンストラクタ 初期設定"""
         # 継承元のコンストラクタを呼び出す
         super().__init__()
+        # todo 初期設定
+        # 変更前テーマの保存
+        self.current_theme = self.user_setting.get_setting("window_theme")
+        # ウィンドウの位置とサイズの取得
+        self.window_left_x = self.user_setting.get_setting("window_left_x") + 50
+        self.window_top_y = self.user_setting.get_setting("window_top_y") + 50
+        # ウィンドウ開始処理
+        self.start_win()
 
     def get_layout(self):
         """ウィンドウレイアウト作成処理
@@ -32,26 +40,20 @@ class ThemeSettingWin(BaseWin):
         Returns:
             layout(list): ウィンドウのレイアウト
         """
+        # ウィンドウのテーマを設定
+        sg.theme(self.current_theme)
+
         # レイアウト指定
         layout = [
-            [sg.Text("テーマ設定画面")],
             [
-                sg.Text("ocr_soft"),
-                sg.Input(
-                    key="-ocr_soft-",  # 識別子
-                    enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
-                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
-                    default_text=self.user_setting.get_setting("ocr_soft"),  # デフォルト
-                ),
-            ],
-            [
-                sg.Text("translation_soft"),
-                sg.Input(
-                    key="-translation_soft-",  # 識別子
-                    enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
-                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
-                    default_text=self.user_setting.get_setting("translation_soft"),  # デフォルト
-                ),
+                # テーマ一覧リストボックス
+                sg.Listbox(
+                    values=sg.theme_list(),  # テーマ一覧
+                    size=(20, 12),  # サイズ
+                    key="-theme_list-",  # 識別子
+                    enable_events=True,  # イベントを取得する
+                    default_values=[self.current_theme],  # デフォルト値
+                )
             ],
             [
                 sg.Push(),  # 右に寄せる
@@ -61,25 +63,62 @@ class ThemeSettingWin(BaseWin):
         ]
         return layout  # レイアウト
 
+    def make_win(self):
+        """GUIウィンドウ作成処理
+
+        Returns:
+            window(sg.Window): GUIウィンドウ設定
+        """
+
+        # GUIウィンドウ設定の引数の辞書
+        window_args = {
+            "title": "test",  # ウィンドウタイトル
+            "layout": self.get_layout(),  # レイアウト指定
+            "resizable": True,  # ウィンドウサイズ変更可能
+            "finalize": True,  # 入力待ち までの間にウィンドウを表示する
+            "enable_close_attempted_event": True,  # タイトルバーの[X]ボタン押下,Alt+F4時にイベントが返される
+            # メタデータ
+            "metadata": {
+                "is_exit": False,  # ウィンドウを閉じるかどうか
+            },
+        }
+
+        # ウィンドウ位置が指定されている場合
+        if (self.window_left_x is not None) and (self.window_top_y is not None):
+            window_args["location"] = (self.window_left_x, self.window_top_y)
+
+        # GUIウィンドウ設定
+        window = sg.Window(**window_args)
+
+        return window  # GUIウィンドウ設定
+
     def event_start(self):
         """イベント受付開始処理
         指定したボタンが押された時などのイベント処理内容
         終了処理が行われるまで繰り返す
         """
+
+        # テーマ選択リストボックスの最初に表示される要素番号の取得
+        theme_list_index = sg.theme_list().index(self.current_theme)
+
+        # テーマ選択リストボックスの更新
+        self.window["-theme_list-"].update(
+            set_to_index=theme_list_index,  # 値の設定
+            scroll_to_index=theme_list_index - 3,  # 最初に表示される要素番号の取得
+        )
+
         # 終了処理が行われるまで繰り返す
         while not self.window.metadata["is_exit"]:
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
 
-            Fn.time_log("event=", event, "values=", values)
             # プログラム終了イベント処理
             if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
                 self.window_close()  # プログラム終了イベント処理
 
             # 確定ボタン押下イベント
             elif event == "-confirm-":
-                update_setting = values  # 更新する設定
-                # * update_setting = self.get_update_setting(values)  # 更新する設定の取得
+                update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
             # 確定ボタン押下イベント
@@ -87,7 +126,44 @@ class ThemeSettingWin(BaseWin):
                 self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
                 self.window_close()  # プログラム終了イベント処理
 
+            # テーマ変更リストボックス選択イベント
+            elif event == "-theme_list-":
+                # 変更先テーマの取得
+                new_theme = values["-theme_list-"][0]
+                # テーマが変更されているなら
+                if new_theme != self.current_theme:
+                    # テーマの更新
+                    self.current_theme = new_theme
+
+                    # ウィンドウ位置、サイズの取得
+                    window_location = self.window.CurrentLocation()  # ウィンドウ位置
+
+                    # ウィンドウの位置の更新
+                    self.window_left_x = window_location[0]
+                    self.window_top_y = window_location[1]
+
+                    # ウィンドウを閉じる
+                    self.window.close()
+                    # ウィンドウ開始処理
+                    self.start_win()
+
     # todo イベント処理記述
+    def get_update_setting(self, values):
+        """更新する設定の取得
+
+        Args:
+            values (dict): 各要素の値の辞書
+        Returns:
+            update_setting (dict): 更新する設定の値の辞書
+        """
+
+        # 更新する設定
+        update_setting = {}
+        # ウィンドウのテーマ
+        update_setting["window_theme"] = values["-theme_list-"][0]
+
+        # 更新する設定
+        return update_setting
 
 
 # ! デバッグ用

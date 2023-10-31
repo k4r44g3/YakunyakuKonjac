@@ -1,48 +1,75 @@
 import PySimpleGUI as sg
-import keyboard
 
-# 1. レイアウト
-layout = [
-    [
-        sg.Text("キー設定",),
-        sg.Button(button_text="a", size=(30, 1), key="-key_text-"),
-    ],
-]
 
-# 2. ウィンドウの生成
-window = sg.Window(
-    title="Window title",
-    layout=layout,
-    grab_anywhere=True,
-    #  Trueの場合、キーボードのキー操作がRead呼び出しからイベントとして返されます
-    return_keyboard_events=True,
-    # no_titlebar=True,
-    # disable_close=True,
-    # Trueの場合、ウィンドウは画面上のすべての他のウィンドウの上に作成されます。このパラメータを使用して別のパラメータで作成されたウィンドウが下に押しやられる可能性があります
-    # keep_on_top=True,
-    use_custom_titlebar=True,
-    # Trueの場合、ウィンドウは「X」をクリックして閉じられません。代わりに、window.readからWINDOW_CLOSE_ATTEMPTED_EVENTが返されます
-    # enable_close_attempted_event = True
+def create_window(theme):
+    sg.theme(theme)
+    layout = [
+        [
+            sg.Listbox(
+                values=sg.theme_list(),
+                size=(20, 12),
+                key="-theme_list-",
+                enable_events=True,
+                default_values=["DarkBlue3"],
+            )
+        ],
+        [
+            sg.Button("確定", key="BUTTON"),
+        ],
+    ]
+
+    return sg.Window(
+        title="Window title",
+        layout=layout,
+        finalize=True,  # 入力待ち までの間にウィンドウを表示する
+        return_keyboard_events=True,
+        keep_on_top=True,
+    )
+
+
+# 変更前のテーマの保存
+current_theme = "DarkBlue3"
+
+# ウィンドウの作成
+window = create_window(current_theme)
+
+
+# テーマ選択リストボックスの最初に表示される要素番号の取得
+theme_list_index = sg.theme_list().index(current_theme)
+# テーマ選択リストボックスの更新
+window["-theme_list-"].update(
+    set_to_index=theme_list_index, # 値の設定
+    scroll_to_index=theme_list_index - 3,  # 最初に表示される要素番号の取得
 )
-window.finalize()
 
-key_code = "a"
-is_key_input_waiting_state = False
-# 3. GUI処理
 while True:
-    event, values = window.read(timeout=None)
+    event, values = window.read()
 
     if event is None:
         break
-    elif event == "-key_text-":
-        is_key_input_waiting_state = True
-        window["-key_text-"].update(text="何かキーを押してください")
-    elif is_key_input_waiting_state:
-        is_key_input_waiting_state = False
-        key_code = event
-        window["-key_text-"].update(text=key_code)
+    if event == "BUTTON":
+        print(sg.theme())
+    if event == "-theme_list-":
+        # テーマの取得
+        new_theme = values["-theme_list-"][0]
+        # テーマが変更されているなら
+        if new_theme != current_theme:
+            # ウィンドウを閉じる
+            window.close()
+            # ウィンドウを再度開く
+            window = create_window(new_theme)
+            # テーマの保存
+            current_theme = new_theme
 
-    elif event == key_code:
-        print("処理")
+            # テーマ選択リストボックスの要素番号取得
+            theme_list_index = sg.theme_list().index(new_theme)
+            print(theme_list_index)
+            # テーマ選択リストボックスの最初に表示される要素番号の取得
+            theme_list_index = sg.theme_list().index(current_theme)
+            # テーマ選択リストボックスの更新
+            window["-theme_list-"].update(
+                set_to_index=theme_list_index, # 値の設定
+                scroll_to_index=theme_list_index - 3,  # 最初に表示される要素番号の取得
+            )
 
 window.close()

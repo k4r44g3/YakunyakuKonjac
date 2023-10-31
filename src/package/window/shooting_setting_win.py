@@ -29,6 +29,9 @@ class ShootingSettingWin(BaseWin):
         """コンストラクタ 初期設定"""
         # 継承元のコンストラクタを呼び出す
         super().__init__()
+        # todo 初期設定
+        # ウィンドウ開始処理
+        self.start_win()
 
     def get_layout(self):
         """ウィンドウレイアウト作成処理
@@ -36,6 +39,8 @@ class ShootingSettingWin(BaseWin):
         Returns:
             layout(list): ウィンドウのレイアウト
         """
+        # ウィンドウのテーマを設定
+        sg.theme(self.user_setting.get_setting("window_theme"))
         # 撮影範囲の座標情報の辞書
         self.ss_region_info_dict = {
             "left": {

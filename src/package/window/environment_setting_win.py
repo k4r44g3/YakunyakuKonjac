@@ -31,6 +31,9 @@ class EnvironmentSettingWin(BaseWin):
         """コンストラクタ 初期設定"""
         # 継承元のコンストラクタを呼び出す
         super().__init__()
+        # todo 初期設定
+        # ウィンドウ開始処理
+        self.start_win()
 
     def get_layout(self):
         """ウィンドウレイアウト作成処理
@@ -38,6 +41,8 @@ class EnvironmentSettingWin(BaseWin):
         Returns:
             layout(list): ウィンドウのレイアウト
         """
+        # ウィンドウのテーマを設定
+        sg.theme(self.user_setting.get_setting("window_theme"))
 
         # 現在のOCRソフトの取得
         now_ocr_soft = self.user_setting.get_setting("ocr_soft")
