@@ -1,7 +1,7 @@
 from datetime import datetime  # 日時
 import time  # 時間測定
 import os  # ディレクトリ関連
-
+import re  # 正規表現
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
 
@@ -135,6 +135,12 @@ class Fn:
         # 翻訳後画像ファイル名のリスト
         after_file_name_list = os.listdir(image_after_directory_path)
 
+        # .gitkeepが存在する場合、ファイル名のリストから削除する
+        if ".gitkeep" in before_file_name_list:
+            before_file_name_list.remove(".gitkeep")
+        if ".gitkeep" in after_file_name_list:
+            after_file_name_list.remove(".gitkeep")
+
         # 集合型に変換
         before_file_name_set = set(before_file_name_list)
         after_file_name_set = set(after_file_name_list)
@@ -142,25 +148,14 @@ class Fn:
         # 共通要素の取得
         common_file_name_set = before_file_name_set & after_file_name_set
 
-        # # 片方のみに存在する要素の取得
-        # before_only_file_name_set = before_file_name_set - common_file_name_set  # 翻訳前画像のみのファイル名の取得
-        # after_only_file_name_set = after_file_name_set - common_file_name_set  # 翻訳後画像のみのファイル名の取得
-
-        # # 翻訳前画像のみのファイルの削除
-        # for before_file_name in before_only_file_name_set:
-        #     os.remove(image_before_directory_path + "/" + before_file_name)
-        # # 翻訳後画像のみのファイルの削除
-        # for after_file_name in after_only_file_name_set:
-        #     os.remove(image_after_directory_path + "/" + after_file_name)
-
         # 履歴ファイル名のリストを取得
         history_file_name_list = list(common_file_name_set)
 
         # 昇順に並び替え
         history_file_name_list.sort()
 
-        # .gitkeepを履歴ファイル名のリストから削除して返す
-        return history_file_name_list[1:]
+        # 履歴ファイル名のリスト
+        return history_file_name_list
 
     def delete_unique_history_file():
         """翻訳前、後画像の両方が存在しない履歴ファイルを削除"""
@@ -174,6 +169,12 @@ class Fn:
         before_file_name_list = os.listdir(image_before_directory_path)
         # 翻訳後画像ファイル名のリスト
         after_file_name_list = os.listdir(image_after_directory_path)
+
+        # .gitkeepが存在する場合、ファイル名のリストから削除する
+        if ".gitkeep" in before_file_name_list:
+            before_file_name_list.remove(".gitkeep")
+        if ".gitkeep" in after_file_name_list:
+            after_file_name_list.remove(".gitkeep")
 
         # 集合型に変換
         before_file_name_set = set(before_file_name_list)
@@ -191,6 +192,36 @@ class Fn:
             os.remove(image_before_directory_path + "/" + before_file_name)
         # 翻訳後画像のみのファイルの削除
         for after_file_name in after_only_file_name_set:
+            os.remove(image_after_directory_path + "/" + after_file_name)
+
+        # ファイル名の形式が正しくないファイル名のリスト
+        invalid_file_name_list = []
+
+        # 共通要素からファイル名を取得
+        for file_name in common_file_name_set:
+            # 正規表現で"yyyymmdd_hhmmss.拡張子"の形式に一致するかチェック
+            match = re.match(r"^(\d{8})_(\d{6})\..+$", file_name)
+            if not match:
+                # 形式がただしくないなら
+                # ファイル名の形式が正しくないファイル名を保存
+                invalid_file_name_list.append(file_name)
+
+            # ファイルのベース名の取得
+            file_base_name = file_name.split(".")[0]
+
+            # 日付と時刻の形式が正しいかチェック
+            try:
+                # "yyyymmdd_hhmmss"の形式の文字列を解析してdatetimeオブジェクトに変換
+                dt = datetime.strptime(file_base_name, "%Y%m%d_%H%M%S")
+            except ValueError:
+                # ファイル名の形式が正しくないファイル名を保存
+                invalid_file_name_list.append(file_name)
+
+        # ファイル名の形式が正しくないファイルの削除
+        for file_name in invalid_file_name_list:
+            # 翻訳前画像フォルダから削除
+            os.remove(image_before_directory_path + "/" + before_file_name)
+            # 翻訳後画像フォルダから削除
             os.remove(image_after_directory_path + "/" + after_file_name)
 
     def search_dict_in_list(lst, key_name, value):
