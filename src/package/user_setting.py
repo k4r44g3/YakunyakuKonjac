@@ -127,25 +127,7 @@ class UserSetting:
         """
 
         setting_file_path = SystemSetting.setting_file_path  # 設定ファイルのパス
-        format_update_setting = self.remove_hyphens_from_keys(update_setting)  # 更新する設定の両端のハイフンを取り除く
-        self.setting.update(format_update_setting)  # 現在の設定を更新
+        self.setting.update(update_setting)  # 現在の設定を更新
 
         with open(setting_file_path, "w") as f:  # ファイルを開く(書き込み)
             json.dump(obj=self.setting, fp=f, indent=2)  # ファイルに読み込む
-
-    def remove_hyphens_from_keys(self, input_dict):
-        """キー名の両端のハイフンを取り除いた辞書を返す。
-
-        Args:
-            input_dict (dict): ハイフンを取り除く対象の辞書。
-        Returns:
-            format_dict: ハイフンを取り除いた辞書。
-        """
-        Fn.time_log(input_dict)
-        format_dict = {}  # 空辞書の作成
-        for key, value in input_dict.items():  # 辞書の各キーと値で捜査
-            # キーの両端にハイフンが含まれる場合、ハイフンを取り除く
-            if key[0] == key[-1] == "-":
-                key = key[1:-1]  # ハイフンを取り除く
-            format_dict[key] = value  # 辞書の追加
-        return format_dict  # ハイフンを取り除いた辞書

@@ -36,34 +36,28 @@ class TranslationWin(BaseWin):
 
     def __init__(self):
         """コンストラクタ 初期設定"""
-        # 自動翻訳のタイミングを取得するスレッド
-        self.translate_timing_thread = None
         # 継承元のコンストラクタを呼び出す
         super().__init__()
         # todo 初期設定
-        # ウィンドウ開始処理
-        self.start_win()
-
-    def start_win(self):
         # 履歴ファイル名のリスト取得
         self.history_file_name_list = Fn.get_history_file_name_list()
 
         # 履歴ファイル日時のリスト取得
         self.history_file_time_list = Fn.get_history_file_time_list(self.history_file_name_list)
 
-        # ! デバッグ用
-        self.timeout_count = 0
-
         # 現在の翻訳スレッド数
         self.thread_count = 0
         # 翻訳スレッド数の最大数
         self.thread_max = self.user_setting.get_setting("translation_thread_max")
 
+        # 自動翻訳のタイミングを取得するスレッド
+        self.translate_timing_thread = None
+
         # スレッド数がオーバーするかどうか
         self.is_thread_over = False
 
-        # 継承元メソッドを呼び出す
-        super().start_win()
+        # ウィンドウ開始処理
+        self.start_win()
 
     def get_layout(self):
         """ウィンドウレイアウト作成処理
@@ -522,10 +516,8 @@ class TranslationWin(BaseWin):
         # トグルボタンのテキスト切り替え
         self.window["-toggle_auto_translation-"].update(text=button_text)
 
+        # トグルボタンがオンなら
         if is_toggle_on:
-            # トグルボタンがオンなら
-            self.timeout_count = 0
-
             # 自動翻訳のタイミングを取得するスレッドの開始
             self.translate_timing_thread_start()
 

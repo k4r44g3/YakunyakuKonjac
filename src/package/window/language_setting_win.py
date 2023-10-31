@@ -27,6 +27,14 @@ class LanguageSettingWin(BaseWin):
         # 継承元のコンストラクタを呼び出す
         super().__init__()
         # todo 初期設定
+        # 言語情報一覧リストのリストの取得
+        self.language_list = SystemSetting.language_list
+
+        # 言語名のリスト作成
+        self.language_name_list = []
+        for language in self.language_list:
+            self.language_name_list.append(language["ja_text"])  # 言語名取得
+
         # ウィンドウ開始処理
         self.start_win()
 
@@ -38,14 +46,6 @@ class LanguageSettingWin(BaseWin):
         """
         # ウィンドウのテーマを設定
         sg.theme(self.user_setting.get_setting("window_theme"))
-
-        # 言語情報一覧リストのリストの取得
-        self.language_list = SystemSetting.language_list
-
-        # 言語名のリスト作成
-        self.language_name_list = []
-        for language in self.language_list:
-            self.language_name_list.append(language["ja_text"])  # 言語名取得
 
         # 現在のOCRソフトの取得
         now_ocr_soft = self.user_setting.get_setting("ocr_soft")

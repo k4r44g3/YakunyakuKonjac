@@ -29,6 +29,13 @@ class KeySettingWin(BaseWin):
         # 継承元のコンストラクタを呼び出す
         super().__init__()
         # todo 初期設定
+        # キーバインド設定情報の辞書
+        self.key_binding_info_list = self.user_setting.get_setting("key_binding_info_list")
+
+        # キーバインド設定のイベントのリスト
+        self.key_binding_event_list = [
+            key_binding_info["gui_key"] for key_binding_info in self.key_binding_info_list
+        ]
         # ウィンドウ開始処理
         self.start_win()
 
@@ -40,13 +47,6 @@ class KeySettingWin(BaseWin):
         """
         # ウィンドウのテーマを設定
         sg.theme(self.user_setting.get_setting("window_theme"))
-        # キーバインド設定情報の辞書
-        self.key_binding_info_list = self.user_setting.get_setting("key_binding_info_list")
-
-        # キーバインド設定のイベントのリスト
-        self.key_binding_event_list = [
-            key_binding_info["gui_key"] for key_binding_info in self.key_binding_info_list
-        ]
 
         # キーバインド設定のレイアウト
         key_binding_layout = []
