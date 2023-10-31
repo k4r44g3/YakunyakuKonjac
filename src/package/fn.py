@@ -1,4 +1,4 @@
-from datetime import datetime  # 日時
+from datetime import datetime, timedelta  # 日時, 時間差
 import time  # 時間測定
 import os  # ディレクトリ関連
 import re  # 正規表現
@@ -118,10 +118,10 @@ class Fn:
         """履歴ファイル名のリストを取得
 
         翻訳前、後画像の両方が存在する履歴ファイル名を取得
-        存在しないなら、該当ファイルを削除
+        存在しない、もしくは、ファイル名の形式が正しくない場合、該当ファイルを削除
 
         Returns:
-            history_file_name_list: 履歴ファイル名のリスト
+            history_file_name_list(list[file_name:str]): 履歴ファイル名のリスト
         """
 
         # 翻訳前画像保存先設定
@@ -156,6 +156,23 @@ class Fn:
 
         # 履歴ファイル名のリスト
         return history_file_name_list
+
+    def get_history_file_time_list(history_file_name_list):
+        """履歴ファイル日時のリストを取得
+
+        Args:
+            history_file_name_list(list[file_name:str]): 履歴ファイル名のリスト
+
+        Returns:
+            history_file_time_list(list[file_timr:str]): 履歴ファイル日時のリスト
+        """
+        # 履歴ファイル日時のリスト取得
+        history_file_time_list = []
+        for file_name in history_file_name_list:
+            # ファイル名から日時を取得
+            file_time = Fn.convert_time_from_filename(file_name)
+            history_file_time_list.append(file_time)
+        return history_file_time_list  # 履歴ファイル日時のリスト
 
     def delete_unique_history_file():
         """翻訳前、後画像の両方が存在しない履歴ファイルを削除"""
@@ -220,9 +237,9 @@ class Fn:
         # ファイル名の形式が正しくないファイルの削除
         for file_name in invalid_file_name_list:
             # 翻訳前画像フォルダから削除
-            os.remove(image_before_directory_path + "/" + before_file_name)
+            os.remove(image_before_directory_path + "/" + file_name)
             # 翻訳後画像フォルダから削除
-            os.remove(image_after_directory_path + "/" + after_file_name)
+            os.remove(image_after_directory_path + "/" + file_name)
 
     def search_dict_in_list(lst, key_name, value):
         """与えられたリスト内の辞書から指定したキーと値に一致する辞書を取得
@@ -240,6 +257,91 @@ class Fn:
             if item[key_name] == value:
                 # 辞書のキーと値が一致するなら一致する辞書を返す
                 return item
+
+    def check_file_limits(
+        directory_path, max_file_size_mb, max_file_count, max_file_retention_days
+    ):
+        """指定された制限を超えているかどうかをチェックして結果を返すメソッド
+
+        Args:
+            directory_path (str): ディレクトリパス
+            max_file_size_mb (int): 最大保存容量(MB)
+            max_file_count (int): 最大保存枚数
+            max_file_retention_days (int): 最大保存期間(日)
+
+        Returns:
+            check_file_limit_dict(dict{file_name:bool})
+                - 指定された制限を超えているかどうかを保存する辞書
+        """
+        # ファイル名のリストを降順で取得
+        file_name_list = sorted(os.listdir(directory_path), reverse=True)
+
+        # .gitkeepが存在するなら削除する
+        if ".gitkeep" in file_name_list:
+            file_name_list.remove(".gitkeep")
+
+        # ファイル数
+        file_count = 0
+
+        # 現在の日付の取得
+        now_date = datetime.now()
+
+        # 履歴を保存する最も古い日時の取得
+        oldest_date = now_date - timedelta(days=max_file_retention_days)
+
+        # 合計サイズ
+        total_size_kb = 0
+
+        # 指定された制限を超えているかどうかを保存する辞書
+        check_file_limit_dict = {}
+
+        # 指定された制限を超えたかどうか
+        is_limit_over = False
+
+        # ファイルごとに確認
+        for file_name in file_name_list:
+            if not is_limit_over:
+                # 指定された制限を超えていないなら
+                # ファイル数の加算
+                file_count += 1
+
+                # ファイルのベース名の取得
+                file_base_name = file_name.split(".")[0]
+                # datetimeオブジェクトの取得
+                file_date = datetime.strptime(file_base_name, "%Y%m%d_%H%M%S")
+
+                # ファイルサイズの取得
+                file_size = os.path.getsize(directory_path + file_name) / (1024)
+
+                # 合計サイズの
+                total_size_kb += int(file_size) + 1
+
+                # 指定された制限を超えているかどうかの情報をまとめた辞書
+                file_limit_info_dict = {
+                    # ファイルサイズがオーバーしているかどうか
+                    "is_file_size_over": total_size_kb > max_file_size_mb * 1024,
+                    # ファイル数がオーバーしているかどうか
+                    "is_file_count_over": file_count > max_file_count,
+                    # ファイル保存期間がオーバーしているかどうか
+                    "is_file_time_over": file_date < oldest_date,
+                }
+                # print(total_size_kb, list(file_limit_info_dict.values()))
+
+                if True not in file_limit_info_dict.values():
+                    # 指定された制限を超えているかどうかを保存
+                    check_file_limit_dict[file_name] = False
+                else:
+                    # 指定された制限を超えたかどうか
+                    # is_limit_over = True
+                    # 指定された制限を超えているかどうかを保存
+                    check_file_limit_dict[file_name] = True
+            else:
+                # 指定された制限を超えているなら
+                # 指定された制限を超えているかどうかを保存
+                check_file_limit_dict[file_name] = True
+
+        # 指定された制限を超えているかどうかを保存する辞書
+        return check_file_limit_dict
 
     def convert_time_from_filename(file_name):
         """ファイル名から日時を取得

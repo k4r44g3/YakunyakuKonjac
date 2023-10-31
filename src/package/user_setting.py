@@ -24,6 +24,9 @@ class UserSetting:
         "window_height": None,  # ウィンドウの縦幅
         "translation_interval_sec": 10,  # 翻訳間隔(秒)
         "translation_thread_max": 4,  # 翻訳スレッドの最大数
+        "max_file_size_mb": 100,  # 最大保存容量(MB)
+        "max_file_count": 50,  # 最大保存枚数
+        "max_file_retention_days": 30,  # 最大保存期間(日)
         # キーバインド設定情報の辞書
         "key_binding_info_list": [
             {

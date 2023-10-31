@@ -36,21 +36,30 @@ class SaveSettingWin(BaseWin):
         layout = [
             [sg.Text("保存設定画面")],
             [
-                sg.Text("ocr_soft"),
+                sg.Text("最大保存容量(MB)"),
                 sg.Input(
-                    key="-ocr_soft-",  # 識別子
+                    key="-max_file_size_mb-",  # 識別子
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
                     # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
-                    default_text=self.user_setting.get_setting("ocr_soft"),  # デフォルト
+                    default_text=self.user_setting.get_setting("max_file_size_mb"),  # デフォルト
                 ),
             ],
             [
-                sg.Text("translation_soft"),
+                sg.Text("最大保存枚数"),
                 sg.Input(
-                    key="-translation_soft-",  # 識別子
+                    key="-max_file_count-",  # 識別子
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
                     # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
-                    default_text=self.user_setting.get_setting("translation_soft"),  # デフォルト
+                    default_text=self.user_setting.get_setting("max_file_count"),  # デフォルト
+                ),
+            ],
+            [
+                sg.Text("最大保存期間(日)"),
+                sg.Input(
+                    key="-max_file_retention_days-",  # 識別子
+                    enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
+                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
+                    default_text=self.user_setting.get_setting("max_file_retention_days"),  # デフォルト
                 ),
             ],
             [
@@ -78,8 +87,7 @@ class SaveSettingWin(BaseWin):
 
             # 確定ボタン押下イベント
             elif event == "-confirm-":
-                update_setting = values  # 更新する設定
-                # * update_setting = self.get_update_setting(values)  # 更新する設定の取得
+                update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
             # 確定ボタン押下イベント
@@ -88,6 +96,26 @@ class SaveSettingWin(BaseWin):
                 self.window_close()  # プログラム終了イベント処理
 
     # todo イベント処理記述
+    def get_update_setting(self, values):
+        """更新する設定の取得
+
+        Args:
+            values (dict): 各要素の値の辞書
+        Returns:
+            update_setting (dict): 更新する設定の値の辞書
+        """
+
+        # 更新する設定
+        update_setting = {}
+        # 最大保存容量(MB)
+        update_setting["max_file_size_mb"] = values["-max_file_size_mb-"]
+        # 最大保存枚数
+        update_setting["max_file_count"] = values["-max_file_count-"]
+        # 最大保存期間(日)
+        update_setting["max_file_retention_days"] = values["-max_file_retention_days-"]
+
+        # 更新する設定
+        return update_setting
 
 
 # ! デバッグ用

@@ -46,11 +46,7 @@ class TranslationWin(BaseWin):
         self.history_file_name_list = Fn.get_history_file_name_list()
 
         # 履歴ファイル日時のリスト取得
-        self.history_file_time_list = []
-        for file_name in self.history_file_name_list:
-            # ファイル名から日時を取得
-            file_time = Fn.convert_time_from_filename(file_name)
-            self.history_file_time_list.append(file_time)
+        self.history_file_time_list = Fn.get_history_file_time_list(self.history_file_name_list)
 
         # ! デバッグ用
         self.timeout_count = 0
@@ -431,6 +427,7 @@ class TranslationWin(BaseWin):
             values (dict): 各要素の値の辞書
         """
 
+        # スレッド数のカウント
         self.thread_count -= 1
         Fn.time_log("スレッド終了 : " + str(self.thread_count))
 
@@ -458,6 +455,39 @@ class TranslationWin(BaseWin):
         # 履歴ファイル日時のリストの更新
         self.history_file_time_list.insert(insert_index, file_time)
 
+        # 指定された制限を超えているかどうかをチェックして結果を返す
+        check_file_limit_dict = Fn.check_file_limits(
+            # ディレクトリパス
+            directory_path=SystemSetting.image_after_directory_path,
+            # 最大保存容量(MB)
+            max_file_size_mb=int(self.user_setting.get_setting("max_file_size_mb")),
+            # 最大保存枚数
+            max_file_count=int(self.user_setting.get_setting("max_file_count")),
+            # 最大保存期間(日)
+            max_file_retention_days=int(self.user_setting.get_setting("max_file_retention_days")),
+        )
+
+        # 削除するファイルのリスト
+        delete_file_list = []
+        # 指定された制限を超えているかどうかを走査
+        for file_name in check_file_limit_dict:
+            # 指定された制限を超えているなら、ファイル名を保存する
+            if check_file_limit_dict[file_name]:
+                delete_file_list.append(file_name)
+
+        # 削除するファイルを取得
+        for file_name in delete_file_list:
+            # 翻訳前画像フォルダから削除
+            os.remove(SystemSetting.image_before_directory_path + "/" + file_name)
+            # 翻訳後画像フォルダから削除
+            os.remove(SystemSetting.image_after_directory_path + "/" + file_name)
+
+        # 履歴ファイル名のリスト取得
+        self.history_file_name_list = Fn.get_history_file_name_list()
+
+        # 履歴ファイル日時のリスト取得
+        self.history_file_time_list = Fn.get_history_file_time_list(self.history_file_name_list)
+
         # 履歴ファイル選択リストの更新
         self.window["-history_file_time_list-"].update(
             values=self.history_file_time_list,
@@ -465,6 +495,7 @@ class TranslationWin(BaseWin):
             set_to_index=len(self.history_file_time_list) - 1,  # 強調表示される要素番号
             scroll_to_index=len(self.history_file_time_list) - 1,  # 最初に表示される要素番号の取得
         )
+
         # 翻訳前、後画像の変更処理
         self.image_change(max(self.history_file_name_list))
 
