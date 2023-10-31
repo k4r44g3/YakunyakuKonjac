@@ -157,12 +157,12 @@ class TranslationWin(BaseWin):
                 [
                     "撮影設定 (&Q)::transition_ShootingSettingWin::",
                     "言語設定 (&W)::transition_LanguageSettingWin::",
-                    "表示設定 (&E)::transition_DisplaySettingWin::",
+                    # "表示設定 (&E)::transition_DisplaySettingWin::",
                     "キー設定 (&R)::transition_KeySettingWin::",
                     "テーマ設定 (&T)::transition_ThemeSettingWin::",
                     "保存設定 (&Y)::transition_SaveSettingWin::",
                     "環境設定 (&U)::transition_EnvironmentSettingWin::",
-                    "利用者情報 (&I)::transition_UserInfoWin::",
+                    # "利用者情報 (&I)::transition_UserInfoWin::",
                 ],
             ],
         ]
