@@ -26,6 +26,12 @@ class SaveSettingWin(BaseWin):
         # 継承元のコンストラクタを呼び出す
         super().__init__()
         # todo 初期設定
+        #  入力値エラーが発生しているかどうかの辞書
+        self.is_error_dict = {
+            "-max_file_size_mb-": False,  # 最大保存容量(MB)
+            "-max_file_count-": False,  # 最大保存枚数
+            "-max_file_retention_days-": False,  # 最大保存期間(日)
+        }
         # ウィンドウ開始処理
         self.start_win()
 
@@ -46,7 +52,26 @@ class SaveSettingWin(BaseWin):
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
                     size=(6, 1),  # 要素のサイズ=(文字数, 行数)
                     default_text=self.user_setting.get_setting("max_file_size_mb"),  # デフォルト
+                    metadata={
+                        # 前回の値の保存
+                        "before_input_value": self.user_setting.get_setting("max_file_size_mb"),
+                        "min_value": 1,  # 入力範囲の最小値
+                        "max_value": 1000,  # 入力範囲の最大値
+                        "message_key": "-max_file_size_mb_message-",  # メッセージテキストの識別子
+                        "is_add_newline_end": True,  # メッセージ末尾に改行を追加するかどうか
+                    },
                 ),
+            ],
+            [
+                # 表示/非表示切り替え時に再表示が必要ない
+                sg.pin(
+                    # エラー発生時に表示するメッセージ
+                    sg.Text(
+                        text="",
+                        key="-max_file_size_mb_message-",
+                        visible=False,  # 非表示にする
+                    )
+                )
             ],
             [
                 sg.Text(text="最大保存枚数", size=(14, 1)),
@@ -55,7 +80,26 @@ class SaveSettingWin(BaseWin):
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
                     size=(6, 1),  # 要素のサイズ=(文字数, 行数)
                     default_text=self.user_setting.get_setting("max_file_count"),  # デフォルト
+                    metadata={
+                        # 前回の値の保存
+                        "before_input_value": self.user_setting.get_setting("max_file_count"),
+                        "min_value": 1,  # 入力範囲の最小値
+                        "max_value": 1000,  # 入力範囲の最大値
+                        "message_key": "-max_file_count_message-",  # メッセージテキストの識別子
+                        "is_add_newline_end": True,  # メッセージ末尾に改行を追加するかどうか
+                    },
                 ),
+            ],
+            [
+                # 表示/非表示切り替え時に再表示が必要ない
+                sg.pin(
+                    # エラー発生時に表示するメッセージ
+                    sg.Text(
+                        text="",
+                        key="-max_file_count_message-",
+                        visible=False,  # 非表示にする
+                    )
+                )
             ],
             [
                 sg.Text(text="最大保存期間(日)", size=(14, 1)),
@@ -64,7 +108,28 @@ class SaveSettingWin(BaseWin):
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
                     size=(6, 1),  # 要素のサイズ=(文字数, 行数)
                     default_text=self.user_setting.get_setting("max_file_retention_days"),  # デフォルト
+                    metadata={
+                        # 前回の値の保存
+                        "before_input_value": self.user_setting.get_setting(
+                            "max_file_retention_days"
+                        ),
+                        "min_value": 1,  # 入力範囲の最小値
+                        "max_value": 3600,  # 入力範囲の最大値
+                        "message_key": "-max_file_retention_days_message-",  # メッセージテキストの識別子
+                        "is_add_newline_end": True,  # メッセージ末尾に改行を追加するかどうか
+                    },
                 ),
+            ],
+            [
+                # 表示/非表示切り替え時に再表示が必要ない
+                sg.pin(
+                    # エラー発生時に表示するメッセージ
+                    sg.Text(
+                        text="",
+                        key="-max_file_retention_days_message-",
+                        visible=False,  # 非表示にする
+                    )
+                )
             ],
             [
                 sg.Push(),  # 右に寄せる
@@ -99,6 +164,11 @@ class SaveSettingWin(BaseWin):
                 self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
                 self.window_close()  # プログラム終了イベント処理
 
+            # 入力値変更イベント
+            elif event in ["-max_file_size_mb-", "-max_file_count-", "-max_file_retention_days-"]:
+                # 数字の入力値が有効かどうかを判定してGUI更新処理を行う処理
+                self.input_text_event(event, values)
+
     # todo イベント処理記述
     def get_update_setting(self, values):
         """更新する設定の取得
@@ -120,6 +190,29 @@ class SaveSettingWin(BaseWin):
 
         # 更新する設定
         return update_setting
+
+    def input_text_event(self, event, values):
+        """数字の入力値が有効かどうかを判定してGUI更新処理を行う処理
+
+        Args:
+            event (_type_): 識別子
+            values (dict): 各要素の値の辞書
+        """
+        # 継承元の数字の入力値が有効かどうかを判定してGUI更新処理を行う処理を呼び出す
+        # エラーが発生したかどうかの取得
+        is_error = super().check_valid_number_event(
+            window=self.window,  # GUIウィンドウ設定
+            event=event,  # 識別子
+            values=values,  # 各要素の値の辞書
+        )
+
+        #  入力値エラーが発生しているかどうかの辞書の更新
+        self.is_error_dict[event] = is_error
+
+        # エラーが存在するかどうか
+        is_error = True in self.is_error_dict.values()
+        # # エラーの発生状況によって確定ボタンの有効化、無効化を切り替える
+        self.window["-confirm-"].update(disabled=True in self.is_error_dict.values())
 
 
 # ! デバッグ用

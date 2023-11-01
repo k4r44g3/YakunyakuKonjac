@@ -30,7 +30,7 @@ class ShootingSettingWin(BaseWin):
         # 継承元のコンストラクタを呼び出す
         super().__init__()
         # todo 初期設定
-        self.window_title = "表示設定画面" # ウィンドウタイトル
+        self.window_title = "表示設定画面"  # ウィンドウタイトル
         # 撮影範囲の座標情報の辞書
         self.ss_region_info_dict = {
             "left": {
@@ -85,12 +85,34 @@ class ShootingSettingWin(BaseWin):
                         [
                             sg.Input(
                                 key="-translation_interval_sec-",
-                                enable_events=True,
-                                size=(5, 1),
+                                size=(6, 1),
+                                # デフォルト
                                 default_text=self.user_setting.get_setting(
                                     "translation_interval_sec"
                                 ),
+                                enable_events=True,  # イベントを取得する
+                                metadata={
+                                    # 前回の値の保存
+                                    "before_input_value": self.user_setting.get_setting(
+                                        "translation_interval_sec"
+                                    ),
+                                    "min_value": 1,  # 入力範囲の最小値
+                                    "max_value": 3600,  # 入力範囲の最大値
+                                    "message_key": "-translation_interval_sec_message-",  # メッセージテキストの識別子
+                                    "is_add_newline_end": False,  # メッセージ末尾に改行を追加するかどうか
+                                },
                             ),
+                        ],
+                        [
+                            # 表示/非表示切り替え時に再表示が必要ない
+                            sg.pin(
+                                # エラー発生時に表示するメッセージ
+                                sg.Text(
+                                    text="",
+                                    key="-translation_interval_sec_message-",
+                                    visible=False,  # 非表示にする
+                                )
+                            )
                         ],
                     ],
                 )
@@ -147,6 +169,10 @@ class ShootingSettingWin(BaseWin):
             elif event == "-set_ss_region-":
                 # 撮影範囲設定ボタン押下イベント処理
                 self.set_ss_region_event()
+            # 翻訳間隔入力ボックス変更イベント
+            elif event == "-translation_interval_sec-":
+                # 数字の入力値が有効かどうかを判定してGUI更新処理を行う処理
+                self.input_text_event(event, values)
 
     def get_ss_region_text(self):
         """撮影範囲表示テキストの取得
@@ -203,6 +229,24 @@ class ShootingSettingWin(BaseWin):
         update_setting["ss_bottom_y"] = int(self.ss_region_info_dict["bottom"]["value"])
         # 更新する設定
         return update_setting
+
+    def input_text_event(self, event, values):
+        """数字の入力値が有効かどうかを判定してGUI更新処理を行う処理
+
+        Args:
+            event (_type_): 識別子
+            values (dict): 各要素の値の辞書
+        """
+        # 継承元の数字の入力値が有効かどうかを判定してGUI更新処理を行う処理を呼び出す
+        # エラーが発生したかどうかの取得
+        is_error = super().check_valid_number_event(
+            window=self.window,  # GUIウィンドウ設定
+            event=event,  # 識別子
+            values=values,  # 各要素の値の辞書
+        )
+
+        # エラーの発生状況によって確定ボタンの有効化、無効化を切り替える
+        self.window["-confirm-"].update(disabled=is_error)
 
 
 # ! デバッグ用

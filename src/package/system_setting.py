@@ -64,5 +64,6 @@ class SystemSetting:
     # EasyOCR用の言語コード(ISO 639-2)のリスト((ISO 639-1):(ISO 639-2))
     EasyOCR_language_code = {"zh-CN": "ch_sim"}
 
-    # イベントタイムアウト時間(ms)
-    event_timeout_ms = 100
+
+    # 翻訳スレッドの最大数
+    translation_thread_max = 4

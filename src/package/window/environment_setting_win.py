@@ -89,7 +89,7 @@ class EnvironmentSettingWin(BaseWin):
                     # OCRがAmazonTextractの場合に表示するメッセージ
                     sg.Text(
                         text="AmazonTextract は\n非ラテン文字の言語に\n対応していません。",
-                        key="-ocr_amazon_textract_messeage-",
+                        key="-ocr_amazon_textract_message-",
                         # OCRがAmazonTextractの場合に表示する
                         visible=now_ocr_soft == "AmazonTextract",
                     ),
@@ -139,9 +139,9 @@ class EnvironmentSettingWin(BaseWin):
             # OCRソフトラジオボタン押下イベント
             if event in ["-" + ocr_soft + "-" for ocr_soft in self.ocr_soft_list]:
                 # OCRがAmazonTextractの場合に表示するメッセージの表示/非表示を切り替える
-                self.ocr_amazon_textract_messeage_event(event)
+                self.ocr_amazon_textract_message_event(event)
                 # if event == "-AmazonTextract-":
-                #     "-ocr_amazon_textract_messeage-"
+                #     "-ocr_amazon_textract_message-"
                 #     self.window['-TXT-'].update(visible=not window['-TXT-'].visible)
 
     # todo イベント処理記述
@@ -172,23 +172,23 @@ class EnvironmentSettingWin(BaseWin):
         # 更新する設定
         return update_setting
 
-    def ocr_amazon_textract_messeage_event(self, event):
+    def ocr_amazon_textract_message_event(self, event):
         """OCRがAmazonTextractの場合に表示するメッセージの表示/非表示を切り替える
 
         Args:
             event (str): 識別子
         """
         # 現在メッセージが表示されているかどうか
-        now_visible = self.window["-ocr_amazon_textract_messeage-"].visible
+        now_visible = self.window["-ocr_amazon_textract_message-"].visible
         # 表示/非表示切り替え処理
         # 表示されている、かつ、OCRソフトがAmazonTextractでないなら
         if now_visible and event != "-AmazonTextract-":
             # 非表示状態に変更
-            self.window["-ocr_amazon_textract_messeage-"].update(visible=False)
+            self.window["-ocr_amazon_textract_message-"].update(visible=False)
         # 表示されていない、かつ、OCRソフトがAmazonTextractであるなら
         elif not now_visible and event == "-AmazonTextract-":
             # 表示状態に変更
-            self.window["-ocr_amazon_textract_messeage-"].update(visible=True)
+            self.window["-ocr_amazon_textract_message-"].update(visible=True)
 
 
 # ! デバッグ用

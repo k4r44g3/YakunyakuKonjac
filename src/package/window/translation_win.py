@@ -48,7 +48,7 @@ class TranslationWin(BaseWin):
         # 現在の翻訳スレッド数
         self.thread_count = 0
         # 翻訳スレッド数の最大数
-        self.thread_max = self.user_setting.get_setting("translation_thread_max")
+        self.thread_max = SystemSetting.translation_thread_max
 
         # 自動翻訳のタイミングを取得するスレッド
         self.translate_timing_thread = None

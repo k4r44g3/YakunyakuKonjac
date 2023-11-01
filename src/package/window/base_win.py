@@ -93,6 +93,14 @@ class BaseWin:
         return self.transition_target_win
 
     # todo イベント処理記述
+    def window_close(self):
+        """プログラム終了イベント処理
+
+        閉じるボタン押下,Alt+F4イベントが発生したら
+        """
+        self.exit_event()  # イベント終了処理
+        self.window.metadata["is_exit"] = True  # イベント受付終了
+
     def get_update_setting(self, values):
         """更新する設定の取得
 
@@ -102,10 +110,93 @@ class BaseWin:
             update_setting (dict): 更新する設定の値の辞書
         """
 
-    def window_close(self):
-        """プログラム終了イベント処理
+    def check_valid_number_event(self, window, event, values):
+        """数字の入力値が有効かどうかを判定してGUI更新処理を行う処理
 
-        閉じるボタン押下,Alt+F4イベントが発生したら
+        エラーメッセージの表示や非表示、およびボタンの有効/無効の設定を行う
+
+        Args:
+            window(sg.Window): GUIウィンドウ設定
+            event (str): 識別子
+            values (dict): 各要素の値の辞書
+        Return:
+            is_error(bool): エラーが発生しているかどうか
         """
-        self.exit_event()  # イベント終了処理
-        self.window.metadata["is_exit"] = True  # イベント受付終了
+
+        min_value = window[event].metadata["min_value"]  # 入力範囲の最小値
+        max_value = window[event].metadata["max_value"]  # 入力範囲の最大値
+        message_key = window[event].metadata["message_key"]  # メッセージテキストの識別子
+        is_add_newline_end = window[event].metadata["is_add_newline_end"]  # メッセージ末尾に改行を追加するかどうか
+
+        # 入力値が空文字列でないなら
+        if values[event] != "":
+            # 文字列が数字のみなら
+            if Fn.check_number_string(values[event]):
+                # 先頭に0があるかつ文字数が2文字以上なら
+                if values[event][0] == "0" and len(values[event]) >= 2:
+                    # 先頭の0を削除する
+                    window[event].update(value=int(values[event]))
+
+                # 値が範囲内なら
+                if min_value <= int(values[event]) <= max_value:
+                    # エラーメッセージが表示されているなら
+                    if window[message_key].visible:
+                        # エラーメッセージを非表示にする
+                        window[message_key].update(visible=False)
+
+                    # 前回の値を保存する
+                    window[event].metadata["before_input_value"] = values[event]
+                    # エラーが発生しているかどうかを返す
+                    return False
+                # 値が範囲外なら
+                else:
+                    # メッセージテキスト
+                    message_value = (
+                        "  " + str(min_value) + "~" + str(max_value) + "の間で\n  入力してください。"
+                    )
+
+                    # メッセージ末尾に改行を追加するなら
+                    if is_add_newline_end:
+                        message_value += "\n "
+
+                    # エラーメッセージを表示する
+                    window[message_key].update(
+                        value=message_value,
+                        visible=True,  # 表示する
+                    )
+
+                    # 前回の値を保存する
+                    window[event].metadata["before_input_value"] = values[event]
+                    # エラーが発生しているかどうかを返す
+                    return True
+
+            # 文字列が数字のみでないなら
+            else:
+                # 数字以外を表示させないように処理
+
+                # 値を前回の値に戻す
+                window[event].update(value=window[event].metadata["before_input_value"])
+
+                # エラー文が表示されているかどうかを返す
+                return window[message_key].visible
+
+        # 入力値が空文字列なら
+        else:
+            # 前回の値を保存する
+            window[event].metadata["before_input_value"] = ""
+
+            # メッセージテキスト
+            message_value = "  半角数字のみを\n  入力してください。"
+
+            # メッセージ末尾に改行を追加するなら
+            if is_add_newline_end:
+                message_value += "\n "
+
+            # エラーメッセージを表示する
+            window[message_key].update(
+                value=message_value,
+                visible=True,  # 表示する
+            )
+
+            # エラーが発生しているかどうかを返す
+            return True

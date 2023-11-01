@@ -46,38 +46,18 @@ class Fn:
                 # 要素数が2以上ならタプルにする
                 print(text, now.strftime("%H:%M:%S.%f")[:-3])  # 時刻の表示（ミリ秒三桁まで）
 
-    def isfloat(value):
-        """値が少数かどうかを返す
+    def check_number_string(value):
+        """数字文字列かどうかを判定する
 
         Args:
-            value (str): 確認する値
+            value (str): 判定する文字列
 
         Returns:
-            bool: 値が少数ならTrue
-        """
-        try:
-            # 少数に変換出来なかったら中断
-            float(value)  # 少数に変換
-            return True  # 少数に変換できたならTrueを返す
-        except ValueError:  # 少数に変換できなかったなら
-            return False  # falseを返す
-
-    def isint(value):
-        """値が整数かどうかを返す
-
-        Args:
-            value (str): 確認する値
-
-        Returns:
-            bool: 値が整数ならTrue
+            is_valid_number_string(bool): 数字文字列かどうか
         """
 
-        try:
-            # 整数に変換出来なかったら中断
-            int(value)  # 整数に変換
-            return True  # 整数に変換できたならTrueを返す
-        except ValueError:  # 整数に変換できなかったなら
-            return False  # falseを返す
+        # 文字列が数字のみで構成され、かつ少なくとも1文字以上の数字を含むかどうかを返す
+        return bool(re.match(r"^[0-9]+$", value))
 
     def get_now_file_base_name():
         """ファイルのベース名用現在時刻の取得
@@ -289,6 +269,10 @@ class Fn:
         # 履歴を保存する最も古い日時の取得
         oldest_date = now_date - timedelta(days=max_file_retention_days)
 
+        # 最大サイズ
+        # KBに直した上で、翻訳前、翻訳後の2つのディレクトリがあるので、1/2にする
+        max_file_size_kb = max_file_size_mb * 1024 / 2
+
         # 合計サイズ
         total_size_kb = 0
 
@@ -319,7 +303,7 @@ class Fn:
                 # 指定された制限を超えているかどうかの情報をまとめた辞書
                 file_limit_info_dict = {
                     # ファイルサイズがオーバーしているかどうか
-                    "is_file_size_over": total_size_kb > max_file_size_mb * 1024,
+                    "is_file_size_over": total_size_kb > max_file_size_kb,
                     # ファイル数がオーバーしているかどうか
                     "is_file_count_over": file_count > max_file_count,
                     # ファイル保存期間がオーバーしているかどうか

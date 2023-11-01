@@ -198,7 +198,7 @@ class KeySettingWin(BaseWin):
         """キーイベントを取得するスレッドを開始する処理
 
         Args:
-            event (str): イベント名
+            event (str): 識別子
         """
         # 設定変更対象のキー名
         setting_target_key = event
