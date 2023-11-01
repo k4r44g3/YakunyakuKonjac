@@ -30,6 +30,7 @@ class ShootingSettingWin(BaseWin):
         # 継承元のコンストラクタを呼び出す
         super().__init__()
         # todo 初期設定
+        self.window_title = "表示設定画面" # ウィンドウタイトル
         # 撮影範囲の座標情報の辞書
         self.ss_region_info_dict = {
             "left": {
@@ -77,7 +78,6 @@ class ShootingSettingWin(BaseWin):
 
         # レイアウト指定
         layout = [
-            [sg.Text("表示設定画面")],
             [
                 sg.Frame(
                     title="翻訳間隔(秒)",

@@ -46,14 +46,22 @@ class ThemeSettingWin(BaseWin):
         # レイアウト指定
         layout = [
             [
-                # テーマ一覧リストボックス
-                sg.Listbox(
-                    values=sg.theme_list(),  # テーマ一覧
-                    size=(20, 12),  # サイズ
-                    key="-theme_list-",  # 識別子
-                    enable_events=True,  # イベントを取得する
-                    default_values=[self.current_theme],  # デフォルト値
-                )
+                # 使用ソフト表示フレーム
+                sg.Frame(
+                    title="テーマ設定",
+                    layout=[
+                        [
+                            # テーマ一覧リストボックス
+                            sg.Listbox(
+                                values=sg.theme_list(),  # テーマ一覧
+                                size=(20, 12),  # サイズ
+                                key="-theme_list-",  # 識別子
+                                enable_events=True,  # イベントを取得する
+                                default_values=[self.current_theme],  # デフォルト値
+                            )
+                        ]
+                    ],
+                ),
             ],
             [
                 sg.Push(),  # 右に寄せる
@@ -72,7 +80,7 @@ class ThemeSettingWin(BaseWin):
 
         # GUIウィンドウ設定の引数の辞書
         window_args = {
-            "title": "test",  # ウィンドウタイトル
+            "title": "ヤクニャクコンジャック",  # ウィンドウタイトル
             "layout": self.get_layout(),  # レイアウト指定
             "resizable": True,  # ウィンドウサイズ変更可能
             "finalize": True,  # 入力待ち までの間にウィンドウを表示する

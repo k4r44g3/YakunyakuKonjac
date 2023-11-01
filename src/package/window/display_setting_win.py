@@ -39,7 +39,6 @@ class DisplaySettingWin(BaseWin):
         sg.theme(self.user_setting.get_setting("window_theme"))
         # レイアウト指定
         layout = [
-            [sg.Text("表示設定画面")],
             [
                 sg.Text("ocr_soft"),
                 sg.Input(

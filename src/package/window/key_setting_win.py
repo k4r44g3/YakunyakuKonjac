@@ -63,19 +63,19 @@ class KeySettingWin(BaseWin):
                 [
                     # 説明テキスト
                     sg.Text(
-                        key_binding_info["text"],
+                        text=key_binding_info["text"],
+                        size=(12, 1),
                     ),
                     # キー設定変更ボタン
                     sg.Button(
                         button_text=button_text,
-                        size=(20, 1),
+                        size=(10, 1),
                         key=key_binding_info["gui_key"],
                     ),
                 ]
             )
         # レイアウト指定
         layout = [
-            [sg.Text("キー設定画面")],
             [key_binding_layout],
             [
                 sg.Push(),  # 右に寄せる
@@ -98,7 +98,7 @@ class KeySettingWin(BaseWin):
 
         # GUIウィンドウ設定の引数の辞書
         window_args = {
-            "title": "test",  # ウィンドウタイトル
+            "title": "ヤクニャクコンジャック",  # ウィンドウタイトル
             "layout": self.get_layout(),  # レイアウト指定
             "resizable": True,  # ウィンドウサイズ変更可能
             "finalize": True,  # 入力待ち までの間にウィンドウを表示する

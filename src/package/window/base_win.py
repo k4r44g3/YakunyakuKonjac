@@ -19,6 +19,7 @@ class BaseWin:
     def __init__(self):
         """コンストラクタ 初期設定"""
         self.user_setting = UserSetting()  # ユーザ設定のインスタンス化
+        self.window_title = ""  # ウィンドウタイトル
         self.transition_target_win = None  # 遷移先ウィンドウ名
 
     def start_win(self):
@@ -48,7 +49,7 @@ class BaseWin:
 
         # GUIウィンドウ設定の引数の辞書
         window_args = {
-            "title": "test",  # ウィンドウタイトル
+            "title": "ヤクニャクコンジャック",  # ウィンドウタイトル
             "layout": self.get_layout(),  # レイアウト指定
             "resizable": True,  # ウィンドウサイズ変更可能
             "finalize": True,  # 入力待ち までの間にウィンドウを表示する

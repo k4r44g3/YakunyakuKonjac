@@ -246,7 +246,7 @@ class TranslationWin(BaseWin):
 
         # GUIウィンドウ設定の引数の辞書
         window_args = {
-            "title": "test",  # ウィンドウタイトル
+            "title": "ヤクニャクコンジャック",  # ウィンドウタイトル
             "layout": self.get_layout(),  # レイアウト指定
             "resizable": True,  # ウィンドウサイズ変更可能
             "finalize": True,  # 入力待ち までの間にウィンドウを表示する

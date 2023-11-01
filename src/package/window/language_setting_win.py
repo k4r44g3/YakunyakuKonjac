@@ -35,6 +35,9 @@ class LanguageSettingWin(BaseWin):
         for language in self.language_list:
             self.language_name_list.append(language["ja_text"])  # 言語名取得
 
+        # OCRソフトがAmazonTextractかどうか
+        self.is_ocr_amazon_textract = self.user_setting.get_setting("ocr_soft") == "AmazonTextract"
+
         # ウィンドウ開始処理
         self.start_win()
 
@@ -47,10 +50,6 @@ class LanguageSettingWin(BaseWin):
         # ウィンドウのテーマを設定
         sg.theme(self.user_setting.get_setting("window_theme"))
 
-        # 現在のOCRソフトの取得
-        now_ocr_soft = self.user_setting.get_setting("ocr_soft")
-        # 現在の翻訳ソフトの取得
-        now_translation_soft = self.user_setting.get_setting("translation_soft")
         # 現在の翻訳前言語コードの取得
         now_source_language_code = self.user_setting.get_setting("source_language_code")
         # 現在の翻訳後言語コードの取得
@@ -66,39 +65,47 @@ class LanguageSettingWin(BaseWin):
             self.language_list, "code", now_target_language_code
         )["ja_text"]
 
+        # 翻訳前言語設定のレイアウト
+        source_language_layout = []
+
+        # OCRがAmazonTextractでないなら
+        if not self.is_ocr_amazon_textract:
+            # 翻訳前言語設定のレイアウト
+            source_language_layout = [
+                [
+                    sg.Listbox(
+                        values=self.language_name_list,
+                        size=(14, 5),
+                        key="-source_language_code-",
+                        default_values=now_source_language_name,  # デフォルト値
+                    ),
+                ],
+            ]
+        # OCRがAmazonTextractなら
+        else:
+            source_language_layout = [
+                [
+                    sg.Text(
+                        text="自動検出",
+                        size=(14, 1),
+                        key="-source_language_code-",
+                    ),
+                ],
+            ]
+
+        # レイアウトの初期設定
+        layout = []
+
+        # OCRがAmazonTextractなら
+        if self.user_setting.get_setting("ocr_soft") == "AmazonTextract":
+            # OCRがAmazonTextractの場合に表示するメッセージを表示する
+            layout += [[sg.Text("OCRソフト : AmazonTextract は\n非ラテン文字の言語に\n対応していません。")]]
+
         # レイアウト指定
-        layout = [
-            [sg.Text("言語設定画面")],
-            [sg.Text("AmazonTextract は非ラテン文字の言語に対応していません。")],
-            [
-                # 使用ソフト表示フレーム
-                sg.Frame(
-                    title="使用ソフト",
-                    layout=[
-                        [
-                            sg.Text("OCRソフト : " + now_ocr_soft),
-                        ],
-                        [
-                            sg.Text("翻訳ソフト : " + now_translation_soft),
-                        ],
-                    ],
-                ),
-            ],
+        layout += [
             [
                 # 翻訳前言語選択フレーム
-                sg.Frame(
-                    title="翻訳前言語",
-                    layout=[
-                        [
-                            sg.Listbox(
-                                values=self.language_name_list,
-                                size=(14, 5),
-                                key="-source_language_code-",
-                                default_values=now_source_language_name,  # デフォルト値
-                            ),
-                        ],
-                    ],
-                )
+                sg.Frame(title="翻訳前言語", layout=source_language_layout)
             ],
             [
                 # 翻訳後言語選択フレーム
@@ -132,12 +139,14 @@ class LanguageSettingWin(BaseWin):
 
         # リストボックスの初期スクロール位置の設定
         for key in ("-source_language_code-", "-target_language_code-"):
-            # 選択されている値の取得
-            value = self.window[key].get()[0]
-            # 最初に表示される要素番号の取得
-            scroll_to_index = self.language_name_list.index(value) - 1
-            # リストボックスの初期スクロール位置の設定
-            self.window[key].update(scroll_to_index=scroll_to_index)
+            # OCRがAmazonTextractでないかつ、翻訳前言語選択リストボックスでないなら
+            if not (self.is_ocr_amazon_textract and key == "-source_language_code-"):
+                # 選択されている値の取得
+                value = self.window[key].get()[0]
+                # 最初に表示される要素番号の取得
+                scroll_to_index = self.language_name_list.index(value) - 1
+                # リストボックスの初期スクロール位置の設定
+                self.window[key].update(scroll_to_index=scroll_to_index)
 
         # 終了処理が行われるまで繰り返す
         while not self.window.metadata["is_exit"]:
@@ -170,26 +179,30 @@ class LanguageSettingWin(BaseWin):
             update_setting (dict): 更新する設定の値の辞書
         """
 
-        # 翻訳前言語名取得
-        source_language_name = values["-source_language_code-"][0]
+        # 更新する設定
+        update_setting = {}
+
+        # OCRがAmazonTextractでないなら
+        if not self.is_ocr_amazon_textract:
+            # 翻訳前言語名取得
+            source_language_name = values["-source_language_code-"][0]
+            # 翻訳前言語コード取得
+            source_language_code = Fn.search_dict_in_list(
+                self.language_list, "ja_text", source_language_name
+            )["code"]
+            # 翻訳前言語設定
+            update_setting["source_language_code"] = source_language_code
+
         # 翻訳後言語名取得
         target_language_name = values["-target_language_code-"][0]
-
-        # 翻訳前言語コード取得
-        source_language_code = Fn.search_dict_in_list(
-            self.language_list, "ja_text", source_language_name
-        )["code"]
         # 翻訳後言語コード取得
         target_language_code = Fn.search_dict_in_list(
             self.language_list, "ja_text", target_language_name
         )["code"]
 
-        # 更新する設定
-        update_setting = {}
-        # 翻訳前言語設定
-        update_setting["source_language_code"] = source_language_code
         # 翻訳後言語設定
         update_setting["target_language_code"] = target_language_code
+
         # 更新する設定
         return update_setting
 

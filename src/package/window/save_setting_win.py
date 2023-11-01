@@ -39,31 +39,30 @@ class SaveSettingWin(BaseWin):
         sg.theme(self.user_setting.get_setting("window_theme"))
         # レイアウト指定
         layout = [
-            [sg.Text("保存設定画面")],
             [
-                sg.Text("最大保存容量(MB)"),
+                sg.Text(text="最大保存容量(MB)", size=(14, 1)),
                 sg.Input(
                     key="-max_file_size_mb-",  # 識別子
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
-                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
+                    size=(6, 1),  # 要素のサイズ=(文字数, 行数)
                     default_text=self.user_setting.get_setting("max_file_size_mb"),  # デフォルト
                 ),
             ],
             [
-                sg.Text("最大保存枚数"),
+                sg.Text(text="最大保存枚数", size=(14, 1)),
                 sg.Input(
                     key="-max_file_count-",  # 識別子
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
-                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
+                    size=(6, 1),  # 要素のサイズ=(文字数, 行数)
                     default_text=self.user_setting.get_setting("max_file_count"),  # デフォルト
                 ),
             ],
             [
-                sg.Text("最大保存期間(日)"),
+                sg.Text(text="最大保存期間(日)", size=(14, 1)),
                 sg.Input(
                     key="-max_file_retention_days-",  # 識別子
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
-                    # size=(8, 1),  # 要素のサイズ=(文字数, 行数)
+                    size=(6, 1),  # 要素のサイズ=(文字数, 行数)
                     default_text=self.user_setting.get_setting("max_file_retention_days"),  # デフォルト
                 ),
             ],
@@ -113,11 +112,11 @@ class SaveSettingWin(BaseWin):
         # 更新する設定
         update_setting = {}
         # 最大保存容量(MB)
-        update_setting["max_file_size_mb"] = values["-max_file_size_mb-"]
+        update_setting["max_file_size_mb"] = int(values["-max_file_size_mb-"])
         # 最大保存枚数
-        update_setting["max_file_count"] = values["-max_file_count-"]
+        update_setting["max_file_count"] = int(values["-max_file_count-"])
         # 最大保存期間(日)
-        update_setting["max_file_retention_days"] = values["-max_file_retention_days-"]
+        update_setting["max_file_retention_days"] = int(values["-max_file_retention_days-"])
 
         # 更新する設定
         return update_setting

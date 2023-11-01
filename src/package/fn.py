@@ -314,7 +314,7 @@ class Fn:
                 file_size = os.path.getsize(directory_path + file_name) / (1024)
 
                 # 合計サイズの
-                total_size_kb += int(file_size) + 1
+                total_size_kb += file_size + 1
 
                 # 指定された制限を超えているかどうかの情報をまとめた辞書
                 file_limit_info_dict = {

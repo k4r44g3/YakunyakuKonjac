@@ -60,6 +60,11 @@ PySimpleGUI サイズの変更
 https://note.com/hideharu092/n/n140ab2d73159
 
 
+レシピ - 折りたたみ可能なセクション (表示/非表示要素)
+https://www.pysimplegui.org/en/latest/cookbook/#recipe-collapsible-sections-visible-invisible-elements
+
+並列処理関連
+
 Window.perform_long_operation Method
 https://pysimplegui.trinket.io/demo-programs#/multi-threaded/window-perform_long_operation-method
 
@@ -160,7 +165,6 @@ https://kuku81kuku81.hatenablog.com/entry/2022/06/07_python_keyinputjudgement
 
 keyboard
 https://github.com/boppreh/keyboard
-
 
 文字一覧 (ASCII)
 https://tools.m-bsys.com/data/charlist_ascii.php
