@@ -1,14 +1,19 @@
 from package.fn import Fn  # 自作関数クラス
+from package.error_log import ErrorLog  # エラーログに関するクラス
 
 
 class TranslateTimingThread:
     """自動翻訳のタイミングを取得するスレッドクラス"""
 
+    @staticmethod  # スタティックメソッドの定義
+    # @ErrorLog.parameter_decorator(None)  # エラーログを取得するデコレータ
+    @ErrorLog.decorator  # エラーログを取得するデコレータ
     def run(user_setting, window):
         """自動翻訳のタイミングを取得
         Args:
             user_setting(UserSetting): ユーザーが変更可能の設定
             window(sg.Window): Windowオブジェクト
+                - デコレータで使用するためキーワード引数で渡す
         """
         # 翻訳間隔(秒)の取得
         translation_interval_sec = user_setting.get_setting("translation_interval_sec")

@@ -1,7 +1,7 @@
 # ! デバッグ用
 import sys  # システム関連
 import os  # ディレクトリ関連
-import threading  # スレッド
+import threading  # スレッド関連
 
 if __name__ == "__main__":
     src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
@@ -64,12 +64,12 @@ class KeySettingWin(BaseWin):
                     # 説明テキスト
                     sg.Text(
                         text=key_binding_info["text"],
-                        size=(12, 1),
+                        size=(14, 1),
                     ),
                     # キー設定変更ボタン
                     sg.Button(
                         button_text=button_text,
-                        size=(10, 1),
+                        size=(12, 1),
                         key=key_binding_info["gui_key"],
                     ),
                 ]
@@ -137,6 +137,12 @@ class KeySettingWin(BaseWin):
             # 戻るボタン押下イベント
             elif event == "-back-":
                 self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
+                self.window_close()  # プログラム終了イベント処理
+
+            # サブスレッドでエラーが発生したら
+            elif event == "-thread_error_event-":
+                # エラーポップアップの表示
+                sg.popup("\n".join(values["-thread_error_event-"]))
                 self.window_close()  # プログラム終了イベント処理
 
             # キー設定処理
@@ -224,8 +230,8 @@ class KeySettingWin(BaseWin):
             name="入力キー名取得スレッド",
             # スレッドで実行するメソッド
             target=lambda: GetKeyEventThread.run(
-                self.window,  # Windowオブジェクト
-                setting_target_key,  # 設定変更対象のキー名
+                window=self.window,  # Windowオブジェクト
+                setting_target_key=setting_target_key,  # 設定変更対象のキー名
             ),
             daemon=True,  # メインスレッド終了時に終了する
         )

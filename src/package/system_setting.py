@@ -49,14 +49,19 @@ class SystemSetting:
     # 言語情報一覧リスト{日本語表記、英語表記、言語コード(ISO 639-1),フォントパス}
     language_list = [
         {"ja_text": "アラビア語", "en_text": "Arabic", "code": "ar", "font_path": font_Segoe_path},
-        {"ja_text": "中国語", "en_text": "Chinese", "code": "zh-CN","font_path": font_MicrosoftYaHei_path},
+        {
+            "ja_text": "中国語",
+            "en_text": "Chinese",
+            "code": "zh-CN",
+            "font_path": font_MicrosoftYaHei_path,
+        },
         {"ja_text": "英語", "en_text": "English", "code": "en", "font_path": font_Segoe_path},
         {"ja_text": "フランス語", "en_text": "French", "code": "fr", "font_path": font_Segoe_path},
         {"ja_text": "ドイツ語", "en_text": "German", "code": "de", "font_path": font_Segoe_path},
         {"ja_text": "イタリア語", "en_text": "Italian", "code": "it", "font_path": font_Segoe_path},
         {"ja_text": "日本語", "en_text": "Japanese", "code": "ja", "font_path": font_YuGothic_path},
-        {"ja_text": "韓国語", "en_text": "Korean", "code": "ko","font_path": font_MalgunGothic_path},
-        {"ja_text": "ポルトガル語", "en_text": "Portuguese", "code": "pt","font_path": font_Segoe_path},
+        {"ja_text": "韓国語", "en_text": "Korean", "code": "ko", "font_path": font_MalgunGothic_path},
+        {"ja_text": "ポルトガル語", "en_text": "Portuguese", "code": "pt", "font_path": font_Segoe_path},
         {"ja_text": "ロシア語", "en_text": "Russian", "code": "ru", "font_path": font_Segoe_path},
         {"ja_text": "スペイン語", "en_text": "Spanish", "code": "es", "font_path": font_Segoe_path},
     ]
@@ -64,6 +69,13 @@ class SystemSetting:
     # EasyOCR用の言語コード(ISO 639-2)のリスト((ISO 639-1):(ISO 639-2))
     EasyOCR_language_code = {"zh-CN": "ch_sim"}
 
-
     # 翻訳スレッドの最大数
     translation_thread_max = 4
+
+    # エラーログのディレクトリパス
+    error_log_directory_path = package_path + "../"  # ディレクトリパス
+
+    # エラー基本情報のログファイルの保存場所
+    simple_error_log_file_path = error_log_directory_path + "error_simple.log"
+    # エラー詳細情報のログファイルの保存場所
+    detailed_error_log_file_path = error_log_directory_path + "error_detailed.log"

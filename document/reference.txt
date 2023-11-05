@@ -95,6 +95,21 @@ PythonでJSONファイル・文字列の読み込み・書き込み
 https://note.nkmk.me/python-json-load-dump/
 
 
+Pythonのデコレータについて
+https://qiita.com/mtb_beta/items/d257519b018b8cd0cc2e
+
+【python入門】さわっておぼえるデコレータ。中身を理解して、便利に使おう。
+https://www.yuttanpo.com/use-decorator-beginner/
+
+Pythonのデコレータで関数に処理を追加する
+https://helve-blog.com/posts/python/python-decorator/
+
+［Pythonチートシート］クラス定義編
+https://atmarkit.itmedia.co.jp/ait/articles/2001/28/news013.html
+
+Python のエラー出力
+https://qiita.com/puchi2121/items/3983a75c8c0a6e958fbd
+
 
 contents_changed
 

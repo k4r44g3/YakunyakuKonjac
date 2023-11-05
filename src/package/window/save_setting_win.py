@@ -46,7 +46,7 @@ class SaveSettingWin(BaseWin):
         # レイアウト指定
         layout = [
             [
-                sg.Text(text="最大保存容量(MB)", size=(14, 1)),
+                sg.Text(text="最大保存容量(MB)", size=(16, 1)),
                 sg.Input(
                     key="-max_file_size_mb-",  # 識別子
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
@@ -74,7 +74,7 @@ class SaveSettingWin(BaseWin):
                 )
             ],
             [
-                sg.Text(text="最大保存枚数", size=(14, 1)),
+                sg.Text(text="最大保存枚数", size=(16, 1)),
                 sg.Input(
                     key="-max_file_count-",  # 識別子
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる
@@ -102,7 +102,7 @@ class SaveSettingWin(BaseWin):
                 )
             ],
             [
-                sg.Text(text="最大保存期間(日)", size=(14, 1)),
+                sg.Text(text="最大保存期間(日)", size=(16, 1)),
                 sg.Input(
                     key="-max_file_retention_days-",  # 識別子
                     enable_events=True,  # テキストボックスの変更をイベントとして受け取れる

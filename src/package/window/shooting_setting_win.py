@@ -15,7 +15,7 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
-from package.drag_area_getter import DragAreaGetter  # ドラッグした領域の座標を取得するクラス
+from package.thread.get_drag_area_thread import GetDragAreaThread  # ドラッグした領域の座標を取得するスレッド
 
 
 class ShootingSettingWin(BaseWin):
@@ -194,11 +194,11 @@ class ShootingSettingWin(BaseWin):
     def set_ss_region_event(self):
         """撮影範囲設定ボタン押下イベント処理"""
         # ドラッグした領域の座標を取得する
-        now_ss_region = DragAreaGetter.run()
+        GetDragAreaThread.run(self.window)
 
         # 撮影範囲の座標情報の更新
         for region_key in ["left", "top", "right", "bottom"]:
-            self.ss_region_info_dict[region_key]["value"] = now_ss_region[region_key]
+            self.ss_region_info_dict[region_key]["value"] = GetDragAreaThread.region[region_key]
 
         # 撮影範囲表示テキストの取得
         ss_region_text = self.get_ss_region_text()

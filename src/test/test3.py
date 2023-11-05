@@ -1,25 +1,42 @@
-import re
-import datetime
+import PySimpleGUI as sg
+
+import traceback
 
 
-def is_valid_filename(filename):
-    # 正規表現で"yyyymmdd_hhmmss.拡張子"の形式に一致するかチェック
-    match = re.match(r"^(\d{8})_(\d{6})\..+$", filename)
-    if not match:
-        return False
+def error_popup(e, is_output_error_log):
+    """エラー発生ポップアップの作成
 
-    # キャプチャグループから日付と時刻の部分を取得
-    date_str, time_str = match.groups()
+    Args:
+        e (Exception): 例外
+        is_output_error_log(bool): エラーログの出力に成功したかどうか
+    """
+    # メッセージの作成
+    # エラーログファイルの出力に成功したなら
+    if is_output_error_log:
+        message = [
+            "申し訳ありません、エラーが発生しました。",
+            f"エラーメッセージ: {str(e)}",
+            "エラーログファイルが作成されました。",
+            "管理者にこのファイルを提供していただけると幸いです。",
+        ]
+    # エラーログファイルの出力に失敗したなら
+    else:
+        message = [
+            "申し訳ありません、エラーが発生しました。",
+            f"エラーメッセージ: {str(e)}",
+            "エラーログファイルの作成に失敗しました。",
+            "管理者に問題を報告していただけると幸いです。",
+        ]
+    # ポップアップの作成
+    sg.popup("\n".join(message))
 
-    # 日付と時刻の形式が正しいかチェック
-    try:
-        datetime.datetime.strptime(date_str + time_str, "%Y%m%d%H%M%S")
-        return True
-    except ValueError:
-        return False
+
+import traceback
+import inspect
 
 
-# テスト
-print(is_valid_filename("20231031_123456.txt"))  # True
-print(is_valid_filename("20234431_123456.txt"))  # False
-print(is_valid_filename("invalid_filename.txt"))  # False
+try:
+    # ここで何らかの例外を発生させるためのサンプルコード
+    x = 1 / 0
+except Exception as e:
+    error_popup(e, True)

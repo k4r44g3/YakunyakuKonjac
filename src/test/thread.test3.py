@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 import time
-import threading  # スレッド
+import threading  # スレッド関連
 import keyboard  # キーボード
 import re  # 正規表現
 

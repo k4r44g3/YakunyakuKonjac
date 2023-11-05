@@ -1,13 +1,12 @@
-import threading
-import tkinter as tk
+import tkinter as tk  # GUI
+
+from package.error_log import ErrorLog  # エラーログに関するクラス
+
+import threading  # スレッド関連
 
 
 class GetDragAreaThread:
-    """ドラッグした領域の座標を取得するスレッド
-
-    Returns:
-        region(dict{left, top, width, height}): スクリーンショット撮影範囲
-    """
+    """ドラッグした領域の座標を取得するスレッド"""
 
     # ドラッグ領域の座標を保存するクラス変数
     region = None
@@ -102,12 +101,19 @@ class GetDragAreaThread:
         # アプリケーションを削除
         self.root.destroy()
 
-    @classmethod
-    def run(cls):
+    @staticmethod  # スタティックメソッドの定義
+    # @ErrorLog.parameter_decorator(None)  # エラーログを取得するデコレータ
+    @ErrorLog.decorator  # エラーログを取得するデコレータ
+    def run(window):
         """ドラッグした領域の座標を取得する
 
+        Args:
+            window(sg.Window): Windowオブジェクト
+                - デコレータで使用するためキーワード引数で渡す
+
         Returns:
-            region(dict{left, top, width, height}): スクリーンショット撮影範囲
+            GetDragAreaThread.region(dict{left, top, width, height})
+                - スクリーンショット撮影範囲(クラス変数)
         """
         root = tk.Tk()
         app = GetDragAreaThread(root)

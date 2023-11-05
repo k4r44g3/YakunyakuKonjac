@@ -290,8 +290,9 @@ class TranslationWin(BaseWin):
             name="キーイベント取得スレッド",
             # スレッドで実行するメソッド
             target=lambda: WatchForKeyEventThread.run(
-                self.window,  # Windowオブジェクト
-                self.user_setting.get_setting("key_binding_info_list"),  # キーバインド情報のリスト
+                window=self.window,  # Windowオブジェクト
+                # キーバインド情報のリスト
+                key_binding_info_list=self.user_setting.get_setting("key_binding_info_list"),
             ),
             daemon=True,  # メインスレッド終了時に終了する
         )
@@ -348,6 +349,12 @@ class TranslationWin(BaseWin):
             elif event in ("-history_file_time_list_sub-", "-history_file_time_list_add-"):
                 self.history_file_select_botton(event)  # 履歴ファイル選択ボタンイベント
 
+            # サブスレッドでエラーが発生したら
+            elif event == "-thread_error_event-":
+                # エラーポップアップの表示
+                sg.popup("\n".join(values["-thread_error_event-"]))
+                self.window_close()  # プログラム終了イベント処理
+
             # キーイベントが発生したなら
             if "-keyboard_event-" in values:
                 event_name = values["-keyboard_event-"]  # 対応するイベント名
@@ -395,7 +402,6 @@ class TranslationWin(BaseWin):
 
     def translate_thread_start(self):
         """翻訳処理を別スレッドで開始する処理"""
-
         if self.thread_count < self.thread_max:
             # 翻訳スレッド最大数を超えていないなら
             self.thread_count += 1
@@ -660,12 +666,11 @@ class TranslationWin(BaseWin):
             # スレッド名
             name="撮影範囲設定スレッド",
             # スレッドで実行するメソッド
-            target=lambda: GetDragAreaThread.run(),
+            target=lambda: GetDragAreaThread.run(window=self.window),
             daemon=True,  # メインスレッド終了時に終了する
         )
         # スレッド開始
         thread.start()
-
         # スレッドが終了するまで停止
         thread.join()
 

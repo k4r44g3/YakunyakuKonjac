@@ -3,15 +3,21 @@ import re  # 正規表現
 
 from package.fn import Fn  # 自作関数クラス
 
+from package.error_log import ErrorLog  # エラーログに関するクラス
+
 
 class GetKeyEventThread:
     """キーイベントの取得処理を行うスレッドクラス"""
 
+    @staticmethod  # スタティックメソッドの定義
+    # @ErrorLog.parameter_decorator(None)  # エラーログを取得するデコレータ
+    @ErrorLog.decorator  # エラーログを取得するデコレータ
     def run(window, setting_target_key):
         """キーイベントの取得
 
         Args:
             window(sg.Window): Windowオブジェクト
+                - デコレータで使用するためキーワード引数で渡す
             setting_target_key (str): 設定変更対象のキー名
         """
         # 各キーの長押し状態を格納する辞書を初期化

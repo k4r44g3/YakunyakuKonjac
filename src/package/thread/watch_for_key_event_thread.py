@@ -2,11 +2,15 @@ import keyboard  # キーボード
 import re  # 正規表現
 
 from package.fn import Fn  # 自作関数クラス
+from package.error_log import ErrorLog  # エラーログに関するクラス
 
 
 class WatchForKeyEventThread:
     """指定したキーイベントが発生するかどうか監視するスレッドクラス"""
 
+    @staticmethod  # スタティックメソッドの定義
+    # @ErrorLog.parameter_decorator(None)  # エラーログを取得するデコレータ
+    @ErrorLog.decorator  # エラーログを取得するデコレータ
     def run(window, key_binding_info_list):
         """指定したキーイベントが発生するかどうか監視する処理
 
@@ -18,10 +22,14 @@ class WatchForKeyEventThread:
                 - key_name(str) : キー名
                 - scan_code(int) : スキャンコード
         """
+
         # 各キーの長押し状態を格納する辞書を初期化
         pressed_keys = {}
         # キーイベントの取得
         key_event = keyboard.read_event()
+
+        # キーイベント後に待機(処理軽減)
+        Fn.sleep(50)
 
         while not (window.was_closed()):
             # ウィンドウが閉じてないかつ、キー入力待ち状態なら
