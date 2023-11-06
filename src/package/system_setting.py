@@ -21,7 +21,7 @@ class SystemSetting:
 
     # 設定ファイル保存先設定
     setting_file_name = "setting.json"  # ファイル名
-    setting_directory_path = package_path + "../"  # ディレクトリパス
+    setting_directory_path = package_path + "../config/"  # ディレクトリパス
     setting_file_path = setting_directory_path + setting_file_name  # 設定ファイルパス
 
     # 静的ファイル保存先設定
@@ -73,7 +73,7 @@ class SystemSetting:
     translation_thread_max = 4
 
     # エラーログのディレクトリパス
-    error_log_directory_path = package_path + "../"  # ディレクトリパス
+    error_log_directory_path = package_path + "../log/"  # ディレクトリパス
 
     # エラー基本情報のログファイルの保存場所
     simple_error_log_file_path = error_log_directory_path + "error_simple.log"

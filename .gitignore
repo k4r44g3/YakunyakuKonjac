@@ -1,3 +1,10 @@
+# 設定フォルダ
+src/config/setting.json
+
+# エラーログフォルダ
+src/log/error_detailed.log
+src/log/error_simple.log
+
 # 履歴フォルダ
 src/history/image_after/*
 src/history/image_before/*
