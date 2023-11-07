@@ -122,12 +122,11 @@ class EnvironmentSettingWin(BaseWin):
             event, values = self.window.read()
 
             Fn.time_log("event=", event, "values=", values)
-            # プログラム終了イベント処理
-            if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
-                self.window_close()  # プログラム終了イベント処理
+            # 共通イベントの処理
+            self.base_event(event, values)
 
             # 確定ボタン押下イベント
-            elif event == "-confirm-":
+            if event == "-confirm-":
                 update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
@@ -137,7 +136,7 @@ class EnvironmentSettingWin(BaseWin):
                 self.window_close()  # プログラム終了イベント処理
 
             # OCRソフトラジオボタン押下イベント
-            if event in ["-" + ocr_soft + "-" for ocr_soft in self.ocr_soft_list]:
+            elif event in ["-" + ocr_soft + "-" for ocr_soft in self.ocr_soft_list]:
                 # OCRがAmazonTextractの場合に表示するメッセージの表示/非表示を切り替える
                 self.ocr_amazon_textract_message_event(event)
                 # if event == "-AmazonTextract-":

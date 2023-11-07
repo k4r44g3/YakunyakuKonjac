@@ -79,6 +79,17 @@ class BaseWin:
         # todo 終了設定(保存など)
         self.end_win()  # ウィンドウ終了処理
 
+    def base_event(self, event, values):
+        """共通のイベントの処理
+
+        Args:
+            event (_type_): 識別子
+            values (dict): 各要素の値の辞書
+        """
+        # プログラム終了イベント処理
+        if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
+            self.window_close()  # プログラム終了イベント処理
+
     def end_win(self):
         """ウィンドウ終了処理"""
         Fn.time_log("ウィンドウ終了")  # ログ出力

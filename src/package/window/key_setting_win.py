@@ -130,12 +130,11 @@ class KeySettingWin(BaseWin):
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
 
-            # プログラム終了イベント処理
-            if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
-                self.window_close()  # プログラム終了イベント処理
+            # 共通イベントの処理
+            self.base_event(event, values)
 
             # 戻るボタン押下イベント
-            elif event == "-back-":
+            if event == "-back-":
                 self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
                 self.window_close()  # プログラム終了イベント処理
 

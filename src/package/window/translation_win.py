@@ -308,12 +308,11 @@ class TranslationWin(BaseWin):
             # ! デバッグログ
             # Fn.time_log(event)
 
-            # プログラム終了イベント処理
-            if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
-                self.window_close()  # プログラム終了イベント処理
+            # 共通イベントの処理
+            self.base_event(event, values)
 
             # メニューバーの押下イベント
-            elif values["-menu-"] is not None:  # 選択された項目があるなら
+            if values["-menu-"] is not None:  # 選択された項目があるなら
                 # メニューバーのイベント処理
                 menu_key = event.split("::")[1]  # メニュー項目の識別子取得
                 # 画面遷移を行うかどうか

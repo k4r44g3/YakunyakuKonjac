@@ -150,12 +150,11 @@ class ShootingSettingWin(BaseWin):
             if event != "__TIMEOUT__":
                 Fn.time_log(event, values)
 
-            # プログラム終了イベント処理
-            if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
-                self.window_close()  # プログラム終了イベント処理
+            # 共通イベントの処理
+            self.base_event(event, values)
 
             # 確定ボタン押下イベント
-            elif event == "-confirm-":
+            if event == "-confirm-":
                 update_setting = values  # 更新する設定
                 update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存

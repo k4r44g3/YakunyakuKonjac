@@ -80,7 +80,7 @@ class Translation:
         # Fn.time_log("画像作成")
 
         # ! デバッグ用
-        overlay_translation_image.show()  # 画像表示
+        # overlay_translation_image.show()  # 画像表示
 
         return file_name  # 保存ファイル名(撮影日時)
 
