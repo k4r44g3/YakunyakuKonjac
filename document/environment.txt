@@ -1,22 +1,21 @@
-1. build_environment.batのダウンロード
+1. installer.batのダウンロード
 
 2. 開発環境作成
-    build_environment.bat の実行
-        build_environment.batがダウンロードされた場所に作成
+    installer.bat の実行
+        installer.batがダウンロードされた場所に作成
 
 3. AWSの設定
-    venv_YakunyakuKonjac\YakunyakuKonjac\document\aws.batの実行
-        入力情報は下記の内容
-            sv01\student\02_情報処理\2022年度1年生\100_TEMP\boto3.txt
+    venv_YakunyakuKonjac\YakunyakuKonjac\tools\aws.batの実行
+
 4. アプリの実行
-    venv_YakunyakuKonjac\YakunyakuKonjac\document\app.batの実行
+    venv_YakunyakuKonjac\YakunyakuKonjac\tools\app.batの実行
 
 
 履歴の削除
-    venv_YakunyakuKonjac\YakunyakuKonjac\document\delete_history.batの実行
+    venv_YakunyakuKonjac\YakunyakuKonjac\tools\delete_history.batの実行
 
 設定のリセット
-    venv_YakunyakuKonjac\YakunyakuKonjac\document\reset_setting.batの実行
+    venv_YakunyakuKonjac\YakunyakuKonjac\tools\reset_setting.batの実行
 
 更新方法
     1 . プロジェクトフォルダへの移動

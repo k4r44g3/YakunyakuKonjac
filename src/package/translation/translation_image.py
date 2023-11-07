@@ -50,6 +50,18 @@ class TranslationImage:
             font_path, text_after_list, text_region_list
         )
 
+        # フォントサイズが0である要素番号のリストの取得
+        zero_font_size_index_list = [
+            index for index, font_size in enumerate(font_size_list) if font_size == 0
+        ]
+
+        # フォントサイズが0である要素番号で走査（削除後の要素番号のずれを防ぐために逆順にソート）
+        for delete_index in zero_font_size_index_list[::-1]:
+            # フォントサイズが0の要素を削除
+            del text_after_list[delete_index]
+            del text_region_list[delete_index]
+            del font_size_list[delete_index]
+
         # 画像内のテキストボックスを塗りつぶす処理
         TranslationImage.fill_text_box_image(draw, text_region_list)
 
