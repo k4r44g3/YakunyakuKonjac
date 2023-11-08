@@ -12,12 +12,17 @@ import PySimpleGUI as sg  # GUI
 from package.fn import Fn  # 自作関数クラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 
+from package.error_log import ErrorLog  # エラーログに関するクラス
+
+from package.global_status import GlobalStatus # グローバル変数保存用のクラス
+
 
 class BaseWin:
     """ウィンドウの基本クラス"""
 
     def __init__(self):
         """コンストラクタ 初期設定"""
+        GlobalStatus.win_instance = self # 現在のウィンドウインスタンスの保持
         self.user_setting = UserSetting()  # ユーザ設定のインスタンス化
         self.window_title = ""  # ウィンドウタイトル
         self.transition_target_win = None  # 遷移先ウィンドウ名
@@ -85,10 +90,26 @@ class BaseWin:
         Args:
             event (_type_): 識別子
             values (dict): 各要素の値の辞書
+        Return:
+            is_base_event(bool): 共通のイベントが発生したかどうか
         """
         # プログラム終了イベント処理
+
         if event == "-WINDOW CLOSE ATTEMPTED-":  # 閉じるボタン押下,Alt+F4イベントが発生したら
             self.window_close()  # プログラム終了イベント処理
+            return True # 共通のイベントが発生したかどうか
+
+        # サブスレッドでエラーが発生したなら
+        elif event == "-thread_error_event-" or GlobalStatus.is_sub_thread_error:
+            print("エラー発生")
+            # エラーポップアップの表示
+            sg.popup("\n".join(GlobalStatus.sub_thread_error_message))
+            self.window_close()  # プログラム終了イベント処理
+            return True # 共通のイベントが発生したかどうか
+
+        # それ以外のイベントが発生したなら
+        else:
+            return False # 共通のイベントが発生したかどうか
 
     def end_win(self):
         """ウィンドウ終了処理"""

@@ -120,11 +120,12 @@ class ThemeSettingWin(BaseWin):
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
 
-            # 共通イベントの処理
-            self.base_event(event, values)
+            # 共通イベントの処理が発生したら
+            if self.base_event(event, values):
+                continue
 
             # 確定ボタン押下イベント
-            if event == "-confirm-":
+            elif event == "-confirm-":
                 update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 

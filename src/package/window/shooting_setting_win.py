@@ -1,6 +1,8 @@
 # ! デバッグ用
 import sys  # システム関連
 import os  # ディレクトリ関連
+import threading  # スレッド関連
+
 
 if __name__ == "__main__":
     src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
@@ -14,6 +16,7 @@ from package.fn import Fn  # 自作関数クラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
+from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
 
 from package.thread.get_drag_area_thread import GetDragAreaThread  # ドラッグした領域の座標を取得するスレッド
 
@@ -147,14 +150,15 @@ class ShootingSettingWin(BaseWin):
             event, values = self.window.read()
 
             # ! デバッグログ
-            if event != "__TIMEOUT__":
-                Fn.time_log(event, values)
+            # if event != "__TIMEOUT__":
+            #     Fn.time_log(event, values)
 
-            # 共通イベントの処理
-            self.base_event(event, values)
+            # 共通イベントの処理が発生したら
+            if self.base_event(event, values):
+                continue
 
             # 確定ボタン押下イベント
-            if event == "-confirm-":
+            elif event == "-confirm-":
                 update_setting = values  # 更新する設定
                 update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
@@ -192,17 +196,37 @@ class ShootingSettingWin(BaseWin):
 
     def set_ss_region_event(self):
         """撮影範囲設定ボタン押下イベント処理"""
-        # ドラッグした領域の座標を取得する
-        GetDragAreaThread.run(self.window)
+        # ドラッグした領域の座標を取得するスレッド作成
+        thread = threading.Thread(
+            # スレッド名
+            name="撮影範囲設定スレッド",
+            # スレッドで実行するメソッド
+            target=lambda: GetDragAreaThread.run(window=self.window),
+            daemon=True,  # メインスレッド終了時に終了する
+        )
+        # スレッド開始
+        thread.start()
 
-        # 撮影範囲の座標情報の更新
-        for region_key in ["left", "top", "right", "bottom"]:
-            self.ss_region_info_dict[region_key]["value"] = GetDragAreaThread.region[region_key]
+        # 1秒ごとにスレッドでエラーが発生したかどうかをチェックする
+        # スレッドが存在するかつ、サブスレッドでエラーが発生していないなら
+        while thread.is_alive() and not GlobalStatus.is_sub_thread_error:
+            # スレッドが終了するまで停止(最大0.5秒)
+            thread.join(timeout=0.5)
 
-        # 撮影範囲表示テキストの取得
-        ss_region_text = self.get_ss_region_text()
-        # 撮影範囲表示テキストの更新
-        self.window["-ss_region_text-"].update(value=ss_region_text)
+        # サブスレッドでエラーが発生したら
+        if GlobalStatus.is_sub_thread_error:
+            return "error"
+
+        # 撮影範囲がドラッグ選択されたなら
+        elif GetDragAreaThread.region is not None:
+            # 撮影範囲の座標情報の更新
+            for region_key in ["left", "top", "right", "bottom"]:
+                self.ss_region_info_dict[region_key]["value"] = GetDragAreaThread.region[region_key]
+
+            # 撮影範囲表示テキストの取得
+            ss_region_text = self.get_ss_region_text()
+            # 撮影範囲表示テキストの更新
+            self.window["-ss_region_text-"].update(value=ss_region_text)
 
     def get_update_setting(self, values):
         """更新する設定の取得

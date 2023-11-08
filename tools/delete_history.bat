@@ -13,9 +13,14 @@ echo. > image_before\.gitkeep
 cd ..\..
 
 @REM キャッシュの削除
+rmdir /s /q src\__pycache__
 rmdir /s /q src\package\__pycache__
 rmdir /s /q src\package\translation\__pycache__
 rmdir /s /q src\package\window\__pycache__
 rmdir /s /q src\package\thread\__pycache__
+
+@REM エラーログファイル削除
+del log\error_detailed.log
+del log\error_simple.log
 
 pause

@@ -15,6 +15,8 @@ from package.fn import Fn  # 自作関数クラス
 from package.debug import Debug  # デバッグ用クラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
+from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
+
 from package.translation.translation import Translation  # 翻訳機能関連のクラス
 
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
@@ -308,11 +310,12 @@ class TranslationWin(BaseWin):
             # ! デバッグログ
             # Fn.time_log(event)
 
-            # 共通イベントの処理
-            self.base_event(event, values)
+            # 共通イベントの処理が発生したら
+            if self.base_event(event, values):
+                continue
 
             # メニューバーの押下イベント
-            if values["-menu-"] is not None:  # 選択された項目があるなら
+            elif values["-menu-"] is not None:  # 選択された項目があるなら
                 # メニューバーのイベント処理
                 menu_key = event.split("::")[1]  # メニュー項目の識別子取得
                 # 画面遷移を行うかどうか
@@ -348,14 +351,8 @@ class TranslationWin(BaseWin):
             elif event in ("-history_file_time_list_sub-", "-history_file_time_list_add-"):
                 self.history_file_select_botton(event)  # 履歴ファイル選択ボタンイベント
 
-            # サブスレッドでエラーが発生したら
-            elif event == "-thread_error_event-":
-                # エラーポップアップの表示
-                sg.popup("\n".join(values["-thread_error_event-"]))
-                self.window_close()  # プログラム終了イベント処理
-
             # キーイベントが発生したなら
-            if "-keyboard_event-" in values:
+            elif "-keyboard_event-" in values:
                 event_name = values["-keyboard_event-"]  # 対応するイベント名
                 # 翻訳イベント
                 if event_name == "-translate_key-":
@@ -670,11 +667,19 @@ class TranslationWin(BaseWin):
         )
         # スレッド開始
         thread.start()
-        # スレッドが終了するまで停止
-        thread.join()
+
+        # 1秒ごとにスレッドでエラーが発生したかどうかをチェックする
+        # スレッドが存在するかつ、サブスレッドでエラーが発生していないなら
+        while thread.is_alive() and not GlobalStatus.is_sub_thread_error:
+            # スレッドが終了するまで停止(最大0.5秒)
+            thread.join(timeout=0.5)
+
+        # サブスレッドでエラーが発生したら
+        if GlobalStatus.is_sub_thread_error:
+            return "error"
 
         # 撮影範囲がドラッグ選択されたなら
-        if GetDragAreaThread.region is not None:
+        elif GetDragAreaThread.region is not None:
             # 更新する設定
             update_setting = {}
             update_setting["ss_left_x"] = GetDragAreaThread.region["left"]

@@ -73,9 +73,12 @@ class SystemSetting:
     translation_thread_max = 4
 
     # エラーログのディレクトリパス
-    error_log_directory_path = package_path + "../log/"  # ディレクトリパス
+    error_log_directory_path = package_path + "../../log/"  # ディレクトリパス
 
     # エラー基本情報のログファイルの保存場所
     simple_error_log_file_path = error_log_directory_path + "error_simple.log"
     # エラー詳細情報のログファイルの保存場所
     detailed_error_log_file_path = error_log_directory_path + "error_detailed.log"
+
+    # # エラーチェックを行う間隔(ms)
+    # error_check_interval_ms = 1000

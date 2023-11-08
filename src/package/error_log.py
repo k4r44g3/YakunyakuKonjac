@@ -9,6 +9,8 @@ import threading  # スレッド関連
 
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 
+from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
+
 
 class ErrorLog:
     """エラーログに関するクラス"""
@@ -123,8 +125,8 @@ class ErrorLog:
             window (sg.Window, None): ポップアップイベントを返すWindowオブジェクト
         """
         try:
+            # エラーログの出力
             error_log_instance.self_output_error_log()
-
             # エラー発生ポップアップの作成
             ErrorLog.error_popup(e, is_output_error_log=True, window=window)
         # エラーログの出力に失敗したなら
@@ -161,46 +163,28 @@ class ErrorLog:
                 "管理者に問題を報告していただけると幸いです。",
             ]
 
-        # ポップアップイベントを返すWindowオブジェクトが存在しないなら
-        if window is None:
+        # 現在のスレッドがメインスレッドかどうか
+        is_main_thread = threading.current_thread() == threading.main_thread()
+        # 現在のスレッドがメインスレッドなら
+        if is_main_thread:
             # エラーポップアップの作成
             sg.popup("\n".join(message))
+
+        # 現在のスレッドがメインスレッドでないなら
         else:
-            print("ポップアップ表示")
-            # スレッドから、キーイベントを送信
-            window.write_event_value(key="-thread_error_event-", value=message)
+            # サブスレッドでエラーが発生したかどうか
+            GlobalStatus.is_sub_thread_error = True
+            # サブスレッドでエラー発生時の表示エラーメッセージ
+            GlobalStatus.sub_thread_error_message = message
 
-    # @staticmethod  # スタティック(静的)メソッドの定義
-    # def parameter_decorator(is_main_thread, event_window=None):  # デコレータの引数を取得する関数の宣言
-    #     """デコレータの引数を取得する関数
-
-    #     Args:
-    #         is_main_thread (bool): メインスレッドかどうか
-    #         window (sg.Window, None): ポップアップイベントを返すWindowオブジェクト
-    #     """
-
-    #     def decorator(func):  # デコレータ関数の宣言。
-    #         """デコレータ関数。このデコレータを使用した関数は、'wrapper'関数に置き換えられる。
-
-    #         Args:
-    #             func (func): デコレートされる関数
-    #         """
-
-    #         def wrapper(*args, **kwargs):
-    #             """デコレータの内部関数。任意の位置引数(*args)とキーワード引数(**kwargs)を受け取る。"""
-    #             try:
-    #                 # エラーログ作成
-    #                 error_log = ErrorLog.create_error_log()
-    #                 # 元の関数実行前の処理
-    #                 func(*args, **kwargs)  # 元々のデコレートされる関数を実行
-    #             # エラー発生時
-    #             except Exception as e:
-    #                 # エラーログの出力処理
-    #                 ErrorLog.output_error_log(error_log, e, window)
-
-    #         return wrapper  # デコレータの内部関数を返す。
-
-    #     return decorator  # デコレータ関数を返す。
+            # 現在開いているウィンドウクラスのインスタンスでウィンドウオブジェクトが作成されているかどうか
+            if hasattr(GlobalStatus.win_instance, "window"):
+                # ウィンドウオブジェクトの保存
+                window = GlobalStatus.win_instance.window
+                # ウィンドウが閉じられていないなら
+                if not window.was_closed():
+                    # スレッドから、キーイベントを送信
+                    window.write_event_value(key="-thread_error_event-", value=message)
 
     @staticmethod  # スタティック(静的)メソッドの定義
     def decorator(func):  # デコレータ関数の宣言。
