@@ -123,10 +123,10 @@ class CharacterRecognition:
         for text_box in result:
             # テキスト範囲の取得
             text_region = {
-                "left": int(text_box[0][0][0]),  # テキスト範囲の左側x座標
-                "top": int(text_box[0][0][1]),  # テキスト範囲の上側y座標
-                "width": int(text_box[0][2][0]) - int(text_box[0][0][0]),  # テキスト範囲の横幅
-                "height": int(text_box[0][2][1]) - int(text_box[0][0][1]),  # テキスト範囲の縦幅
+                "left": min(int(text_box[0][0][0]),int(text_box[0][2][0])),  # テキスト範囲の左側x座標
+                "top": min(int(text_box[0][0][1]),int(text_box[0][2][1])),  # テキスト範囲の上側y座標
+                "width": abs(int(text_box[0][2][0]) - int(text_box[0][0][0])),  # テキスト範囲の横幅
+                "height": abs(int(text_box[0][2][1]) - int(text_box[0][0][1])),  # テキスト範囲の縦幅
             }
             text = text_box[1]  # テキスト内容の取得
             # confidence = text_box[2] # 信頼度の取得
