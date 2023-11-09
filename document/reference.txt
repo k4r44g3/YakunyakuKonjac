@@ -102,6 +102,9 @@ Python関連
     Pythonのデコレータで関数に処理を追加する
     https://helve-blog.com/posts/python/python-decorator/
 
+    pipのReadTimeoutError対策 (certbot-auto)
+    https://www.infocircus.jp/2020/06/30/pip-readtimeouterror-certbot-auto/
+
     並列処理関連
         Window.perform_long_operation Method
         https://pysimplegui.trinket.io/demo-programs#/multi-threaded/window-perform_long_operation-method
