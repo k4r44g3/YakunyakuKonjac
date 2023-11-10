@@ -162,8 +162,8 @@ class SaveSettingWin(BaseWin):
 
             # 確定ボタン押下イベント
             elif event == "-back-":
-                self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
-                self.window_close()  # プログラム終了イベント処理
+                # 翻訳画面に遷移する処理
+                self.transition_to_translation_win()
 
             # 入力値変更イベント
             elif event in ["-max_file_size_mb-", "-max_file_count-", "-max_file_retention_days-"]:

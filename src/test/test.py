@@ -1,33 +1,18 @@
 import time
-def get_bool1():
-    print("bool1")
-    return False
 
-def get_bool2():
-    print("bool2")
-    return True
-
-def get_bool3():
-    print("bool3")
-    return True
-
+count = 0
+interval_sec = 5
 # while True:
-#     time.sleep(5)
-#     if get_bool1():
-#         print("run1")
-#     elif get_bool2():
-#         print("run2")
-#     elif get_bool3():
-#         print("run3")
+#     print(f"count: {count}")
+#     count+=1
+#     time.sleep(interval_sec)
 
 while True:
-    time.sleep(5)
-    if get_bool1():
-        print("run1")
+    print(f"count: {count}")
+    for sleep_interval in range(interval_sec):
+        time.sleep(1)
+        break
+    else:
+        count += 1
         continue
-    if get_bool2():
-        print("run2")
-        continue
-    if get_bool3():
-        print("run3")
-        continue
+    break

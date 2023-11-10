@@ -190,6 +190,7 @@ class TranslationWin(BaseWin):
                     metadata={
                         "is_toggle_on": False,  # トグルボタンがオンかどうか
                         "toggle_button_text": {False: "自動撮影開始", True: "自動撮影停止"},  # トグルボタンテキスト
+                        "toggle_on_count": 0,  # トグルボタンがオンに切り替わった回数
                     },
                 ),
             ],
@@ -504,13 +505,11 @@ class TranslationWin(BaseWin):
         """自動翻訳トグルボタン押下イベント処理"""
         # トグルボタンがオンかどうか取得
         is_toggle_on = self.window["-toggle_auto_translation-"].metadata["is_toggle_on"]
-
         # オンオフ切り替え
         is_toggle_on = not is_toggle_on
 
         # トグルボタンに状態を保存
         self.window["-toggle_auto_translation-"].metadata["is_toggle_on"] = is_toggle_on
-
         # トグルボタンの変更先テキスト取得
         button_text = self.window["-toggle_auto_translation-"].metadata["toggle_button_text"][
             is_toggle_on
@@ -520,6 +519,8 @@ class TranslationWin(BaseWin):
 
         # トグルボタンがオンなら
         if is_toggle_on:
+            # トグルボタンがオンに切り替わった回数の加算
+            self.window["-toggle_auto_translation-"].metadata["toggle_on_count"] += 1
             # 自動翻訳のタイミングを取得するスレッドの開始
             self.translate_timing_thread_start()
 
@@ -529,9 +530,8 @@ class TranslationWin(BaseWin):
         is_toggle_auto_translation = self.window["-toggle_auto_translation-"].metadata[
             "is_toggle_on"
         ]
+        # 自動翻訳がオンなら
         if is_toggle_auto_translation:
-            # 自動翻訳がオンなら
-
             # 自動翻訳のタイミングを取得するスレッド作成
             self.translate_timing_thread = threading.Thread(
                 # スレッド名

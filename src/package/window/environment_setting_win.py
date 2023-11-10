@@ -134,8 +134,8 @@ class EnvironmentSettingWin(BaseWin):
 
             # 確定ボタン押下イベント
             elif event == "-back-":
-                self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
-                self.window_close()  # プログラム終了イベント処理
+                # 翻訳画面に遷移する処理
+                self.transition_to_translation_win()
 
             # OCRソフトラジオボタン押下イベント
             elif event in ["-" + ocr_soft + "-" for ocr_soft in self.ocr_soft_list]:

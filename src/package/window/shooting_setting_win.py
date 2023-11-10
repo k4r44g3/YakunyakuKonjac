@@ -159,14 +159,13 @@ class ShootingSettingWin(BaseWin):
 
             # 確定ボタン押下イベント
             elif event == "-confirm-":
-                update_setting = values  # 更新する設定
                 update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
             # 確定ボタン押下イベント
             elif event == "-back-":
-                self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
-                self.window_close()  # プログラム終了イベント処理
+                # 翻訳画面に遷移する処理
+                self.transition_to_translation_win()
 
             # 撮影範囲設定ボタン押下イベント
             elif event == "-set_ss_region-":

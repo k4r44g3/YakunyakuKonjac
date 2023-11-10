@@ -136,8 +136,8 @@ class KeySettingWin(BaseWin):
 
             # 戻るボタン押下イベント
             elif event == "-back-":
-                self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
-                self.window_close()  # プログラム終了イベント処理
+                # 翻訳画面に遷移する処理
+                self.transition_to_translation_win()
 
             # キー設定処理
             # キー入力待ち状態でないなら
@@ -157,7 +157,6 @@ class KeySettingWin(BaseWin):
             elif self.window.metadata["is_key_input_waiting_state"]:
                 # キー押下イベントなら
                 if event == "-keyboard_event-":
-
                     # キー名とスキャンコードが他と重複していないなら
                     if not self.is_duplicate(values):
                         # キーバインド設定の表示の更新処理
@@ -170,7 +169,6 @@ class KeySettingWin(BaseWin):
 
                 # 変更対象のキー設定ボタン押下イベントが発生した場合
                 elif event in self.window.metadata["is_key_input_waiting_event"]:
-
                     # キーバインド設定の表示の更新処理
                     self.update_key_binding_view(
                         # 設定変更対象のキー名
