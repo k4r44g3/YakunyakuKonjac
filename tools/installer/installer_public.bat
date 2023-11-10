@@ -6,9 +6,6 @@ py -3.8 -m venv venv_YakunyakuKonjac
 cd venv_YakunyakuKonjac
 call Scripts\activate.bat
 
-@REM pipのバージョンアップ
-python Scripts\pip.exe install --upgrade pip
-
 @REM パッケージインストール タイムアウトを100秒に変更
 
 @REM AWS関連

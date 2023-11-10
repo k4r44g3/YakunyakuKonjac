@@ -142,6 +142,11 @@ class BaseWin:
             update_setting (dict): 更新する設定の値の辞書
         """
 
+    def transition_to_translation_win(self):
+        """翻訳画面に遷移する処理"""
+        self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
+        self.window_close()  # プログラム終了イベント処理
+
     def check_valid_number_event(self, window, event, values):
         """数字の入力値が有効かどうかを判定してGUI更新処理を行う処理
 

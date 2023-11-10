@@ -6,7 +6,6 @@ call Scripts\activate.bat
 @REM pipのバージョンアップ
 python Scripts\pip.exe install --upgrade pip
 
-
 @REM パッケージインストール
 @REM グラフィカルユーザーインターフェイス(GUI)を簡単に作成するためのツール
 pip install PySimpleGUI
@@ -25,6 +24,8 @@ copy ..\installer.py .\src
 
 @REM exeファイルの作成
 pyinstaller .\src\installer.py --onefile --noconsole
-@REM pyinstaller .\src\installer.py --onefile
+
+@REM exeファイルのコピー
+
 
 pause

@@ -107,10 +107,10 @@ class InstallThread:
         Args:
             window (sg.Window): Windowオブジェクト
         """
-        #! デバッグ用
+        #! デバッグ用 プライベート用かどうか
         DEBUG = True
-        # プロジェクトが存在するGitのURLとリポジトリ名の取得
 
+        # プロジェクトが存在するGitのURLとリポジトリ名の取得
         # デバッグ用でないなら
         if not DEBUG:
             # 公開用
@@ -146,11 +146,6 @@ class InstallThread:
             # pipのパス
             pip_path = os.path.join(venv_path, "Scripts", "pip.exe")
 
-            # pipのバージョンアップ タイムアウトの時間を100秒に変更
-            Fn.command_run(
-                ["python", pip_path, "--default-timeout=100", "install", "--upgrade", "pip"]
-            )
-
             # インストールするパッケージの一覧
             packages_to_install = [
                 # AWS関連
@@ -167,14 +162,14 @@ class InstallThread:
                 # "black",  # PythonコードをPEP 8スタイルガイドに沿って自動整形するためのフォーマッタ
             ]
 
-            # パッケージのインストール
+            # パッケージのインストール タイムアウトの時間を100秒に変更
             for index, package in enumerate(packages_to_install):
                 # インストール状況のメッセージの更新処理
                 Main.install_progress_message_update(
                     window, message=f"パッケージインストール中: {index + 1}/{len(packages_to_install)}"
                 )
                 # パッケージのインストール
-                Fn.command_run([pip_path, "install", package])
+                Fn.command_run([pip_path,"--default-timeout=100", "install", package])
 
             # パッケージ一覧を出力ファイルに保存
             Fn.command_run([pip_path, "freeze"], file_path="requirements.txt")

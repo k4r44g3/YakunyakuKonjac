@@ -40,5 +40,3 @@ class TranslateThread:
                 if os.path.exists(file_path):
                     # ファイルを削除
                     os.remove(file_path)
-                else:
-                    print(f"{file_path} は存在しません。")

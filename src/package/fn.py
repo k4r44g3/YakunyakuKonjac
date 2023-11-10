@@ -309,7 +309,6 @@ class Fn:
                     # ファイル保存期間がオーバーしているかどうか
                     "is_file_time_over": file_date < oldest_date,
                 }
-                # print(total_size_kb, list(file_limit_info_dict.values()))
 
                 if True not in file_limit_info_dict.values():
                     # 指定された制限を超えているかどうかを保存
