@@ -84,6 +84,7 @@ class Translation:
 
         return file_name  # 保存ファイル名(撮影日時)
 
+
 # ! デバッグ用
 if __name__ == "__main__":
     image_path = Translation.save_history()

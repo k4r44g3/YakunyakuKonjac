@@ -32,6 +32,10 @@ class CharacterRecognition:
         elif ocr_soft == "EasyOCR":
             # EasyOCRを使用して画像からテキスト情報を取得
             text_data_list = CharacterRecognition.easy_ocr(user_setting, ss_file_path)
+
+        # テキスト内容が空である要素の削除
+        CharacterRecognition.remove_empty_text_data(text_data_list)
+
         return text_data_list  # テキスト情報のリスト
 
     def amazon_textract_ocr(ss_file_path):
@@ -123,8 +127,8 @@ class CharacterRecognition:
         for text_box in result:
             # テキスト範囲の取得
             text_region = {
-                "left": min(int(text_box[0][0][0]),int(text_box[0][2][0])),  # テキスト範囲の左側x座標
-                "top": min(int(text_box[0][0][1]),int(text_box[0][2][1])),  # テキスト範囲の上側y座標
+                "left": min(int(text_box[0][0][0]), int(text_box[0][2][0])),  # テキスト範囲の左側x座標
+                "top": min(int(text_box[0][0][1]), int(text_box[0][2][1])),  # テキスト範囲の上側y座標
                 "width": abs(int(text_box[0][2][0]) - int(text_box[0][0][0])),  # テキスト範囲の横幅
                 "height": abs(int(text_box[0][2][1]) - int(text_box[0][0][1])),  # テキスト範囲の縦幅
             }
@@ -143,3 +147,23 @@ class CharacterRecognition:
         }
 
         return text_data_list  # テキスト情報のリスト
+
+    def remove_empty_text_data(text_data_list):
+        """テキスト内容が空である要素の削除
+
+        Args:
+            text_data_dict(List[text_list,text_region_list]): テキスト情報リスト
+                - text_list(List[text(str)]) : テキスト内容のリスト
+                - text_region_list(List[region]): テキスト範囲のリスト
+                    - text_region(dict{Left:int, Top:int, Width:int, Height:int}): テキスト範囲
+        """
+        # テキスト内容が空である要素番号のリストの取得
+        zero_text_count_index_list = [
+            index for index, text in enumerate(text_data_list["text_list"]) if len(text) == 0
+        ]
+
+        # テキスト内容が空である要素番号で走査（削除後の要素番号のずれを防ぐために逆順にソート）
+        for delete_index in zero_text_count_index_list[::-1]:
+            # テキスト内容が空である要素を削除
+            del text_data_list["text_list"][delete_index]  # テキスト内容の削除
+            del text_data_list["text_region_list"][delete_index]  # テキスト範囲の削除

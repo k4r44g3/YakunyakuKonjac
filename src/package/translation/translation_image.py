@@ -50,17 +50,8 @@ class TranslationImage:
             font_path, text_after_list, text_region_list
         )
 
-        # フォントサイズが0である要素番号のリストの取得
-        zero_font_size_index_list = [
-            index for index, font_size in enumerate(font_size_list) if font_size == 0
-        ]
-
-        # フォントサイズが0である要素番号で走査（削除後の要素番号のずれを防ぐために逆順にソート）
-        for delete_index in zero_font_size_index_list[::-1]:
-            # フォントサイズが0の要素を削除
-            del text_after_list[delete_index]
-            del text_region_list[delete_index]
-            del font_size_list[delete_index]
+        # フォントサイズが0である要素の削除
+        TranslationImage.remove_empty_text_data(font_size_list, text_after_list, text_region_list)
 
         # 画像内のテキストボックスを塗りつぶす処理
         TranslationImage.fill_text_box_image(draw, text_region_list)
@@ -152,6 +143,28 @@ class TranslationImage:
                         break
 
         return font_size_list  # テキストボックスに収まる最大のフォントサイズのリスト
+
+    def remove_empty_text_data(font_size_list, text_after_list, text_region_list):
+        """フォントサイズが0である要素の削除
+
+        Args:
+            font_size_list (list[font_size]): 最大のフォントサイズのリスト
+                - font_size(int): 最大のフォントサイズ(偶数)
+            text_after_list(List[text_after(str)]) : 翻訳後テキスト内容のリスト
+            text_region_list(List[text_region]): テキスト範囲のリスト
+                - text_region(dict{Left:int, Top:int, Width:int, Height:int}): テキスト範囲
+        """
+        # フォントサイズが0である要素番号のリストの取得
+        zero_font_size_index_list = [
+            index for index, font_size in enumerate(font_size_list) if font_size == 0
+        ]
+
+        # フォントサイズが0である要素番号で走査（削除後の要素番号のずれを防ぐために逆順にソート）
+        for delete_index in zero_font_size_index_list[::-1]:
+            # フォントサイズが0の要素を削除
+            del font_size_list[delete_index]
+            del text_after_list[delete_index]
+            del text_region_list[delete_index]
 
     def fill_text_box_image(draw, text_region_list):
         """画像内のテキストボックスを塗りつぶす処理
