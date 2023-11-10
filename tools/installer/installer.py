@@ -108,11 +108,11 @@ class InstallThread:
             window (sg.Window): Windowオブジェクト
         """
         #! デバッグ用 プライベート用かどうか
-        DEBUG = True
+        IS_PRIVATE = True
 
         # プロジェクトが存在するGitのURLとリポジトリ名の取得
         # デバッグ用でないなら
-        if not DEBUG:
+        if not IS_PRIVATE:
             # 公開用
             GIT_URL = "https://github.com/pppp-987/Yakunyakukonjac_Public.git"
             GIT_REPOSITORY_NAME = "Yakunyakukonjac_Public"
@@ -169,7 +169,7 @@ class InstallThread:
                     window, message=f"パッケージインストール中: {index + 1}/{len(packages_to_install)}"
                 )
                 # パッケージのインストール
-                Fn.command_run([pip_path,"--default-timeout=100", "install", package])
+                Fn.command_run([pip_path, "--default-timeout=100", "install", package])
 
             # パッケージ一覧を出力ファイルに保存
             Fn.command_run([pip_path, "freeze"], file_path="requirements.txt")
@@ -190,8 +190,8 @@ class InstallThread:
                 # gitからプルする
                 Fn.command_run(["git", "pull", "origin"])
 
-            #! デバッグ用なら
-            if DEBUG:
+            #! デバッグ用(プライベート)なら
+            if IS_PRIVATE:
                 # カレントディレクトリをプロジェクトディレクトリに変更
                 os.chdir(os.path.join(venv_path, GIT_REPOSITORY_NAME))
 
