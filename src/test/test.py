@@ -1,18 +1,23 @@
+import multiprocessing
 import time
 
-count = 0
-interval_sec = 5
-# while True:
-#     print(f"count: {count}")
-#     count+=1
-#     time.sleep(interval_sec)
 
-while True:
-    print(f"count: {count}")
-    for sleep_interval in range(interval_sec):
-        time.sleep(1)
-        break
-    else:
-        count += 1
-        continue
-    break
+def mytest():
+    print("Start")
+    for i in range(1, 10):
+        # time.sleep(1)
+        print("{} seconds have passed".format(i))
+
+
+if __name__ == "__main__":
+    # 関数をプロセスとして実行
+    p = multiprocessing.Process(target=mytest)
+    p.start()
+
+    # 5秒後にタイムアウト
+    p.join(5)
+
+    if p.is_alive():
+        print("mytest is not finished within 5 seconds")
+        p.terminate()  # プロセスを強制終了
+        p.join()

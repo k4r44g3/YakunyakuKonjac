@@ -206,26 +206,36 @@ class ShootingSettingWin(BaseWin):
         # スレッド開始
         thread.start()
 
-        # 1秒ごとにスレッドでエラーが発生したかどうかをチェックする
+        # メインスレッドが実行中かどうか
+        GlobalStatus.is_main_thread_running = False
+
+        # 0.5秒ごとにスレッドでエラーが発生したかどうかをチェックする
         # スレッドが存在するかつ、サブスレッドでエラーが発生していないなら
         while thread.is_alive() and not GlobalStatus.is_sub_thread_error:
             # スレッドが終了するまで停止(最大0.5秒)
             thread.join(timeout=0.5)
 
+        # サブスレッドでエラーが発生しなかったら
+        if not GlobalStatus.is_sub_thread_error:
+            # メインスレッドが実行中かどうか
+            GlobalStatus.is_main_thread_running = True
+
+            # 撮影範囲がドラッグ選択されたなら
+            if GetDragAreaThread.region is not None:
+                # 撮影範囲の座標情報の更新
+                for region_key in ["left", "top", "right", "bottom"]:
+                    self.ss_region_info_dict[region_key]["value"] = GetDragAreaThread.region[
+                        region_key
+                    ]
+
+                # 撮影範囲表示テキストの取得
+                ss_region_text = self.get_ss_region_text()
+                # 撮影範囲表示テキストの更新
+                self.window["-ss_region_text-"].update(value=ss_region_text)
+
         # サブスレッドでエラーが発生したら
-        if GlobalStatus.is_sub_thread_error:
+        else:
             return "error"
-
-        # 撮影範囲がドラッグ選択されたなら
-        elif GetDragAreaThread.region is not None:
-            # 撮影範囲の座標情報の更新
-            for region_key in ["left", "top", "right", "bottom"]:
-                self.ss_region_info_dict[region_key]["value"] = GetDragAreaThread.region[region_key]
-
-            # 撮影範囲表示テキストの取得
-            ss_region_text = self.get_ss_region_text()
-            # 撮影範囲表示テキストの更新
-            self.window["-ss_region_text-"].update(value=ss_region_text)
 
     def get_update_setting(self, values):
         """更新する設定の取得
