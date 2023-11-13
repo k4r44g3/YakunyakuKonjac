@@ -147,6 +147,8 @@ class KeySettingWin(BaseWin):
                     # 更新する設定の取得
                     update_setting = self.get_update_setting(self.key_binding_info_list)
                     self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
+                    # 翻訳画面に遷移する処理
+                    self.transition_to_translation_win()
 
                 # キー設定ボタン押下イベント
                 elif event in self.key_binding_event_list:

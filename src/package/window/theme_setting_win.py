@@ -128,6 +128,8 @@ class ThemeSettingWin(BaseWin):
             elif event == "-confirm-":
                 update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
+                # 翻訳画面に遷移する処理
+                self.transition_to_translation_win()
 
             # 確定ボタン押下イベント
             elif event == "-back-":
