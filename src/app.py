@@ -29,6 +29,7 @@ class App:
 
         from package.window.translation_win import TranslationWin  # 翻訳画面ウィンドウクラス
         from package.window.display_setting_win import DisplaySettingWin  # 表示設定画面ウィンドウクラス
+
         # 環境設定画面ウィンドウクラス
         from package.window.environment_setting_win import EnvironmentSettingWin
         from package.window.key_setting_win import KeySettingWin  # キー設定画面ウィンドウクラス
@@ -75,4 +76,4 @@ class App:
 if __name__ == "__main__":
     app_instance = App()  # メイン処理
     # print(app_instance)
-    from package.global_status import GlobalStatus # グローバル変数保存用のクラス
+    from package.global_status import GlobalStatus  # グローバル変数保存用のクラス

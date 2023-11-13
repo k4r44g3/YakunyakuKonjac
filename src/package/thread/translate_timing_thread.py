@@ -1,6 +1,8 @@
 from package.fn import Fn  # 自作関数クラス
 from package.error_log import ErrorLog  # エラーログに関するクラス
 
+from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
+
 
 class TranslateTimingThread:
     """自動翻訳のタイミングを取得するスレッドクラス"""
@@ -13,8 +15,10 @@ class TranslateTimingThread:
         Args:
             user_setting(UserSetting): ユーザーが変更可能の設定
             window(sg.Window): Windowオブジェクト
-                - デコレータで使用するためキーワード引数で渡す
         """
+
+        # ウィンドウオブジェクトの保存
+        window = GlobalStatus.win_instance.window
 
         # トグルボタンがオンに切り替わった回数の取得
         toggle_on_count = window["-toggle_auto_translation-"].metadata["toggle_on_count"]

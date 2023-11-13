@@ -33,7 +33,6 @@ class ShootingSettingWin(BaseWin):
         # 継承元のコンストラクタを呼び出す
         super().__init__()
         # todo 初期設定
-        self.window_title = "表示設定画面"  # ウィンドウタイトル
         # 撮影範囲の座標情報の辞書
         self.ss_region_info_dict = {
             "left": {
@@ -202,7 +201,7 @@ class ShootingSettingWin(BaseWin):
             # スレッド名
             name="撮影範囲設定スレッド",
             # スレッドで実行するメソッド
-            target=lambda: GetDragAreaThread.run(window=self.window),
+            target=lambda: GetDragAreaThread.run(),
             daemon=True,  # メインスレッド終了時に終了する
         )
         # スレッド開始

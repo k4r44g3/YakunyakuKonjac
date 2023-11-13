@@ -1,26 +1,34 @@
-import keyboard
+import time
 import threading
+from wrapt_timeout_decorator import *
 
-class KeyboardListener:
-    def __init__(self, timeout=10):
-        self.timeout = timeout
-        self.timer = None
-        self.listener = keyboard.Listener(on_press=self.on_press)
-        self.listener.start()
+from test3 import Test3
 
-    def on_press(self, event):
-        # キーボードイベントが発生したときの処理
-        print(f"Key pressed: {event.name}")
-        # タイマーをリセット
-        if self.timer is not None:
-            self.timer.cancel()
-        self.timer = threading.Timer(self.timeout, self.stop_listener)
-        self.timer.start()
+class Test:
+    @staticmethod
+    @timeout(dec_timeout=100)
+    def main():
+        for i in range(1, 10):
+            time.sleep(100)
+            print("{} seconds have passed".format(i))
 
-    def stop_listener(self):
-        # リスナーを停止する処理
-        print("No keyboard event occurred. Stopping listener.")
-        self.listener.stop()
+    @staticmethod
+    def run():
+        try:
+            Test3.main()
+            print("完了")
+        except TimeoutError as e:
+            print("エラー", e)
 
-# リスナーを起動し、10秒間キーボードイベントがなければ停止する
-keyboard_listener = KeyboardListener(timeout=10)
+
+if __name__ == "__main__":
+    try:
+        thread = threading.Thread(
+            name="スレッド作成スレッド",
+            target=Test.run,
+            daemon=True,
+        )
+        thread.start()
+        print("正常")
+    except TimeoutError as e:
+        print("エラー")

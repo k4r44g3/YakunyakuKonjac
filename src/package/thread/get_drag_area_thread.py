@@ -105,12 +105,8 @@ class GetDragAreaThread:
     @staticmethod  # スタティックメソッドの定義
     # @ErrorLog.parameter_decorator(None)  # エラーログを取得するデコレータ
     @ErrorLog.decorator  # エラーログを取得するデコレータ
-    def run(window):
+    def run():
         """ドラッグした領域の座標を取得する
-
-        Args:
-            window(sg.Window): Windowオブジェクト
-                - デコレータで使用するためキーワード引数で渡す
 
         Returns:
             GetDragAreaThread.region(dict{left, top, width, height})

@@ -24,6 +24,10 @@ class WatchForKeyEventThread:
                 - key_name(str) : キー名
                 - scan_code(int) : スキャンコード
         """
+
+        # ウィンドウオブジェクトの保存
+        window = GlobalStatus.win_instance.window
+
         # 各キーの長押し状態を格納する辞書を初期化
         pressed_keys = {}
 
@@ -69,7 +73,6 @@ class WatchForKeyEventThread:
                                     # 押されているキーの数が1つだけなら
                                     and len(pressed_keys) == 1
                                 ):
-
                                     # スレッドから、キーイベントを送信
                                     window.write_event_value(
                                         key="-keyboard_event-",

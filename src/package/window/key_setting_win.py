@@ -225,7 +225,6 @@ class KeySettingWin(BaseWin):
             name="入力キー名取得スレッド",
             # スレッドで実行するメソッド
             target=lambda: GetKeyEventThread.run(
-                window=self.window,  # Windowオブジェクト
                 setting_target_key=setting_target_key,  # 設定変更対象のキー名
             ),
             daemon=True,  # メインスレッド終了時に終了する

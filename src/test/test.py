@@ -5,7 +5,7 @@ import time
 def mytest():
     print("Start")
     for i in range(1, 10):
-        # time.sleep(1)
+        time.sleep(100)
         print("{} seconds have passed".format(i))
 
 

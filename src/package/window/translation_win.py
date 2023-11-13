@@ -662,7 +662,7 @@ class TranslationWin(BaseWin):
             # スレッド名
             name="撮影範囲設定スレッド",
             # スレッドで実行するメソッド
-            target=lambda: GetDragAreaThread.run(window=self.window),
+            target=lambda: GetDragAreaThread.run(),
             daemon=True,  # メインスレッド終了時に終了する
         )
         # スレッド開始
