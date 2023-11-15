@@ -1,148 +1,127 @@
-import logging
 import PySimpleGUI as sg
-import sys
-import traceback
-import inspect
 import os
-import platform
-import threading  # スレッド関連
+from PIL import Image, ImageTk
+import time
+import threading
 
 
-class Thread1:
-    def thread_run():
-        print("a")
-        a = 1 / 0
-class Win:
+def get_fit_zoom_scale(image, max_width, max_height):
+    """画像を与えられた範囲に収まるようにするための拡大率を取得
+
+    Args:
+        image (Image): 拡大率を計算する元の画像オブジェクト
+        max_width (int): 画像の最大幅
+        max_height (int): 画像の最大高さ
+
+    Returns:
+        int: 画像を与えられた範囲に収まるようにするための拡大率
+    """
+    # リサイズ前画像サイズ
+    image_width = image.size[0]
+    image_height = image.size[1]
+    # 拡大率の取得
+    width_zoom_scale = max_width / image_width  # 表示サイズを超えない横幅の拡大率
+    height_zoom_scale = max_height / image_height  # 表示サイズを超えない縦幅の拡大率
+    magnification_rate = min(width_zoom_scale, height_zoom_scale)  # 小さいほうの拡大率を適用
+
+    # 拡大率
+    return magnification_rate
 
 
-    def main():
-        layout = [[sg.Button("エラー1", key="-button1-")], [sg.Button("エラー2", key="-button2-")]]
+def resize_and_refresh_gui(image, fit_zoom_scale, user_zoom_scale):
+    """画像のサイズを変更してウィンドウを更新する処理
 
-        window = sg.Window("テスト", layout)
-
-        while True:
-            event, values = window.read()
-
-            if event == sg.WINDOW_CLOSED:
-                break
-            elif event == "-button1-":
-                # スレッド作成
-                thread = threading.Thread(
-                    # スレッド名
-                    name="自動翻訳タイミング取得スレッド",
-                    # スレッドで実行するメソッド
-                    target=lambda: Thread1.thread_run(),
-                    daemon=True,  # メインスレッド終了時に終了する
-                )
-                # スレッド開始
-                thread.start()
-                # スレッド終了
-                thread.join()
-
-            elif event == "-button2-":
-                l = [1, 2]
-                a = l[3]
-
-        window.close()
+    Args:
+        image (Image): 拡大率を計算する元の画像オブジェクト
+        fit_zoom_scale (int): 画像を与えられた範囲に収まるようにするための拡大率
+        user_zoom_scale (int): 利用者が変更できる拡大率
+    """
+    # 拡大率の計算
+    zoom_scale = fit_zoom_scale * user_zoom_scale
+    # 新しいサイズを計算
+    new_size = (int(image.size[0] * zoom_scale), int(image.size[1] * zoom_scale))
+    # 画像をリサイズ
+    resized_img = image.resize(new_size, Image.LANCZOS)
+    # GUIの画像要素を更新
+    window["-IMAGE-"].update(data=ImageTk.PhotoImage(resized_img))
+    # Columnのスクロール可能領域の更新
+    window["-COLUMN-"].Widget.canvas.config(scrollregion=(0, 0, new_size[0], new_size[1]))
+    window.refresh()  # ウィンドウを強制的に更新
 
 
-class Log:
-    def get_logger():
-        # 基本的な情報のみを出力するロガーの設定
+# def sleep_thread(second):
 
-        # ロギングモジュールから 'simple' という名前のロガーインスタンスを取得
-        simple_logger = logging.getLogger("simple")
+# 表示サイズ
+START_COLUMN_WIDTH = 400
+START_COLUMN_HEIGHT = 225
 
-        # ロガーのログレベルを DEBUG に設定
-        simple_logger.setLevel(logging.DEBUG)
+# 画像ファイルのパス
+image_path = os.path.join(os.path.dirname(__file__), "image_before.png")
 
-        # 基本情報用のロガーの出力フォーマットを設定
-        simple_formatter = logging.Formatter(
-            "%(asctime)s [%(levelname)s] - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
+# 画像を開く
+image = Image.open(image_path)
+
+# 画像を与えられた範囲に収まるようにするための拡大率
+fit_zoom_scale = get_fit_zoom_scale(image, START_COLUMN_WIDTH, START_COLUMN_HEIGHT)
+
+# 利用者が変更できる拡大率
+user_zoom_scale = 1
+
+# スクロール可能なカラムレイアウトを作成
+column = [
+    [
+        sg.Image(
+            key="-IMAGE-",
+            enable_events=True,
         )
+    ]
+]
 
-        # 'error.log' という名前のファイルに基本的なログ情報を出力するためのファイルハンドラを作成
-        simple_file_handler = logging.FileHandler("error.log", encoding="utf-8")
-
-        # 基本情報用のファイルハンドラにフォーマッタをセット
-        simple_file_handler.setFormatter(simple_formatter)
-
-        # 'simple' ロガーにファイルハンドラを追加
-        # このロガーがキャッチしたログは 'error.log' に書き込まれる
-        simple_logger.addHandler(simple_file_handler)
-
-        # 詳細な情報を出力するロガーの設定
-
-        # ロギングモジュールから 'detailed' という名前のロガーインスタンスを取得
-        detailed_logger = logging.getLogger("detailed")
-
-        # ロガーのログレベルを DEBUG に設定
-        # これにより、DEBUG レベル以上のすべてのログメッセージがこのロガーによってキャッチされる
-        detailed_logger.setLevel(logging.DEBUG)
-
-        # ログメッセージの出力フォーマットを設定するためのフォーマッタを作成
-        # ログのタイムスタンプ、ログレベル、そしてメッセージ自体を含む形式としている
-        detailed_formatter = logging.Formatter(
-            "%(asctime)s [%(levelname)s] - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
+# メインレイアウト
+layout = [
+    [
+        sg.Column(
+            layout=column,
+            key="-COLUMN-",
+            size=(START_COLUMN_WIDTH, START_COLUMN_HEIGHT),
+            scrollable=True,  # スクロールバーの有効化
+            expand_x=True,  # 横方向に自動的に拡大
+            expand_y=True,  # 縦方向に自動的に拡大
+            size_subsample_width=1,  # スクロール可能な横の幅
+            size_subsample_height=1,  # スクロール可能な縦の幅
         )
+    ],
+    [sg.Button("サイズ変更", key="-size-", size=(10, 2)), sg.Button("表示", key="-print-", size=(10, 2))],
+]
 
-        # 'error_detailed.log' という名前のファイルにログを出力するためのファイルハンドラを作成
-        # このハンドラは utf-8 でエンコードされる
-        detailed_file_handler = logging.FileHandler("error_detailed.log", encoding="utf-8")
+# ウィンドウの作成
+window = sg.Window("スクロール可能な画像", layout, resizable=True, finalize=True)
+window.bind("<Configure>", "Configure")
 
-        # 作成したファイルハンドラに上で定義したフォーマッタをセット
-        detailed_file_handler.setFormatter(detailed_formatter)
+# 画像のサイズを変更してウィンドウを更新する処理
+resize_and_refresh_gui(image, fit_zoom_scale, user_zoom_scale)
 
-        # 'detailed' ロガーにファイルハンドラを追加
-        # これにより、このロガーがキャッチしたログは 'error_detailed.log' に書き込まれる
-        detailed_logger.addHandler(detailed_file_handler)
+while True:
+    event, values = window.read()
 
-        return simple_logger, detailed_logger
+    print(event, values)
+    if event == sg.WIN_CLOSED:
+        break
 
-    def output_log(simple_logger, detailed_logger):
-        # 基本的な情報のみを出力
-        simple_logger.exception("エラー発生")
+    # 画像のリサイズと更新
+    if event == "-size-":
+        print(user_zoom_scale)
+        if user_zoom_scale == 1:
+            user_zoom_scale = 2
+        elif user_zoom_scale == 2:
+            user_zoom_scale = 4
+        elif user_zoom_scale == 4:
+            user_zoom_scale = 1
 
-        # 詳細な情報を出力
-        detailed_logger.exception("エラー発生")
+        # 画像のサイズを変更してウィンドウを更新する処理
+        resize_and_refresh_gui(image, fit_zoom_scale, user_zoom_scale)
 
-        # 環境情報をログに出力
-        detailed_logger.error("Python version: %s", sys.version)
-        detailed_logger.error("OS: %s", os.name)
-        detailed_logger.error("Platform: %s", platform.platform())
+    if event == "-print-":
+        print(window["-IMAGE-"].get_size(), window["-COLUMN-"].get_size())
 
-        # 例外オブジェクトの属性や関連情報をログに出力
-        exc_type, exc_value, exc_traceback = sys.exc_info()
-        detailed_logger.error("Exception Type: %s", exc_type)
-        detailed_logger.error("Exception Value: %s", exc_value)
-
-        # トレースバックの詳細情報を文字列として取得
-        tb_string = traceback.format_exception(exc_type, exc_value, exc_traceback)
-        tb_string = "".join(tb_string)
-        detailed_logger.error("Traceback details:\n%s", tb_string)
-
-        # inspectモジュールを使って現在のフレーム情報を取得
-        current_frame = inspect.currentframe()
-
-        # 一つ前のフレーム（例外が発生した位置）の情報を取得
-        previous_frame = current_frame.f_back
-
-        if previous_frame:
-            # 前のフレームの局所変数を取得
-            local_vars = previous_frame.f_locals
-            for var_name, var_value in local_vars.items():
-                detailed_logger.error("Variable [%s]: %s", var_name, var_value)
-
-
-class Main:
-    def main():
-        simple_logger, detailed_logger = Log.get_logger()
-        try:
-            # 処理内容、エラー内容不明
-            Win.main()
-        except Exception as e:
-            Log.output_log(simple_logger, detailed_logger)
-
-
-if __name__ == "__main__":
-    Main.main()
+window.close()

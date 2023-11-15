@@ -63,6 +63,9 @@ GUI関連
         Pythonのcanvasに表示した四角形を変形する
         https://water2litter.net/rum/post/python_tkinter_canvas_rectangle_modification/
 
+        Tkinterの使い方：スクロールバー（Scrollbar）の使い方
+        https://daeudaeu.com/scrollbar/
+
 
 
 Python関連

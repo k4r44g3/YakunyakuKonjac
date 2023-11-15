@@ -1,34 +1,29 @@
-import time
-import threading
-from wrapt_timeout_decorator import *
+import PySimpleGUI as sg
 
-from test3 import Test3
+# ウィンドウの内容を定義
+layout = [
+    [sg.Text("スクロールバーの位置を取得")],
+    [sg.Column([[sg.Text(f"行 {i}") for i in range(100)]], scrollable=True, key="-COLUMN-")],
+    [sg.Button("位置取得"), sg.Button("終了")],
+]
 
-class Test:
-    @staticmethod
-    @timeout(dec_timeout=100)
-    def main():
-        for i in range(1, 10):
-            time.sleep(100)
-            print("{} seconds have passed".format(i))
+# ウィンドウを作成
+window = sg.Window("ウィンドウタイトル", layout)
 
-    @staticmethod
-    def run():
+# イベントループ
+while True:
+    event, values = window.read()
+    if event == sg.WIN_CLOSED or event == "終了":
+        break
+    if event == "位置取得":
+        column_element = window["-COLUMN-"]
+        # Canvasウィジェットにアクセスしてyviewメソッドを呼び出す
         try:
-            Test3.main()
-            print("完了")
-        except TimeoutError as e:
-            print("エラー", e)
+            #
+            scrollbar_pos = column_element.Widget.canvas.xview()
+            print("スクロールバーの位置:", scrollbar_pos)
+        except AttributeError as e:
+            print("スクロールバーの位置を取得できませんでした。", e)
 
-
-if __name__ == "__main__":
-    try:
-        thread = threading.Thread(
-            name="スレッド作成スレッド",
-            target=Test.run,
-            daemon=True,
-        )
-        thread.start()
-        print("正常")
-    except TimeoutError as e:
-        print("エラー")
+# ウィンドウを閉じる
+window.close()
