@@ -13,7 +13,7 @@ class SystemSetting:
     package_path = os.path.dirname(__file__)  # パッケージディレクトリパス
 
     # ソースコードを格納するディレクトリ
-    src_path = os.path.join(package_path, "..")
+    src_path = os.path.normpath(os.path.join(package_path, "..")) # 上位レベル参照の正規化
 
     # 設定ファイル保存先設定
     setting_directory_path = os.path.join(src_path, "config")  # ディレクトリパス
@@ -31,7 +31,7 @@ class SystemSetting:
 
 
     # プロジェクトのルートディレクトリ
-    project_path = os.path.join(src_path, "..")
+    project_path = os.path.normpath(os.path.join(src_path, "..")) # 上位レベル参照の正規化
 
     # エラーログのディレクトリパス
     error_log_directory_path = os.path.join(project_path, "log")  # ディレクトリパス
@@ -62,7 +62,7 @@ class SystemSetting:
 
 
     # 仮想環境のルートディレクトリ
-    venv_path = os.path.join(project_path, "..")
+    venv_path = os.path.normpath(os.path.join(project_path, "..")) # 上位レベル参照の正規化
 
     # AWSの認証情報や設定ファイルのディレクトリパス
     aws_setting_directory_path = os.path.join(venv_path, ".aws")

@@ -25,7 +25,7 @@ class Translation:
         Returns:
             file_name(str): 保存ファイル名(撮影日時)
         """
-        # Fn.time_log("翻訳開始")
+        Fn.time_log("翻訳開始")
 
         user_setting = UserSetting()  # ユーザ設定のインスタンス化
 
@@ -87,4 +87,8 @@ class Translation:
 
 # ! デバッグ用
 if __name__ == "__main__":
+    # AWSの設定ファイルのパスの設定
+    os.environ["AWS_CONFIG_FILE"] = SystemSetting.aws_config_file_path
+    # AWSの認証情報ファイルのパスの設定
+    os.environ["AWS_SHARED_CREDENTIALS_FILE"] = SystemSetting.aws_credentials_file_path
     image_path = Translation.save_history()

@@ -6,22 +6,25 @@ error_log = None
 # エラーログのインポート
 try:
     from package.error_log import ErrorLog  # エラーログに関するクラス
+
     # エラーログ作成
     error_log = ErrorLog.create_error_log()
 # インポートに失敗したなら
 except Exception as e:
     message = [
         "申し訳ありません、エラーが発生しました。",
-        f"エラーメッセージ: {str(e)}",
         "エラーログファイルの作成に失敗しました。",
         "管理者に問題を報告していただけると幸いです。",
+        "エラーメッセージ:",
+        f"  {e}",
     ]
     print("\n".join(message))
-    exit() # 処理を終了する
+    exit()  # 処理を終了する
 
 
 # その他の自作クラスのインポート
 try:
+    import PySimpleGUI as sg  # GUI
 
     from package.fn import Fn  # 自作関数クラス
 
@@ -44,11 +47,29 @@ except Exception as e:
     # エラーログの出力処理
     ErrorLog.output_error_log(error_log, e)
 
+
 class App:
     """アプリケーションのメインクラス"""
 
     def __init__(self):
         """コンストラクタ"""
+
+        # AWSの設定ファイルのパスの設定
+        os.environ["AWS_CONFIG_FILE"] = SystemSetting.aws_config_file_path
+        # AWSの認証情報ファイルのパスの設定
+        os.environ["AWS_SHARED_CREDENTIALS_FILE"] = SystemSetting.aws_credentials_file_path
+
+        # ユーザ設定のインスタンス化
+        user_setting = UserSetting()
+
+        # AWSサービスにアクセス可能かどうか保存されていないなら
+        if user_setting.get_setting("can_access_aws_service") is None:
+            # AWSサービスにアクセス可能か確認する処理
+            user_setting.check_access_aws_service()
+
+        # 翻訳前、後画像の両方が存在しない履歴ファイルを削除
+        Fn.delete_unique_history_file()
+
         # メイン処理
         self.run()
 
@@ -72,28 +93,6 @@ class App:
 
         Fn.time_log("システム開始")
 
-        # AWSの設定ファイルのパスの設定
-        os.environ["AWS_CONFIG_FILE"] = SystemSetting.aws_config_file_path
-        # AWSの認証情報ファイルのパスの設定
-        os.environ["AWS_SHARED_CREDENTIALS_FILE"] = SystemSetting.aws_credentials_file_path
-
-        # ユーザ設定のインスタンス化
-        user_setting = UserSetting()
-
-        # # AWSサービスにアクセス可能か確認する処理
-        # aws_service_exception = user_setting.check_access_aws_service()
-
-        # # AWSサービスにアクセス時に発生した例外オブジェクトが存在するなら
-        # if aws_service_exception is not None:
-        #     print("AWSアクセスエラー")
-        #     print(aws_service_exception)
-        #     return
-        # else:
-        #     print("正常")
-
-        # 翻訳前、後画像の両方が存在しない履歴ファイルを削除
-        Fn.delete_unique_history_file()
-
         # メインウィンドウの処理
         transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
         win_class = WIN_CLASS_DICT[transition_target_win]  # 遷移先ウィンドウクラスの取得
@@ -106,6 +105,7 @@ class App:
             win_instance = win_class()  # ウィンドウ作成、ウィンドウクラスのインスタンスの保持
             transition_target_win = win_instance.get_transition_target_win()  # 遷移先ウィンドウ名取得
         Fn.time_log("システム終了")
+
 
 if __name__ == "__main__":
     app_instance = App()  # メイン処理

@@ -22,5 +22,3 @@ rmdir /s /q src\package\thread\__pycache__
 @REM エラーログファイル削除
 del log\error_detailed.log
 del log\error_simple.log
-
-pause

@@ -2,6 +2,7 @@ import json  # jsonファイルの読み書き
 import os  # ディレクトリ関連
 
 import boto3  # AWSのAIサービス
+import PySimpleGUI as sg  # GUI
 
 from package.fn import Fn  # 自作関数クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
@@ -131,14 +132,18 @@ class UserSetting:
         setting_file_path = SystemSetting.setting_file_path  # 設定ファイルのパス
         self.setting.update(update_setting)  # 現在の設定を更新
 
+        # 設定変更
+        Fn.time_log(f"設定変更:{update_setting}")
+
         with open(setting_file_path, "w") as f:  # ファイルを開く(書き込み)
             json.dump(obj=self.setting, fp=f, indent=2)  # ファイルに読み込む
 
-    def check_access_aws_service(self):
+    def check_access_aws_service(self, is_show_success_message=False):
         """AWSサービスにアクセス可能か確認する処理
 
-        Returns:
-            aws_service_exception(Optional[Exception]): AWSサービスにアクセス時に発生した例外オブジェクト
+        Args:
+            is_show_success_message (bool, optional): アクセス成功時にメッセージを表示するかどうか。
+                - デフォルトはFalse
         """
 
         try:
@@ -173,8 +178,54 @@ class UserSetting:
         can_access_aws_service = aws_service_exception is None
         # 更新する設定
         update_setting = {"can_access_aws_service": can_access_aws_service}
+
+        # AWSのサービスにアクセスできないなら
+        if not can_access_aws_service:
+            # "ocr_soft": "EasyOCR",  # OCRソフト
+            # "translation_soft": "GoogleTranslator",  # 翻訳ソフト
+
+            # 現在のOCRソフトがAWSのサービスなら
+            if self.get_setting("ocr_soft") == "AmazonTextract":
+                # デフォルトのOCRソフトに変更する
+                update_setting["ocr_soft"] = self.default_user_setting["ocr_soft"]
+
+            # 現在の翻訳ソフトがAWSのサービスなら
+            if self.get_setting("translation_soft") == "AmazonTranslate":
+                # デフォルトのOCRソフトに変更する
+                update_setting["translation_soft"] = self.default_user_setting["translation_soft"]
+
         # 設定をjsonファイルに保存
         self.save_setting_file(update_setting)
 
-        # AWSサービスにアクセス時に発生した例外オブジェクト
-        return aws_service_exception
+        # AWSのサービスにアクセスできないなら
+        if not can_access_aws_service:
+            # 表示するメッセージ
+            message = [
+                "申し訳ありません、AWSへのアクセスに失敗しました。",
+                "AWSにアクセスできないため、AWSのサービスは使用できません。",
+                "AWSの設定ファイルに誤りがないか、確認してください。",
+                "AWSの設定は環境設定画面からでも行えます。",
+                "AWSの設定ディレクトリパス:",
+                f"  {SystemSetting.aws_setting_directory_path}",
+                "エラーメッセージ :",
+                f"  {aws_service_exception}",
+            ]
+            # ログに表示させる
+            print("\n".join(message))
+            # エラーポップアップの作成
+            sg.popup("\n".join(message))
+
+        # AWSのサービスのアクセスに成功したなら
+        else:
+            # 表示するメッセージ
+            message = [
+                "AWSへのアクセスに成功しました。",
+                "AWSのサービスは使用可能です。",
+            ]
+            # ログに表示させる
+            print("\n".join(message))
+
+            # AWSのサービスのアクセスに成功した場合、メッセージを表示するなら
+            if is_show_success_message:
+                # ポップアップの作成
+                sg.popup("\n".join(message))
