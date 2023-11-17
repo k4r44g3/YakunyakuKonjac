@@ -1,13 +1,12 @@
-# ! デバッグ用
 import sys  # システム関連
 import os  # ディレクトリ関連
 
-if __name__ == "__main__":
-    src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
-    sys.path.append(src_path)  # モジュール検索パスを追加
-    print(src_path)
-
 import PySimpleGUI as sg  # GUI
+
+#! デバッグ用
+if __name__ == "__main__":
+    src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
+    sys.path.append(src_path)  # モジュール検索パスを追加
 
 from package.fn import Fn  # 自作関数クラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス

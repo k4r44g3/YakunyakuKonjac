@@ -67,7 +67,3 @@ class GetKeyEventThread:
 
             # キーイベントの取得
             key_event = keyboard.read_event()
-
-            # キーイベント後に待機(処理軽減)
-            #! 連打時にバグ発生
-            # Fn.sleep(50)

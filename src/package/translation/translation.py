@@ -1,9 +1,9 @@
-# ! デバッグ用
 import sys  # システム関連
 import os  # ディレクトリ関連
 
+#! デバッグ用
 if __name__ == "__main__":
-    src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
+    src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
 
 from package.fn import Fn  # 自作関数クラス
@@ -45,7 +45,7 @@ class Translation:
 
         # ! デバック用
         # ss_file_path = Debug.ss_file_path  # スクショ画像パス
-        # ss_file_path = Debug.debug_directory_path + "/test.png"  # スクショ画像パス
+        # ss_file_path = os.path.join(Debug.debug_directory_path , "test.png")  # スクショ画像パス
 
         # 文字認識機能
         text_data_dict = CharacterRecognition.get_text_data_dict(

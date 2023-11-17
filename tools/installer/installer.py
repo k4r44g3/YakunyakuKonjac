@@ -340,17 +340,18 @@ class Main:
     @staticmethod  # スタティック(静的)メソッド
     def install_progress_dot_count_update(window):
         """インストール状況を表す進捗インジケーターの点の数を更新する処理"""
-        # 表示メッセージの更新
+
+        # 進捗インジケーターの点の数の取得
+        dot_count = window["-install_progress-"].metadata["progress_indicator_dot_count"]
         # 進捗インジケーターの点の数の更新
-        window["-install_progress-"].metadata["progress_indicator_dot_count"] = (
-            window["-install_progress-"].metadata["progress_indicator_dot_count"] + 1
-        ) % 4
-        # インストール進捗状況の更新
-        window["-install_progress-"].update(
-            value=window["-install_progress-"].metadata["message"]
-            + ""
-            + "." * window["-install_progress-"].metadata["progress_indicator_dot_count"]
-        )
+        now_dot_count = (dot_count + 1) % 4
+        # 進捗インジケーターの点の数の保存
+        window["-install_progress-"].metadata["progress_indicator_dot_count"] = now_dot_count
+
+        # 表示メッセージの取得
+        message = window["-install_progress-"].metadata["message"]
+        # インストール進捗状況の表示メッセージの更新
+        window["-install_progress-"].update(value=f"{message}{'.' * now_dot_count}")
 
 
 if __name__ == "__main__":

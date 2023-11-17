@@ -1,11 +1,12 @@
-# ! デバッグ用
 import sys  # システム関連
 import os  # ディレクトリ関連
 
+import PySimpleGUI as sg  # GUI
+
+#! デバッグ用
 if __name__ == "__main__":
-    src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
+    src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
-    print(src_path)
 
 import PySimpleGUI as sg  # GUI
 
@@ -102,7 +103,7 @@ class LanguageSettingWin(BaseWin):
             layout += [[sg.Text("OCRソフト : AmazonTextract は\n非ラテン文字の言語に\n対応していません。")]]
 
         # レイアウト指定
-        layout += [
+        layout = [
             [
                 # 翻訳前言語選択フレーム
                 sg.Frame(title="翻訳前言語", layout=source_language_layout)
@@ -165,7 +166,6 @@ class LanguageSettingWin(BaseWin):
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
                 # 翻訳画面に遷移する処理
                 self.transition_to_translation_win()
-
 
             # 確定ボタン押下イベント
             elif event == "-back-":

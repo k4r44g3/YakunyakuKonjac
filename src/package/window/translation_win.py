@@ -1,4 +1,3 @@
-# ! デバッグ用
 import sys  # システム関連
 import os  # ディレクトリ関連
 import threading  # スレッド関連
@@ -7,8 +6,9 @@ import bisect  # 二分探索
 from PIL import Image, ImageTk  # 画像処理
 import PySimpleGUI as sg  # GUI
 
+#! デバッグ用
 if __name__ == "__main__":
-    src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
+    src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
 
 
@@ -82,9 +82,13 @@ class TranslationWin(BaseWin):
 
             # 履歴が存在するなら最新の画像パスを取得
             # 翻訳前画像の保存先パス
-            now_image_before_path = SystemSetting.image_before_directory_path + now_image_name
+            now_image_before_path = os.path.join(
+                SystemSetting.image_before_directory_path, now_image_name
+            )
             # 翻訳後画像の保存先パス
-            now_image_after_path = SystemSetting.image_after_directory_path + now_image_name
+            now_image_after_path = os.path.join(
+                SystemSetting.image_after_directory_path, now_image_name
+            )
 
             # ファイル日時の取得
             now_file_time = Fn.convert_time_from_filename(now_image_name)
@@ -445,12 +449,12 @@ class TranslationWin(BaseWin):
         if self.thread_count < self.thread_max:
             # 翻訳スレッド最大数を超えていないなら
             self.thread_count += 1
-            Fn.time_log("スレッド開始 : " + str(self.thread_count))
+            Fn.time_log(f"スレッド開始 : {self.thread_count}")
 
             # 翻訳処理を行うスレッド作成
             self.translate_thread = threading.Thread(
                 # スレッド名
-                name="翻訳スレッド : " + str(self.thread_count),
+                name=f"翻訳スレッド : {str(self.thread_count)}",
                 target=lambda: TranslateThread.run(
                     window=self.window,
                 ),  # スレッドで実行するメソッド
@@ -474,7 +478,7 @@ class TranslationWin(BaseWin):
 
         # スレッド数のカウント
         self.thread_count -= 1
-        Fn.time_log("スレッド終了 : " + str(self.thread_count))
+        Fn.time_log(f"スレッド終了 : {str(self.thread_count)}")
 
         # 余裕が出来たスレッドで翻訳処理を開始する処理
         if self.is_thread_over:
@@ -523,9 +527,9 @@ class TranslationWin(BaseWin):
         # 削除するファイルを取得
         for file_name in delete_file_list:
             # 翻訳前画像フォルダから削除
-            os.remove(SystemSetting.image_before_directory_path + "/" + file_name)
+            os.remove(os.path.join(SystemSetting.image_before_directory_path, file_name))
             # 翻訳後画像フォルダから削除
-            os.remove(SystemSetting.image_after_directory_path + "/" + file_name)
+            os.remove(os.path.join(SystemSetting.image_after_directory_path, file_name))
 
         # 履歴ファイル名のリスト取得
         self.history_file_name_list = Fn.get_history_file_name_list()
@@ -597,9 +601,9 @@ class TranslationWin(BaseWin):
         """
 
         # 翻訳前画像パスの取得
-        image_before_path = SystemSetting.image_before_directory_path + file_name
+        image_before_path = os.path.join(SystemSetting.image_before_directory_path, file_name)
         # 翻訳後画像パスの取得
-        image_after_path = SystemSetting.image_after_directory_path + file_name
+        image_after_path = os.path.join(SystemSetting.image_after_directory_path, file_name)
 
         # 画像オブジェクトの保存
         self.image_obj_list = {

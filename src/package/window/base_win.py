@@ -1,11 +1,5 @@
-# ! デバッグ用
 import sys  # システム関連
 import os  # ディレクトリ関連
-
-if __name__ == "__main__":
-    src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
-    sys.path.append(src_path)  # モジュール検索パスを追加
-    print(src_path)
 
 import PySimpleGUI as sg  # GUI
 
@@ -188,7 +182,7 @@ class BaseWin:
                 else:
                     # メッセージテキスト
                     message_value = (
-                        "  " + str(min_value) + "~" + str(max_value) + "の間で\n  入力してください。"
+                        f"  {str(min_value)}~{str(max_value)}の間で\n  入力してください。"
                     )
 
                     # メッセージ末尾に改行を追加するなら

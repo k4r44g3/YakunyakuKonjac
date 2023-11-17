@@ -1,13 +1,14 @@
-# ! デバッグ用
 import sys  # システム関連
 import os  # ディレクトリ関連
 import threading  # スレッド関連
 
 
+import PySimpleGUI as sg  # GUI
+
+#! デバッグ用
 if __name__ == "__main__":
-    src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
+    src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
-    print(src_path)
 
 import PySimpleGUI as sg  # GUI
 import pyautogui as pag  # マウスやキーボードを操作
@@ -73,7 +74,7 @@ class ShootingSettingWin(BaseWin):
         ss_region_text = ""
         # 撮影範囲情報取得
         for ss_region_info in self.ss_region_info_dict.values():
-            ss_region_text += ss_region_info["text"] + " : " + str(ss_region_info["value"]) + "\n"
+            ss_region_text += f"{ss_region_info['text']} : {ss_region_info['value']}\n"
 
         # 末尾の改行を削除
         ss_region_text = ss_region_text.rstrip("\n")
@@ -188,7 +189,7 @@ class ShootingSettingWin(BaseWin):
         ss_region_text = ""
         # 撮影範囲情報取得
         for ss_region_info in self.ss_region_info_dict.values():
-            ss_region_text += ss_region_info["text"] + " : " + str(ss_region_info["value"]) + "\n"
+            ss_region_text += f"{ss_region_info['text']} : {ss_region_info['value']}\n"
 
         # 末尾の改行を削除
         ss_region_text = ss_region_text.rstrip("\n")

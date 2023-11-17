@@ -108,6 +108,9 @@ Python関連
     pipのReadTimeoutError対策 (certbot-auto)
     https://www.infocircus.jp/2020/06/30/pip-readtimeouterror-certbot-auto/
 
+    Pythonの型を完全に理解するためのtypingモジュール全解説(3.10対応)
+    https://qiita.com/nicco_mirai/items/5591c1c48b1422c324c9
+
     並列処理関連
         Window.perform_long_operation Method
         https://pysimplegui.trinket.io/demo-programs#/multi-threaded/window-perform_long_operation-method
@@ -159,7 +162,9 @@ contents_changed
 
 その他
 
-
+AWS関連
+    AWS CLI を設定する環境変数
+    https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-configure-envvars.html
 
 
 

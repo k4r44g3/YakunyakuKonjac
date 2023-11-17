@@ -1,6 +1,8 @@
 import json  # jsonファイルの読み書き
 import os  # ディレクトリ関連
 
+import boto3  # AWSのAIサービス
+
 from package.fn import Fn  # 自作関数クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
@@ -14,8 +16,9 @@ class UserSetting:
         "ss_top_y": 0,  # 撮影範囲の上側y座標
         "ss_right_x": 1280,  # 撮影範囲の右側x座標
         "ss_bottom_y": 720,  # 撮影範囲の下側y座標
-        "ocr_soft": "AmazonTextract",  # OCRソフト
-        "translation_soft": "AmazonTranslate",  # 翻訳ソフト
+        "ocr_soft": "EasyOCR",  # OCRソフト
+        "translation_soft": "GoogleTranslator",  # 翻訳ソフト
+        "can_access_aws_service": None,  # AWSのサービスにアクセス可能かどうか
         "source_language_code": "en",  # 翻訳元言語
         "target_language_code": "ja",  # 翻訳先言語
         "window_left_x": None,  # ウィンドウの左側x座標
@@ -130,3 +133,48 @@ class UserSetting:
 
         with open(setting_file_path, "w") as f:  # ファイルを開く(書き込み)
             json.dump(obj=self.setting, fp=f, indent=2)  # ファイルに読み込む
+
+    def check_access_aws_service(self):
+        """AWSサービスにアクセス可能か確認する処理
+
+        Returns:
+            aws_service_exception(Optional[Exception]): AWSサービスにアクセス時に発生した例外オブジェクト
+        """
+
+        try:
+            # OCRの動作チェックに使用する画像ファイルのパス
+            image_file_path = SystemSetting.check_ocr_image_path
+
+            # Textract サービスクライアントを作成
+            textract = boto3.client("textract")
+
+            # 画像ファイルを開く
+            with open(image_file_path, "rb") as file:
+                # 文字列を検出
+                result = textract.detect_document_text(Document={"Bytes": file.read()})
+
+            # Translate サービスクライアントを作成
+            translate = boto3.client("translate")
+
+            # 簡単な翻訳を試みる
+            result = translate.translate_text(
+                Text="Hello World", SourceLanguageCode="en", TargetLanguageCode="ja"
+            )
+
+            # AWSサービスにアクセス時に発生した例外オブジェクト
+            aws_service_exception = None
+
+        # エラー発生時
+        except Exception as e:
+            # AWSサービスにアクセス時に発生した例外オブジェクト
+            aws_service_exception = e
+
+        # AWSのサービスにアクセス可能かどうか
+        can_access_aws_service = aws_service_exception is None
+        # 更新する設定
+        update_setting = {"can_access_aws_service": can_access_aws_service}
+        # 設定をjsonファイルに保存
+        self.save_setting_file(update_setting)
+
+        # AWSサービスにアクセス時に発生した例外オブジェクト
+        return aws_service_exception

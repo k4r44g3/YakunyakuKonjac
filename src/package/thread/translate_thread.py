@@ -53,7 +53,7 @@ class TranslateThread:
                 SystemSetting.image_after_directory_path,  # 翻訳後履歴画像フォルダパス
             ]:
                 # ファイルパス
-                file_path = dir_path + file_name
+                file_path = os.path.join(dir_path, file_name)
                 # ファイルが存在するかチェック
                 if os.path.exists(file_path):
                     # ファイルを削除

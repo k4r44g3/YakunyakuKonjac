@@ -34,10 +34,6 @@ class WatchForKeyEventThread:
         # キーイベントの取得
         key_event = keyboard.read_event()
 
-        # キーイベント後に待機(処理軽減)
-        #! 連打時にバグ発生
-        # Fn.sleep(50)
-
         # ウィンドウが閉じてないなら
         while not (window.was_closed()):
             event_type = key_event.event_type  # イベントタイプの取得
@@ -87,7 +83,3 @@ class WatchForKeyEventThread:
 
             # キーイベントの取得
             key_event = keyboard.read_event()
-
-            # キーイベント後に待機(処理軽減)
-            #! 連打時にバグ発生
-            # Fn.sleep(50)

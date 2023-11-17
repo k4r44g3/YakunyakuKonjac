@@ -1,5 +1,9 @@
+@REM 仮想環境の有効化
 cd ../../
 call Scripts\activate.bat
+@REM AWSの設定の保存先の指定
+set AWS_SHARED_CREDENTIALS_FILE=.\.aws\credentials
+@REM AWSの認証情報の保存先の指定
+set AWS_CONFIG_FILE=.\.aws\config
 @REM AWSの設定
 aws configure
-pause

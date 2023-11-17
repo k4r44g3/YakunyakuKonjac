@@ -9,39 +9,69 @@ class SystemSetting:
     # 画像ファイル形式
     image_file_extension = ".png"
 
-    package_path = os.path.dirname(__file__) + "/"  # パッケージディレクトリパス
+    # パッケージのルートディレクトリ
+    package_path = os.path.dirname(__file__)  # パッケージディレクトリパス
 
-    history_directory_path = package_path + "../history/"  # 履歴ディレクトリパス
-
-    # 翻訳前画像保存先設定
-    image_before_directory_path = history_directory_path + "image_before/"  # ディレクトリパス
-
-    # 翻訳後画像保存先設定
-    image_after_directory_path = history_directory_path + "image_after/"  # ディレクトリパス
+    # ソースコードを格納するディレクトリ
+    src_path = os.path.join(package_path, "..")
 
     # 設定ファイル保存先設定
-    setting_file_name = "setting.json"  # ファイル名
-    setting_directory_path = package_path + "../config/"  # ディレクトリパス
-    setting_file_path = setting_directory_path + setting_file_name  # 設定ファイルパス
+    setting_directory_path = os.path.join(src_path, "config")  # ディレクトリパス
+    setting_file_path = os.path.join(setting_directory_path, "setting.json")  # 設定ファイルパス
+
+    # 履歴ディレクトリパス
+    history_directory_path = os.path.join(src_path, "history")
+    # 翻訳前画像保存先設定
+    image_before_directory_path = os.path.join(history_directory_path, "image_before")  # ディレクトリパス
+    # 翻訳後画像保存先設定
+    image_after_directory_path = os.path.join(history_directory_path, "image_after")  # ディレクトリパス
+
+    # デバッグ用ディレクトリパス
+    debug_directory_path = os.path.join(src_path, "debug_history")
+
+
+    # プロジェクトのルートディレクトリ
+    project_path = os.path.join(src_path, "..")
+
+    # エラーログのディレクトリパス
+    error_log_directory_path = os.path.join(project_path, "log")  # ディレクトリパス
+    # エラー基本情報のログファイルの保存場所
+    simple_error_log_file_path = os.path.join(error_log_directory_path, "error_simple.log")
+    # エラー詳細情報のログファイルの保存場所
+    detailed_error_log_file_path = os.path.join(error_log_directory_path, "error_detailed.log")
 
     # 静的ファイル保存先設定
-    static_path = package_path + "../../static/"
+    static_path = os.path.join(project_path, "static")
 
     # フォントディレクトリパス
-    font_path = static_path + "/font/"
-
-    # 使用するフォントファイルのパス MS明朝
-    font_msmincho_path = font_path + "msmincho.ttc"
-
+    font_path = os.path.join(static_path, "font")
     # Yu Gothic のパス 和文フォント 游ゴシック
-    font_YuGothic_path = font_path + "YuGothM.ttc"
-
+    font_YuGothic_path = os.path.join(font_path, "YuGothM.ttc")
     # Segoe のパス 欧文フォント
-    font_Segoe_path = font_path + "segoeui.ttf"
+    font_Segoe_path = os.path.join(font_path, "segoeui.ttf")
     # Microsoft YaHei のパス 簡体字フォント
-    font_MicrosoftYaHei_path = font_path + "msyh.ttc"
+    font_MicrosoftYaHei_path = os.path.join(font_path, "msyh.ttc")
     # Malgun Gothic のパス ハングルフォント
-    font_MalgunGothic_path = font_path + "malgun.ttf"
+    font_MalgunGothic_path = os.path.join(font_path, "malgun.ttf")
+
+    # 画像ファイル保存先設定
+    image_path = os.path.join(static_path,"image")
+    # OCRの動作チェックに使用する画像ファイルの保存場所
+    check_ocr_image_path = os.path.join(image_path,"check_ocr.png")
+
+
+
+    # 仮想環境のルートディレクトリ
+    venv_path = os.path.join(project_path, "..")
+
+    # AWSの認証情報や設定ファイルのディレクトリパス
+    aws_setting_directory_path = os.path.join(venv_path, ".aws")
+    # AWSの設定ファイルのパス
+    aws_config_file_path = os.path.join(aws_setting_directory_path, "config")
+    # AWSの認証情報ファイルのパス
+    aws_credentials_file_path = os.path.join(aws_setting_directory_path, "credentials")
+
+
 
     # アプリケーションの名前
     app_name = "ヤクミャクコンジャック"
@@ -71,14 +101,3 @@ class SystemSetting:
 
     # 翻訳スレッドの最大数
     translation_thread_max = 4
-
-    # エラーログのディレクトリパス
-    error_log_directory_path = package_path + "../../log/"  # ディレクトリパス
-
-    # エラー基本情報のログファイルの保存場所
-    simple_error_log_file_path = error_log_directory_path + "error_simple.log"
-    # エラー詳細情報のログファイルの保存場所
-    detailed_error_log_file_path = error_log_directory_path + "error_detailed.log"
-
-    # # エラーチェックを行う間隔(ms)
-    # error_check_interval_ms = 1000

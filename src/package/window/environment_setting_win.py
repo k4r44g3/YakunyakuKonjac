@@ -1,11 +1,12 @@
-# ! デバッグ用
 import sys  # システム関連
 import os  # ディレクトリ関連
 
+import PySimpleGUI as sg  # GUI
+
+#! デバッグ用
 if __name__ == "__main__":
-    src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
+    src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
-    print(src_path)
 
 import PySimpleGUI as sg  # GUI
 
@@ -59,7 +60,7 @@ class EnvironmentSettingWin(BaseWin):
                         text=ocr_soft,  # テキスト
                         group_id="ocr_radio",  # グループID
                         default=(ocr_soft == now_ocr_soft),  # デフォルトの設定
-                        key="-" + ocr_soft + "-",  # 識別子
+                        key=f"-{ocr_soft}-",  # 識別子
                         enable_events=True,  # イベントを取得する
                     ),
                 ]
@@ -75,7 +76,7 @@ class EnvironmentSettingWin(BaseWin):
                         text=translation_soft,  # テキスト
                         group_id="translation_radio",  # グループID
                         default=(translation_soft == now_translation_soft),  # デフォルトの設定
-                        key="-" + translation_soft + "-",  # 識別子
+                        key=f"-{translation_soft}-",  # 識別子
                         enable_events=True,  # イベントを取得する
                     ),
                 ]
@@ -140,7 +141,7 @@ class EnvironmentSettingWin(BaseWin):
                 self.transition_to_translation_win()
 
             # OCRソフトラジオボタン押下イベント
-            elif event in ["-" + ocr_soft + "-" for ocr_soft in self.ocr_soft_list]:
+            elif event in [f"-{ocr_soft}-" for ocr_soft in self.ocr_soft_list]:
                 # OCRがAmazonTextractの場合に表示するメッセージの表示/非表示を切り替える
                 self.ocr_amazon_textract_message_event(event)
                 # if event == "-AmazonTextract-":
@@ -162,13 +163,13 @@ class EnvironmentSettingWin(BaseWin):
 
         # OCRソフトの設定
         for ocr_soft in self.ocr_soft_list:  # OCRソフトの名前で走査
-            if values["-" + ocr_soft + "-"]:  # ラジオボックスが選択されているなら
+            if values[f"-{ocr_soft}-"]:  # ラジオボックスが選択されているなら
                 update_setting["ocr_soft"] = ocr_soft  # OCRソフトの名前を取得
                 break
 
         # 翻訳ソフトの設定
         for translation_soft in self.translation_soft_list:  # 翻訳ソフトの名前で走査
-            if values["-" + translation_soft + "-"]:  # ラジオボックスが選択されているなら
+            if values[f"-{translation_soft}-"]:  # ラジオボックスが選択されているなら
                 update_setting["translation_soft"] = translation_soft  # 翻訳ソフトの名前を取得
                 break
 

@@ -2,6 +2,7 @@ from datetime import datetime, timedelta  # 日時, 時間差
 import time  # 時間測定
 import os  # ディレクトリ関連
 import re  # 正規表現
+
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
 
@@ -186,10 +187,10 @@ class Fn:
 
         # 翻訳前画像のみのファイルの削除
         for before_file_name in before_only_file_name_set:
-            os.remove(image_before_directory_path + "/" + before_file_name)
+            os.remove(os.path.join(image_before_directory_path, before_file_name))
         # 翻訳後画像のみのファイルの削除
         for after_file_name in after_only_file_name_set:
-            os.remove(image_after_directory_path + "/" + after_file_name)
+            os.remove(os.path.join(image_after_directory_path, after_file_name))
 
         # ファイル名の形式が正しくないファイル名のリスト
         invalid_file_name_list = []
@@ -217,9 +218,9 @@ class Fn:
         # ファイル名の形式が正しくないファイルの削除
         for file_name in invalid_file_name_list:
             # 翻訳前画像フォルダから削除
-            os.remove(image_before_directory_path + "/" + file_name)
+            os.remove(os.path.join(image_before_directory_path, file_name))
             # 翻訳後画像フォルダから削除
-            os.remove(image_after_directory_path + "/" + file_name)
+            os.remove(os.path.join(image_after_directory_path, file_name))
 
     def search_dict_in_list(lst, key_name, value):
         """与えられたリスト内の辞書から指定したキーと値に一致する辞書を取得
@@ -295,7 +296,7 @@ class Fn:
                 file_date = datetime.strptime(file_base_name, "%Y%m%d_%H%M%S")
 
                 # ファイルサイズの取得
-                file_size = os.path.getsize(directory_path + file_name) / (1024)
+                file_size = os.path.getsize(os.path.join(directory_path, file_name)) / (1024)
 
                 # 合計サイズの
                 total_size_kb += file_size + 1

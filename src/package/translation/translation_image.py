@@ -4,8 +4,9 @@ import os  # ディレクトリ管理
 # 翻訳されたテキストを日本語で表示するためにフォントとサイズを指定
 from PIL import Image, ImageFont, ImageDraw
 
+#! デバッグ用
 if __name__ == "__main__":
-    src_path = os.path.dirname(__file__) + "\..\.."  # パッケージディレクトリパス
+    src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
 
 from package.fn import Fn  # 自作関数クラス
@@ -33,7 +34,7 @@ class TranslationImage:
         Returns:
             overlay_translation_image(Image): オーバーレイ翻訳画像
         """
-        #! 画像が見つからない　削除しているため
+
         image_out = Image.open(ss_file_path)  # 出力画像を作成
 
         draw = ImageDraw.Draw(image_out)  # 画像に図形やテキストを描画するオブジェクトの作成
@@ -233,7 +234,7 @@ class TranslationImage:
             overlay_translation_image_path(str): オーバーレイ翻訳画像のファイルパス
         """
         directory_path = SystemSetting.image_after_directory_path  # 翻訳後画像のディレクトリパス
-        overlay_translation_image_path = directory_path + file_name  # ファイルパス(絶対参照)
+        overlay_translation_image_path = os.path.join(directory_path, file_name)  # ファイルパス(絶対参照)
 
         overlay_translation_image.save(overlay_translation_image_path)  # 翻訳後画像保存
 
