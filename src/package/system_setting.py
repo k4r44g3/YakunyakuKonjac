@@ -55,8 +55,12 @@ class SystemSetting:
 
     # 画像ファイル保存先設定
     image_path = os.path.join(static_path, "image")
-    # OCRの動作チェックに使用する画像ファイルの保存場所
+    # OCRの動作チェックに使用する画像ファイルのパス
     check_ocr_image_path = os.path.join(image_path, "check_ocr.png")
+    # デフォルトの翻訳前画像ファイルのパス
+    default_image_before_path = os.path.join(image_path, "default_image_before.png")
+    # デフォルトの翻訳後画像ファイルのパス
+    default_image_after_path = os.path.join(image_path, "default_image_after.png")
 
     # プロジェクトに関連するスクリプトが格納されるディレクトリのパス
     tool_path = os.path.join(project_path, "tools")

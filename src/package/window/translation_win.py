@@ -87,8 +87,8 @@ class TranslationWin(BaseWin):
         # 履歴が存在しないなら
         else:
             # デフォルトの画像パスを取得
-            now_image_before_path = Debug.ss_file_path  # 翻訳前画像の保存先パス
-            now_image_after_path = Debug.overlay_translation_image_path  # 翻訳後画像の保存先パス
+            now_image_before_path = SystemSetting.default_image_before_path  # 翻訳前画像の保存先パス
+            now_image_after_path = SystemSetting.default_image_after_path  # 翻訳後画像の保存先パス
             now_file_time = None  # ファイル日時
 
         # 画像オブジェクトの保存

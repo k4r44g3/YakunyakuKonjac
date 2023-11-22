@@ -120,3 +120,11 @@ if __name__ == "__main__":
         font_size=40,
         image_save_path=SystemSetting.check_ocr_image_path,  # OCRの動作チェックに使用する画像ファイルの保存場所
     )
+    # OCRで動作チェックに使用する画像を画像を作成、保存
+    Debug.create_text_image(
+        size=(256, 144),
+        text="No history found",
+        font_path=SystemSetting.font_Segoe_path,  # 欧文フォント
+        font_size=30,
+        image_save_path=SystemSetting.default_image_before_path,  # デフォルトの翻訳前画像ファイル
+    )
