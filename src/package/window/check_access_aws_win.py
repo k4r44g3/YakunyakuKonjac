@@ -1,5 +1,5 @@
-import sys  # システム関連
 import os  # ディレクトリ関連
+import sys  # システム関連
 import threading  # スレッドベースの並行処理を実装するためのモジュール
 
 import PySimpleGUI as sg  # GUI
@@ -10,13 +10,12 @@ if __name__ == "__main__":
     sys.path.append(src_path)  # モジュール検索パスを追加
 
 import PySimpleGUI as sg  # GUI
-
+from package.error_log import ErrorLog  # エラーログに関するクラス
 from package.fn import Fn  # 自作関数クラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
-from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
-from package.error_log import ErrorLog  # エラーログに関するクラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 
 class CheckAccessAwsWin(BaseWin):

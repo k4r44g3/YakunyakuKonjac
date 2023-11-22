@@ -4,12 +4,9 @@ import threading  # スレッド関連
 
 import boto3  # AWSのAIサービス
 import PySimpleGUI as sg  # GUI
-
 from package.fn import Fn  # 自作関数クラス
-from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
-
-
 from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
+from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
 
 class UserSetting:
@@ -170,9 +167,7 @@ class UserSetting:
             translate = boto3.client("translate")
 
             # 簡単な翻訳を試みる
-            result = translate.translate_text(
-                Text="Hello World", SourceLanguageCode="en", TargetLanguageCode="ja"
-            )
+            result = translate.translate_text(Text="Hello World", SourceLanguageCode="en", TargetLanguageCode="ja")
 
             # AWSサービスにアクセス時に発生した例外オブジェクト
             aws_service_exception = None

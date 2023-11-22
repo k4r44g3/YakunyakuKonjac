@@ -1,10 +1,8 @@
-import keyboard  # キーボード
 import re  # 正規表現
 
-from package.fn import Fn  # 自作関数クラス
-
+import keyboard  # キーボード
 from package.error_log import ErrorLog  # エラーログに関するクラス
-
+from package.fn import Fn  # 自作関数クラス
 from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
 
 

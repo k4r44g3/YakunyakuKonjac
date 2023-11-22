@@ -86,8 +86,7 @@ class EnvironmentSettingWin(BaseWin):
                         key=f"-{translation_soft}-",  # 識別子
                         enable_events=True,  # イベントを取得する
                         # AWSサービスにアクセスできないかつ、AWSサービスならラジオボタンを無効化する
-                        disabled=not now_can_access_aws_service
-                        and translation_soft == "AmazonTranslate",
+                        disabled=not now_can_access_aws_service and translation_soft == "AmazonTranslate",
                     ),
                 ]
             )

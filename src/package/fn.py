@@ -1,9 +1,9 @@
-from datetime import datetime, timedelta  # 日時, 時間差
-import time  # 時間測定
 import os  # ディレクトリ関連
-import sys  # Pythonのインタプリタや環境にアクセスするためのモジュール（引数の取得、システムパスの操作など）
-import subprocess  # 新しいプロセスを生成し、その入出力を管制するためのモジュール
 import re  # 正規表現
+import subprocess  # 新しいプロセスを生成し、その入出力を管制するためのモジュール
+import sys  # Pythonのインタプリタや環境にアクセスするためのモジュール（引数の取得、システムパスの操作など）
+import time  # 時間測定
+from datetime import datetime, timedelta  # 日時, 時間差
 
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
@@ -241,9 +241,7 @@ class Fn:
                 # 辞書のキーと値が一致するなら一致する辞書を返す
                 return item
 
-    def check_file_limits(
-        directory_path, max_file_size_mb, max_file_count, max_file_retention_days
-    ):
+    def check_file_limits(directory_path, max_file_size_mb, max_file_count, max_file_retention_days):
         """指定された制限を超えているかどうかをチェックして結果を返すメソッド
 
         Args:

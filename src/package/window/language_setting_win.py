@@ -1,5 +1,5 @@
-import sys  # システム関連
 import os  # ディレクトリ関連
+import sys  # システム関連
 
 import PySimpleGUI as sg  # GUI
 
@@ -9,10 +9,9 @@ if __name__ == "__main__":
     sys.path.append(src_path)  # モジュール検索パスを追加
 
 import PySimpleGUI as sg  # GUI
-
 from package.fn import Fn  # 自作関数クラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 
@@ -57,14 +56,14 @@ class LanguageSettingWin(BaseWin):
         now_target_language_code = self.user_setting.get_setting("target_language_code")
 
         # 現在の翻訳前言語名の取得
-        now_source_language_name = Fn.search_dict_in_list(
-            self.language_list, "code", now_source_language_code
-        )["ja_text"]
+        now_source_language_name = Fn.search_dict_in_list(self.language_list, "code", now_source_language_code)[
+            "ja_text"
+        ]
 
         # 現在の翻訳後言語名の取得
-        now_target_language_name = Fn.search_dict_in_list(
-            self.language_list, "code", now_target_language_code
-        )["ja_text"]
+        now_target_language_name = Fn.search_dict_in_list(self.language_list, "code", now_target_language_code)[
+            "ja_text"
+        ]
 
         # 翻訳前言語設定のレイアウト
         source_language_layout = []
@@ -191,18 +190,14 @@ class LanguageSettingWin(BaseWin):
             # 翻訳前言語名取得
             source_language_name = values["-source_language_code-"][0]
             # 翻訳前言語コード取得
-            source_language_code = Fn.search_dict_in_list(
-                self.language_list, "ja_text", source_language_name
-            )["code"]
+            source_language_code = Fn.search_dict_in_list(self.language_list, "ja_text", source_language_name)["code"]
             # 翻訳前言語設定
             update_setting["source_language_code"] = source_language_code
 
         # 翻訳後言語名取得
         target_language_name = values["-target_language_code-"][0]
         # 翻訳後言語コード取得
-        target_language_code = Fn.search_dict_in_list(
-            self.language_list, "ja_text", target_language_name
-        )["code"]
+        target_language_code = Fn.search_dict_in_list(self.language_list, "ja_text", target_language_name)["code"]
 
         # 翻訳後言語設定
         update_setting["target_language_code"] = target_language_code

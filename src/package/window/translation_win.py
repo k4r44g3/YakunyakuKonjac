@@ -1,10 +1,10 @@
-import sys  # システム関連
-import os  # ディレクトリ関連
-import threading  # スレッド関連
 import bisect  # 二分探索
+import os  # ディレクトリ関連
+import sys  # システム関連
+import threading  # スレッド関連
 
-from PIL import Image, ImageTk  # 画像処理
 import PySimpleGUI as sg  # GUI
+from PIL import Image, ImageTk  # 画像処理
 
 #! デバッグ用
 if __name__ == "__main__":
@@ -12,22 +12,17 @@ if __name__ == "__main__":
     sys.path.append(src_path)  # モジュール検索パスを追加
 
 
-from package.fn import Fn  # 自作関数クラス
 from package.debug import Debug  # デバッグ用クラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
-from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
+from package.fn import Fn  # 自作関数クラス
 from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
-
-from package.translation.translation import Translation  # 翻訳機能関連のクラス
-
-from package.window.base_win import BaseWin  # ウィンドウの基本クラス
-
-from package.thread.translate_timing_thread import TranslateTimingThread  # 自動翻訳のタイミングを取得するスレッドクラス
-from package.thread.translate_thread import TranslateThread  # 翻訳処理を行うスレッドクラス
-
-# 指定したキーイベントが発生するかどうか監視するスレッドクラス
-from package.thread.watch_for_key_event_thread import WatchForKeyEventThread
+from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.thread.get_drag_area_thread import GetDragAreaThread  # ドラッグした領域の座標を取得するスレッド
+from package.thread.translate_thread import TranslateThread  # 翻訳処理を行うスレッドクラス
+from package.thread.translate_timing_thread import TranslateTimingThread  # 自動翻訳のタイミングを取得するスレッドクラス
+from package.thread.watch_for_key_event_thread import WatchForKeyEventThread  # 指定したキーイベントが発生するかどうか監視するスレッドクラス
+from package.translation.translation import Translation  # 翻訳機能関連のクラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 
 class TranslationWin(BaseWin):
@@ -82,13 +77,9 @@ class TranslationWin(BaseWin):
 
             # 履歴が存在するなら最新の画像パスを取得
             # 翻訳前画像の保存先パス
-            now_image_before_path = os.path.join(
-                SystemSetting.image_before_directory_path, now_image_name
-            )
+            now_image_before_path = os.path.join(SystemSetting.image_before_directory_path, now_image_name)
             # 翻訳後画像の保存先パス
-            now_image_after_path = os.path.join(
-                SystemSetting.image_after_directory_path, now_image_name
-            )
+            now_image_after_path = os.path.join(SystemSetting.image_after_directory_path, now_image_name)
 
             # ファイル日時の取得
             now_file_time = Fn.convert_time_from_filename(now_image_name)
@@ -310,9 +301,7 @@ class TranslationWin(BaseWin):
 
         # todo ウィンドウ初期設定
         # 履歴ファイル選択リストの最初に表示される要素番号の取得
-        self.window["-history_file_time_list-"].update(
-            scroll_to_index=len(self.history_file_time_list) - 1
-        )
+        self.window["-history_file_time_list-"].update(scroll_to_index=len(self.history_file_time_list) - 1)
 
         # 直前のウィンドウサイズの保存
         previous_window_size = self.window.current_size_accurate()
@@ -561,9 +550,7 @@ class TranslationWin(BaseWin):
         # トグルボタンに状態を保存
         self.window["-toggle_auto_translation-"].metadata["is_toggle_on"] = is_toggle_on
         # トグルボタンの変更先テキスト取得
-        button_text = self.window["-toggle_auto_translation-"].metadata["toggle_button_text"][
-            is_toggle_on
-        ]
+        button_text = self.window["-toggle_auto_translation-"].metadata["toggle_button_text"][is_toggle_on]
         # トグルボタンのテキスト切り替え
         self.window["-toggle_auto_translation-"].update(text=button_text)
 
@@ -577,9 +564,7 @@ class TranslationWin(BaseWin):
     def translate_timing_thread_start(self):
         """自動翻訳のタイミングを取得するスレッドの開始処理"""
         # 自動翻訳トグルボタンがオンかどうか取得
-        is_toggle_auto_translation = self.window["-toggle_auto_translation-"].metadata[
-            "is_toggle_on"
-        ]
+        is_toggle_auto_translation = self.window["-toggle_auto_translation-"].metadata["is_toggle_on"]
         # 自動翻訳がオンなら
         if is_toggle_auto_translation:
             # 自動翻訳のタイミングを取得するスレッド作成
@@ -682,9 +667,7 @@ class TranslationWin(BaseWin):
                 # GUIの画像要素を更新
                 self.window[image_gui_key].update(data=ImageTk.PhotoImage(resized_img))
                 # Columnのスクロール可能領域の更新
-                self.window[column_key].Widget.canvas.config(
-                    scrollregion=(0, 0, new_size[0], new_size[1])
-                )
+                self.window[column_key].Widget.canvas.config(scrollregion=(0, 0, new_size[0], new_size[1]))
         # ウィンドウを強制的に更新
         self.window.refresh()
 

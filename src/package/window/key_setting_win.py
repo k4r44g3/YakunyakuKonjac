@@ -1,5 +1,5 @@
-import sys  # システム関連
 import os  # ディレクトリ関連
+import sys  # システム関連
 import threading  # スレッド関連
 
 import PySimpleGUI as sg  # GUI
@@ -10,10 +10,9 @@ if __name__ == "__main__":
     sys.path.append(src_path)  # モジュール検索パスを追加
 
 from package.fn import Fn  # 自作関数クラス
+from package.thread.get_key_event_thread import GetKeyEventThread  # キーイベントの取得処理を行うスレッドクラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
-
-from package.thread.get_key_event_thread import GetKeyEventThread  # キーイベントの取得処理を行うスレッドクラス
 
 
 class KeySettingWin(BaseWin):
@@ -32,9 +31,7 @@ class KeySettingWin(BaseWin):
         self.key_binding_info_list = self.user_setting.get_setting("key_binding_info_list")
 
         # キーバインド設定のイベントのリスト
-        self.key_binding_event_list = [
-            key_binding_info["gui_key"] for key_binding_info in self.key_binding_info_list
-        ]
+        self.key_binding_event_list = [key_binding_info["gui_key"] for key_binding_info in self.key_binding_info_list]
         # ウィンドウ開始処理
         self.start_win()
 
@@ -281,9 +278,7 @@ class KeySettingWin(BaseWin):
         self.window[setting_target_key].update(text=button_text)
 
         # 変更前のキーバインド設定の取得
-        old_key_binding_info = Fn.search_dict_in_list(
-            self.key_binding_info_list, "gui_key", setting_target_key
-        )
+        old_key_binding_info = Fn.search_dict_in_list(self.key_binding_info_list, "gui_key", setting_target_key)
 
         # 更新するキーバインド設定の作成
         new_key_binding_info = old_key_binding_info
@@ -291,9 +286,7 @@ class KeySettingWin(BaseWin):
         new_key_binding_info["scan_code"] = scan_code
 
         # キーバインド設定リストの更新箇所の要素番号の取得
-        update_index = self.key_binding_event_list.index(
-            self.window.metadata["is_key_input_waiting_event"]
-        )
+        update_index = self.key_binding_event_list.index(self.window.metadata["is_key_input_waiting_event"])
 
         # キーバインド設定リストの更新
         self.key_binding_info_list[update_index] = new_key_binding_info

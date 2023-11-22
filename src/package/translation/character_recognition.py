@@ -1,12 +1,11 @@
-import boto3  # AWSのAIサービス
-
-from PIL import Image  # 画像処理
-import easyocr  # OCRライブラリ
 import logging  # エラーログ記録
 
+import boto3  # AWSのAIサービス
+import easyocr  # OCRライブラリ
 from package.fn import Fn  # 自作関数クラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+from PIL import Image  # 画像処理
 
 
 class CharacterRecognition:

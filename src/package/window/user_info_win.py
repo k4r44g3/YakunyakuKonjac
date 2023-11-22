@@ -1,5 +1,5 @@
-import sys  # システム関連
 import os  # ディレクトリ関連
+import sys  # システム関連
 
 import PySimpleGUI as sg  # GUI
 

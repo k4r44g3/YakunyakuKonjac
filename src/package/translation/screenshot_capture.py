@@ -1,8 +1,8 @@
 import os
-import pyautogui  # スクショ撮影
 
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+import pyautogui  # スクショ撮影
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 
 
 class ScreenshotCapture:
@@ -20,12 +20,8 @@ class ScreenshotCapture:
         ss_region = [
             user_setting.get_setting("ss_left_x"),  # SS範囲の左側x座標
             user_setting.get_setting("ss_top_y"),  # SS範囲の上側y座標
-            abs(
-                user_setting.get_setting("ss_right_x") - user_setting.get_setting("ss_left_x")
-            ),  # SS範囲の横幅
-            abs(
-                user_setting.get_setting("ss_bottom_y") - user_setting.get_setting("ss_top_y")
-            ),  # SS範囲の縦幅
+            abs(user_setting.get_setting("ss_right_x") - user_setting.get_setting("ss_left_x")),  # SS範囲の横幅
+            abs(user_setting.get_setting("ss_bottom_y") - user_setting.get_setting("ss_top_y")),  # SS範囲の縦幅
         ]
 
         screenshot_image = pyautogui.screenshot(region=ss_region)  # スクショ撮影

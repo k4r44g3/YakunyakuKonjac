@@ -1,14 +1,11 @@
-import sys  # システム関連
 import os  # ディレクトリ関連
+import sys  # システム関連
 
 import PySimpleGUI as sg  # GUI
-
-from package.fn import Fn  # 自作関数クラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
-
 from package.error_log import ErrorLog  # エラーログに関するクラス
-
+from package.fn import Fn  # 自作関数クラス
 from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 
 
 class BaseWin:

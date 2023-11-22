@@ -1,15 +1,14 @@
-import os  # オペレーティングシステム関連
-import sys  # システム関連の機能を提供
-import logging  # ログの機能を提供
-import traceback  # 例外情報の取得と表示
 import inspect  # 関数やクラスの情報を取得
+import logging  # ログの機能を提供
+import os  # オペレーティングシステム関連
 import platform  # プラットフォーム情報の取得
-import PySimpleGUI as sg  # GUI
+import sys  # システム関連の機能を提供
 import threading  # スレッド関連
+import traceback  # 例外情報の取得と表示
 
-from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
-
+import PySimpleGUI as sg  # GUI
 from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
+from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 
 
 class ErrorLog:
@@ -25,9 +24,7 @@ class ErrorLog:
         self.simple_logger.setLevel(logging.DEBUG)
 
         # 基本情報用のロガーの出力フォーマットを設定
-        simple_formatter = logging.Formatter(
-            "%(asctime)s [%(levelname)s] - %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
-        )
+        simple_formatter = logging.Formatter("%(asctime)s [%(levelname)s] - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
         # ログファイルパスの取得
         simple_log_file_path = SystemSetting.simple_error_log_file_path

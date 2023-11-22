@@ -1,8 +1,7 @@
+import threading  # スレッド関連
 import tkinter as tk  # GUI
 
 from package.error_log import ErrorLog  # エラーログに関するクラス
-
-import threading  # スレッド関連
 
 
 class GetDragAreaThread:

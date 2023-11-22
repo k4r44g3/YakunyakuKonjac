@@ -1,7 +1,6 @@
-import sys  # システム関連
 import os  # ディレクトリ関連
+import sys  # システム関連
 import threading  # スレッド関連
-
 
 import PySimpleGUI as sg  # GUI
 
@@ -10,16 +9,14 @@ if __name__ == "__main__":
     src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
 
-import PySimpleGUI as sg  # GUI
 import pyautogui as pag  # マウスやキーボードを操作
-
+import PySimpleGUI as sg  # GUI
 from package.fn import Fn  # 自作関数クラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
-from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
-from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
-
+from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 from package.thread.get_drag_area_thread import GetDragAreaThread  # ドラッグした領域の座標を取得するスレッド
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 
 class ShootingSettingWin(BaseWin):
@@ -90,15 +87,11 @@ class ShootingSettingWin(BaseWin):
                                 key="-translation_interval_sec-",
                                 size=(6, 1),
                                 # デフォルト
-                                default_text=self.user_setting.get_setting(
-                                    "translation_interval_sec"
-                                ),
+                                default_text=self.user_setting.get_setting("translation_interval_sec"),
                                 enable_events=True,  # イベントを取得する
                                 metadata={
                                     # 前回の値の保存
-                                    "before_input_value": self.user_setting.get_setting(
-                                        "translation_interval_sec"
-                                    ),
+                                    "before_input_value": self.user_setting.get_setting("translation_interval_sec"),
                                     "min_value": 1,  # 入力範囲の最小値
                                     "max_value": 3600,  # 入力範囲の最大値
                                     "message_key": "-translation_interval_sec_message-",  # メッセージテキストの識別子
@@ -226,9 +219,7 @@ class ShootingSettingWin(BaseWin):
             if GetDragAreaThread.region is not None:
                 # 撮影範囲の座標情報の更新
                 for region_key in ["left", "top", "right", "bottom"]:
-                    self.ss_region_info_dict[region_key]["value"] = GetDragAreaThread.region[
-                        region_key
-                    ]
+                    self.ss_region_info_dict[region_key]["value"] = GetDragAreaThread.region[region_key]
 
                 # 撮影範囲表示テキストの取得
                 ss_region_text = self.get_ss_region_text()
@@ -250,9 +241,7 @@ class ShootingSettingWin(BaseWin):
         # 更新する設定
         update_setting = {}
         # キー名の両端のハイフンを取り除く
-        update_setting["translation_interval_sec"] = int(
-            values["-translation_interval_sec-"]
-        )  # 翻訳間隔(秒)
+        update_setting["translation_interval_sec"] = int(values["-translation_interval_sec-"])  # 翻訳間隔(秒)
         # 撮影範囲の左側x座標
         update_setting["ss_left_x"] = int(self.ss_region_info_dict["left"]["value"])
         # 撮影範囲の上側y座標

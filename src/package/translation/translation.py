@@ -1,19 +1,19 @@
-import sys  # システム関連
 import os  # ディレクトリ関連
+import sys  # システム関連
 
 #! デバッグ用
 if __name__ == "__main__":
     src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
 
-from package.fn import Fn  # 自作関数クラス
 from package.debug import Debug  # デバッグ用クラス
-from package.translation.screenshot_capture import ScreenshotCapture  # スクリーンショット撮影機能関連のクラス
+from package.fn import Fn  # 自作関数クラス
+from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.translation.character_recognition import CharacterRecognition  # 文字認識機能関連のクラス
+from package.translation.screenshot_capture import ScreenshotCapture  # スクリーンショット撮影機能関連のクラス
 from package.translation.text_translation import TextTranslation  # テキスト翻訳機能関連のクラス
 from package.translation.translation_image import TranslationImage  # オーバーレイ翻訳画像作成機能関連のクラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
-from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 
 
 class Translation:
@@ -48,9 +48,7 @@ class Translation:
         # ss_file_path = os.path.join(Debug.debug_directory_path , "test.png")  # スクショ画像パス
 
         # 文字認識機能
-        text_data_dict = CharacterRecognition.get_text_data_dict(
-            user_setting, ss_file_path
-        )  # 画像からテキスト情報を取得
+        text_data_dict = CharacterRecognition.get_text_data_dict(user_setting, ss_file_path)  # 画像からテキスト情報を取得
         text_before_list = text_data_dict["text_list"]  # 翻訳前テキストリストの取得
         text_region_list = text_data_dict["text_region_list"]  # テキスト範囲のリストの取得
         # Fn.time_log("文字取得")
@@ -60,9 +58,7 @@ class Translation:
         # text_region_list = Debug.text_region_list  # テキスト範囲のリスト
 
         # 翻訳機能
-        text_after_list = TextTranslation.get_text_after_list(
-            user_setting, text_before_list
-        )  # 翻訳後テキストリストの取得
+        text_after_list = TextTranslation.get_text_after_list(user_setting, text_before_list)  # 翻訳後テキストリストの取得
         # Fn.time_log("翻訳")
 
         # ! デバック用

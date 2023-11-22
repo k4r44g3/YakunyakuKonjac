@@ -110,7 +110,7 @@ class Debug:
 # ! デバッグ用
 if __name__ == "__main__":
     # 翻訳されたテキストを日本語で表示するためにフォントとサイズを指定
-    from PIL import Image, ImageFont, ImageDraw
+    from PIL import Image, ImageDraw, ImageFont
 
     # OCRで動作チェックに使用する画像を画像を作成、保存
     Debug.create_text_image(

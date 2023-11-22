@@ -246,5 +246,3 @@ OCR関連
 
     python formatting in venv not working
     https://github.com/microsoft/vscode-python/discussions/22140
-
-    

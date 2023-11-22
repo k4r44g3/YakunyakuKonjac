@@ -1,5 +1,5 @@
-import sys  # システム関連
 import os  # ディレクトリ関連
+import sys  # システム関連
 
 import PySimpleGUI as sg  # GUI
 
@@ -9,7 +9,6 @@ if __name__ == "__main__":
     sys.path.append(src_path)  # モジュール検索パスを追加
 
 import PySimpleGUI as sg  # GUI
-
 from package.fn import Fn  # 自作関数クラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
@@ -111,9 +110,7 @@ class SaveSettingWin(BaseWin):
                     default_text=self.user_setting.get_setting("max_file_retention_days"),  # デフォルト
                     metadata={
                         # 前回の値の保存
-                        "before_input_value": self.user_setting.get_setting(
-                            "max_file_retention_days"
-                        ),
+                        "before_input_value": self.user_setting.get_setting("max_file_retention_days"),
                         "min_value": 1,  # 入力範囲の最小値
                         "max_value": 3600,  # 入力範囲の最大値
                         "message_key": "-max_file_retention_days_message-",  # メッセージテキストの識別子

@@ -1,11 +1,9 @@
 import os  # ディレクトリ関連
 
+from package.error_log import ErrorLog  # エラーログに関するクラス
+from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.translation.translation import Translation  # 翻訳機能関連のクラス
-
-from package.error_log import ErrorLog  # エラーログに関するクラス
-
-from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
 
 
 class TranslateThread:
