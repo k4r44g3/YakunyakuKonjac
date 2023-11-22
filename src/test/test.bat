@@ -27,3 +27,5 @@ pause
 @REM echo %THIS_DIRECTORY%
 
 for %%i in ("%cd%") do echo %%~nxi
+
+msg * TEST

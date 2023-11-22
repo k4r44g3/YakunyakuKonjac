@@ -121,7 +121,7 @@ class TranslationWin(BaseWin):
                             ],
                         ],
                         key="-image_before_column-",  # 識別子
-                        size=(128, 72),  # 表示サイズ
+                        size=(128, 72),  # 最小の表示サイズ
                         expand_x=True,  # 横方向に自動的に拡大
                         expand_y=True,  # 縦方向に自動的に拡大
                         scrollable=True,  # スクロールバーの有効化
@@ -154,7 +154,7 @@ class TranslationWin(BaseWin):
                             ],
                         ],
                         key="-image_after_column-",  # 識別子
-                        size=(128, 72),  # 表示サイズ
+                        size=(128, 72),  # 最小の表示サイズ
                         expand_x=True,  # 横方向に自動的に拡大
                         expand_y=True,  # 縦方向に自動的に拡大
                         scrollable=True,  # スクロールバーの有効化
@@ -428,18 +428,22 @@ class TranslationWin(BaseWin):
 
         閉じるボタン押下,Alt+F4イベントが発生したら
         """
-        # ウィンドウ位置、サイズの取得
-        location = self.window.CurrentLocation()  # ウィンドウ位置
-        size = self.window.current_size_accurate()  # ウィンドウサイズ
 
-        # 更新する設定
-        update_setting = {}
-        update_setting["window_left_x"] = location[0]
-        update_setting["window_top_y"] = location[1]
-        update_setting["window_width"] = size[0]
-        update_setting["window_height"] = size[1]
+        # ウィンドウ位置、サイズを保存する処理
+        # ウィンドウの最小化や最大化が行われていないなら
+        if self.window.TKroot.state() == "normal":
+            # ウィンドウ位置、サイズの取得
+            location = self.window.CurrentLocation()  # ウィンドウ位置
+            size = self.window.current_size_accurate()  # ウィンドウサイズ
 
-        self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
+            # 更新する設定
+            update_setting = {}
+            update_setting["window_left_x"] = location[0]
+            update_setting["window_top_y"] = location[1]
+            update_setting["window_width"] = size[0]
+            update_setting["window_height"] = size[1]
+
+            self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
         self.exit_event()  # イベント終了処理
         self.window.metadata["is_exit"] = True  # イベント受付終了
@@ -670,14 +674,17 @@ class TranslationWin(BaseWin):
 
             # 新しいサイズを計算
             new_size = (int(image.size[0] * zoom_scale), int(image.size[1] * zoom_scale))
-            # 画像をリサイズ
-            resized_img = image.resize(new_size, Image.LANCZOS)
-            # GUIの画像要素を更新
-            self.window[image_gui_key].update(data=ImageTk.PhotoImage(resized_img))
-            # Columnのスクロール可能領域の更新
-            self.window[column_key].Widget.canvas.config(
-                scrollregion=(0, 0, new_size[0], new_size[1])
-            )
+
+            # 画像表示サイズが1px以上なら
+            if new_size[0] > 0 and new_size[1] > 0:
+                # 画像をリサイズ
+                resized_img = image.resize(new_size, Image.LANCZOS)
+                # GUIの画像要素を更新
+                self.window[image_gui_key].update(data=ImageTk.PhotoImage(resized_img))
+                # Columnのスクロール可能領域の更新
+                self.window[column_key].Widget.canvas.config(
+                    scrollregion=(0, 0, new_size[0], new_size[1])
+                )
         # ウィンドウを強制的に更新
         self.window.refresh()
 

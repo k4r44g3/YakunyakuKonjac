@@ -66,6 +66,9 @@ GUI関連
         Tkinterの使い方：スクロールバー（Scrollbar）の使い方
         https://daeudaeu.com/scrollbar/
 
+        Tkinterでウィンドウの最大化
+        https://utisam.hateblo.jp/entry/2013/01/12/212958
+
 
 
 Python関連

@@ -28,8 +28,8 @@ class UserSetting:
         "target_language_code": "ja",  # 翻訳先言語
         "window_left_x": None,  # ウィンドウの左側x座標
         "window_top_y": None,  # ウィンドウの上側y座標
-        "window_width": None,  # ウィンドウの横幅
-        "window_height": None,  # ウィンドウの縦幅
+        "window_width": 400,  # ウィンドウの横幅
+        "window_height": 600,  # ウィンドウの縦幅
         "translation_interval_sec": 10,  # 翻訳間隔(秒)
         "max_file_size_mb": 100,  # 最大保存容量(MB)
         "max_file_count": 50,  # 最大保存枚数
