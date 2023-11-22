@@ -9,8 +9,6 @@ if __name__ == "__main__":
     src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
     sys.path.append(src_path)  # モジュール検索パスを追加
 
-import PySimpleGUI as sg  # GUI
-
 from package.fn import Fn  # 自作関数クラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス

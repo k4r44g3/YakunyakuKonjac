@@ -1,4 +1,5 @@
 import os  # オペレーティングシステム関連
+import sys
 
 # 初期化
 error_log = None
@@ -42,6 +43,8 @@ try:
     from package.window.shooting_setting_win import ShootingSettingWin  # 撮影設定画面ウィンドウクラス
     from package.window.theme_setting_win import ThemeSettingWin  # テーマ設定画面ウィンドウクラス
     from package.window.user_info_win import UserInfoWin  # 利用者情報画面ウィンドウクラス
+    from package.window.aws_configure_win import AwsConfigureWin  # AWS設定画面ウィンドウクラス
+    from package.window.check_access_aws_win import CheckAccessAwsWin  # AWS接続テスト画面ウィンドウクラス
 
 except Exception as e:
     # エラーログの出力処理
@@ -53,6 +56,9 @@ class App:
 
     def __init__(self):
         """コンストラクタ"""
+
+        # AWSの設定ファイルを作成する処理
+        Fn.create_aws_file()
 
         # AWSの設定ファイルのパスの設定
         os.environ["AWS_CONFIG_FILE"] = SystemSetting.aws_config_file_path
@@ -89,6 +95,8 @@ class App:
             "ShootingSettingWin": ShootingSettingWin,  # 撮影設定画面ウィンドウクラス
             "ThemeSettingWin": ThemeSettingWin,  # テーマ設定画面ウィンドウクラス
             "UserInfoWin": UserInfoWin,  # 利用者情報画面ウィンドウクラス
+            "AwsConfigureWin": AwsConfigureWin,  # AWS設定画面ウィンドウクラス
+            "CheckAccessAwsWin": CheckAccessAwsWin,  # AWS接続テスト画面ウィンドウクラス
         }
 
         Fn.time_log("システム開始")
@@ -98,14 +106,33 @@ class App:
         win_class = WIN_CLASS_DICT[transition_target_win]  # 遷移先ウィンドウクラスの取得
         win_instance = win_class()  # ウィンドウ作成、ウィンドウクラスのインスタンスの保持
         transition_target_win = win_instance.get_transition_target_win()  # 遷移先ウィンドウ名取得
+        is_restart_program = win_instance.get_is_restart_program()  # 再起動するかどうかを取得
 
-        # 遷移先ウィンドウが存在する間、繰り返す
-        while transition_target_win is not None:
-            win_class = WIN_CLASS_DICT[transition_target_win]  # 遷移先ウィンドウクラス
-            win_instance = win_class()  # ウィンドウ作成、ウィンドウクラスのインスタンスの保持
-            transition_target_win = win_instance.get_transition_target_win()  # 遷移先ウィンドウ名取得
-        Fn.time_log("システム終了")
+        # 再起動しないなら
+        if not is_restart_program:
+            # 遷移先ウィンドウが存在する間、繰り返す
+            while transition_target_win is not None:
+                win_class = WIN_CLASS_DICT[transition_target_win]  # 遷移先ウィンドウクラス
+                win_instance = win_class()  # ウィンドウ作成、ウィンドウクラスのインスタンスの保持
+                transition_target_win = win_instance.get_transition_target_win()  # 遷移先ウィンドウ名取得
+                is_restart_program = win_instance.get_is_restart_program()  # 再起動するかどうかを取得
+
+        # 再起動するなら
+        if is_restart_program:
+            # 現在のプログラムを終了して再起動する処理
+            Fn.time_log("システム再起動")
+
+            # ! vscode上では動作しない
+            # 実行中のプロセスを新しいプログラムで置き換えるための関数
+            os.execl(
+                sys.executable,  # 実行可能ファイル
+                *([sys.executable] + sys.argv),  # 引数リスト
+            )
+        # 再起動しないなら
+        else:
+            Fn.time_log("システム終了")
 
 
 if __name__ == "__main__":
+    print(sys.executable)
     app_instance = App()  # メイン処理

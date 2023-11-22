@@ -1,2 +1,5 @@
-@REM 險ｭ螳壹ヵ繧｡繧､繝ｫ蜑企勁
+@REM 文字コードを"Shift-JIS"に設定 メッセージは非表示
+chcp 932 >nul
+
+@REM 設定ファイル削除
 del ..\src\config\setting.json

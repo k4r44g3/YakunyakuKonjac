@@ -1,5 +1,7 @@
-import sys  # システム関連
 import os  # ディレクトリ関連
+import subprocess  # 新しいプロセスを生成し、その入出力を管制するためのモジュール
+import sys  # システム関連
+import threading  # スレッドベースの並行処理を実装するためのモジュール
 
 import PySimpleGUI as sg  # GUI
 
@@ -9,10 +11,9 @@ if __name__ == "__main__":
     sys.path.append(src_path)  # モジュール検索パスを追加
 
 import PySimpleGUI as sg  # GUI
-
 from package.fn import Fn  # 自作関数クラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
+from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 
@@ -126,11 +127,13 @@ class EnvironmentSettingWin(BaseWin):
                 sg.Frame(title="翻訳ソフト", layout=translation_soft_layout),
             ],
             [
-                sg.Button("AWS接続テスト", key="-check_access_aws_service-"),  # 変更ボタン
+                # AWS接続テストボタン
+                sg.Button("AWS接続テスト", key="-check_access_aws_service-", size=(16, 1)),
             ],
-            # [
-            #     sg.Button("AWS接続設定", key="-check_access_aws_service2-"),  # 変更ボタン
-            # ],
+            [
+                # AWS接続設定ボタン
+                sg.Button("AWS接続設定", key="-aws_config_button-", size=(16, 1)),
+            ],
             [
                 sg.Push(),  # 右に寄せる
                 sg.Button("確定", key="-confirm-"),  # 変更ボタン
@@ -162,7 +165,7 @@ class EnvironmentSettingWin(BaseWin):
                 # 翻訳画面に遷移する処理
                 self.transition_to_translation_win()
 
-            # 確定ボタン押下イベント
+            # 戻るボタン押下イベント
             elif event == "-back-":
                 # 翻訳画面に遷移する処理
                 self.transition_to_translation_win()
@@ -175,7 +178,14 @@ class EnvironmentSettingWin(BaseWin):
             # AWS接続テストボタン押下イベント
             elif event == "-check_access_aws_service-":
                 # AWS接続テストボタン押下イベント処理
-                self.check_access_aws_service_event()
+                self.transition_target_win = "CheckAccessAwsWin"  # 遷移先ウィンドウ名
+                self.window_close()  # プログラム終了イベント処理
+
+            # AWS接続設定ボタン押下イベント
+            elif event == "-aws_config_button-":
+                # AWS接続設定ボタン押下イベント処理
+                self.transition_target_win = "AwsConfigureWin"  # 遷移先ウィンドウ名
+                self.window_close()  # プログラム終了イベント処理
 
     # todo イベント処理記述
 
@@ -222,49 +232,6 @@ class EnvironmentSettingWin(BaseWin):
         elif not now_visible and event == "-AmazonTextract-":
             # 表示状態に変更
             self.window["-ocr_amazon_textract_message-"].update(visible=True)
-
-    def check_access_aws_service_event(self):
-        """AWS接続テストボタン押下イベント処理"""
-        # AWSサービスにアクセス可能か確認する処理
-        self.user_setting.check_access_aws_service(
-            is_show_success_message=True,  # アクセス成功時にメッセージを表示するかどうか
-        )
-
-        # 現在AWSサービスにアクセスできるかどうか
-        now_can_access_aws_service = self.user_setting.get_setting("can_access_aws_service")
-
-        # 現在メッセージが表示されているかどうか
-        now_visible = self.window["-cannot_access_aws_service_message-"].visible
-
-        # 表示/非表示切り替え処理
-        print(now_visible, now_can_access_aws_service)
-        # 表示されている、かつ、AWSサービスへのアクセスが成功したら
-        if now_visible and now_can_access_aws_service:
-            # 非表示状態に変更
-            self.window["-cannot_access_aws_service_message-"].update(visible=False)
-            # AWSサービスのラジオボタンを有効化
-            self.window["-AmazonTextract-"].update(disabled=False)
-            self.window["-AmazonTranslate-"].update(disabled=False)
-
-        # 表示されていない、かつ、AWSサービスへのアクセスが失敗したら
-        elif not now_visible and not now_can_access_aws_service:
-            #  AWSへのアクセスに失敗している場合に表示するメッセージを表示状態に変更
-            self.window["-cannot_access_aws_service_message-"].update(visible=True)
-            # 現在のOCRソフトの取得
-            now_ocr_soft = self.user_setting.get_setting("ocr_soft")
-            # 現在の翻訳ソフトの取得
-            now_translation_soft = self.user_setting.get_setting("translation_soft")
-
-            # 選択されているラジオボタンの更新
-            self.window[f"-{now_ocr_soft}-"].update(value = True)
-            self.window[f"-{now_translation_soft}-"].update(value = True)
-
-            # OCRがAmazonTextractの場合に表示するメッセージを非表示に変更
-            self.window["-ocr_amazon_textract_message-"].update(visible=False)
-
-            # AWSサービスのラジオボタンを無効化
-            self.window["-AmazonTextract-"].update(disabled=True)
-            self.window["-AmazonTranslate-"].update(disabled=True)
 
 
 # ! デバッグ用

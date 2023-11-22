@@ -181,11 +181,10 @@ class ErrorLog:
 
             # 現在開いているウィンドウクラスのインスタンスでウィンドウオブジェクトが作成されているかどうか
             if hasattr(GlobalStatus.win_instance, "window"):
-                # ウィンドウオブジェクトの保存
+                # ウィンドウオブジェクトの取得
                 window = GlobalStatus.win_instance.window
                 # ウィンドウが閉じられていないなら
                 if not window.was_closed():
-                    print("ポップアップ")
                     # スレッドから、キーイベントを送信
                     window.write_event_value(key="-thread_error_event-", value=message)
 

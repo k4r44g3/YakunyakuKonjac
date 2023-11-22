@@ -163,7 +163,7 @@ class SaveSettingWin(BaseWin):
                 # 翻訳画面に遷移する処理
                 self.transition_to_translation_win()
 
-            # 確定ボタン押下イベント
+            # 戻るボタン押下イベント
             elif event == "-back-":
                 # 翻訳画面に遷移する処理
                 self.transition_to_translation_win()

@@ -1,11 +1,15 @@
 import json  # jsonファイルの読み書き
 import os  # ディレクトリ関連
+import threading  # スレッド関連
 
 import boto3  # AWSのAIサービス
 import PySimpleGUI as sg  # GUI
 
 from package.fn import Fn  # 自作関数クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
+
+
+from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
 
 
 class UserSetting:
@@ -145,6 +149,10 @@ class UserSetting:
             is_show_success_message (bool, optional): アクセス成功時にメッセージを表示するかどうか。
                 - デフォルトはFalse
         """
+        # AWSの設定ファイルのパスの設定
+        os.environ["AWS_CONFIG_FILE"] = SystemSetting.aws_config_file_path
+        # AWSの認証情報ファイルのパスの設定
+        os.environ["AWS_SHARED_CREDENTIALS_FILE"] = SystemSetting.aws_credentials_file_path
 
         try:
             # OCRの動作チェックに使用する画像ファイルのパス
@@ -212,8 +220,6 @@ class UserSetting:
             ]
             # ログに表示させる
             print("\n".join(message))
-            # エラーポップアップの作成
-            sg.popup("\n".join(message))
 
         # AWSのサービスのアクセスに成功したなら
         else:
@@ -225,7 +231,26 @@ class UserSetting:
             # ログに表示させる
             print("\n".join(message))
 
-            # AWSのサービスのアクセスに成功した場合、メッセージを表示するなら
-            if is_show_success_message:
-                # ポップアップの作成
+            # AWSのサービスのアクセスに成功した場合、メッセージを表示しないなら
+            if not is_show_success_message:
+                return
+
+        # AWSのサービスにアクセスできないまたは、AWSのサービスのアクセスに成功した場合、メッセージを表示するなら
+        if not can_access_aws_service or is_show_success_message:
+            # 現在のスレッドがメインスレッドかどうか
+            is_main_thread = threading.current_thread() == threading.main_thread()
+            # 現在のスレッドがメインスレッドなら
+            if is_main_thread:
+                # エラーポップアップの作成
                 sg.popup("\n".join(message))
+
+            # 現在のスレッドがメインスレッドでないなら
+            else:
+                # 現在開いているウィンドウクラスのインスタンスでウィンドウオブジェクトが作成されているかどうか
+                if hasattr(GlobalStatus.win_instance, "window"):
+                    # ウィンドウオブジェクトの取得
+                    window = GlobalStatus.win_instance.window
+                    # ウィンドウが閉じられていないなら
+                    if not window.was_closed():
+                        # スレッドから、キーイベントを送信
+                        window.write_event_value(key="-check_access_aws_thread_end-", value=message)

@@ -12,15 +12,11 @@ class TranslateThread:
     """翻訳処理を行うスレッドクラス"""
 
     @staticmethod  # スタティックメソッドの定義
-    # @ErrorLog.parameter_decorator(None)  # エラーログを取得するデコレータ
     @ErrorLog.decorator  # エラーログを取得するデコレータ
-    def run(window):
-        """翻訳処理
-        Args:
-            window(sg.Window): Windowオブジェクト
-        """
+    def run():
+        """翻訳処理"""
 
-        # ウィンドウオブジェクトの保存
+        # ウィンドウオブジェクトの取得
         window = GlobalStatus.win_instance.window
 
         # 翻訳処理

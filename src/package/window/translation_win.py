@@ -455,9 +455,8 @@ class TranslationWin(BaseWin):
             self.translate_thread = threading.Thread(
                 # スレッド名
                 name=f"翻訳スレッド : {str(self.thread_count)}",
-                target=lambda: TranslateThread.run(
-                    window=self.window,
-                ),  # スレッドで実行するメソッド
+                # スレッドで実行するメソッド
+                target=lambda: TranslateThread.run(),
                 daemon=True,  # メインスレッド終了時に終了する
             )
 

@@ -1,0 +1,23 @@
+{
+    // ファイルは変更後すぐに自動保存される
+    "files.autoSave": "afterDelay",
+    // Pythonインタープリタのデフォルトパスを設定する
+    // "python.defaultInterpreterPath": ,
+    // Black サーバーとサブプロセスを起動するために使用するインタプリタのパスを設定する(グローバル)
+    "black-formatter.interpreter": [
+        "python"
+    ],
+    // pythonの設定
+    "[python]": {
+        // Pythonファイルに対するデフォルトフォーマッターを設定する
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        // 保存時にファイルを自動フォーマットする
+        "editor.formatOnSave": true
+    },
+    // Blackフォーマッターの引数を設定する（ここでは行の長さを100に設定）
+    "black-formatter.args": [
+        "--line-length=100"
+    ],
+    // デフォルトのターミナルを設定する（コマンドプロンプト（cmd.exe））
+    "terminal.integrated.defaultProfile.windows": "Command Prompt"
+}

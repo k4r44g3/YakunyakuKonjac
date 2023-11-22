@@ -8,7 +8,6 @@ class TranslateTimingThread:
     """自動翻訳のタイミングを取得するスレッドクラス"""
 
     @staticmethod  # スタティックメソッドの定義
-    # @ErrorLog.parameter_decorator(None)  # エラーログを取得するデコレータ
     @ErrorLog.decorator  # エラーログを取得するデコレータ
     def run(user_setting, window):
         """自動翻訳のタイミングを取得
@@ -17,7 +16,7 @@ class TranslateTimingThread:
             window(sg.Window): Windowオブジェクト
         """
 
-        # ウィンドウオブジェクトの保存
+        # ウィンドウオブジェクトの取得
         window = GlobalStatus.win_instance.window
 
         # トグルボタンがオンに切り替わった回数の取得

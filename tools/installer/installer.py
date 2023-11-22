@@ -351,7 +351,10 @@ class Main:
         # 表示メッセージの取得
         message = window["-install_progress-"].metadata["message"]
         # インストール進捗状況の表示メッセージの更新
-        window["-install_progress-"].update(value=f"{message}{'.' * now_dot_count}")
+        window["-install_progress-"].update(
+            # メッセージ + 点 + 空白
+            value=f"{message}{'.' * now_dot_count}{' ' * (3-now_dot_count)}"
+        )
 
 
 if __name__ == "__main__":

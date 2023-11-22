@@ -17,5 +17,13 @@ set AWS_SHARED_CREDENTIALS_FILE=.\.aws\credentials
 @REM AWSの認証情報の保存先の指定
 set AWS_CONFIG_FILE=.\.aws\config
 
-@REM アプリケーションの実行
-Scripts\python.exe YakunyakuKonjac\src\app.py
+echo AWS設定画面
+echo 中断する場合、Ctrl + Zを押してください。
+
+@REM AWSの設定
+aws configure
+
+pause
+
+@REM バッチファイルを終了する
+exit

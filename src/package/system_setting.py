@@ -13,7 +13,7 @@ class SystemSetting:
     package_path = os.path.dirname(__file__)  # パッケージディレクトリパス
 
     # ソースコードを格納するディレクトリ
-    src_path = os.path.normpath(os.path.join(package_path, "..")) # 上位レベル参照の正規化
+    src_path = os.path.normpath(os.path.join(package_path, ".."))  # 上位レベル参照の正規化
 
     # 設定ファイル保存先設定
     setting_directory_path = os.path.join(src_path, "config")  # ディレクトリパス
@@ -29,9 +29,8 @@ class SystemSetting:
     # デバッグ用ディレクトリパス
     debug_directory_path = os.path.join(src_path, "debug_history")
 
-
     # プロジェクトのルートディレクトリ
-    project_path = os.path.normpath(os.path.join(src_path, "..")) # 上位レベル参照の正規化
+    project_path = os.path.normpath(os.path.join(src_path, ".."))  # 上位レベル参照の正規化
 
     # エラーログのディレクトリパス
     error_log_directory_path = os.path.join(project_path, "log")  # ディレクトリパス
@@ -55,14 +54,17 @@ class SystemSetting:
     font_MalgunGothic_path = os.path.join(font_path, "malgun.ttf")
 
     # 画像ファイル保存先設定
-    image_path = os.path.join(static_path,"image")
+    image_path = os.path.join(static_path, "image")
     # OCRの動作チェックに使用する画像ファイルの保存場所
-    check_ocr_image_path = os.path.join(image_path,"check_ocr.png")
+    check_ocr_image_path = os.path.join(image_path, "check_ocr.png")
 
-
+    # プロジェクトに関連するスクリプトが格納されるディレクトリのパス
+    tool_path = os.path.join(project_path, "tools")
+    # AWSの設定を行うbatファイルのパス
+    tool_aws_config_path = os.path.join(tool_path, "aws_configure.bat")
 
     # 仮想環境のルートディレクトリ
-    venv_path = os.path.normpath(os.path.join(project_path, "..")) # 上位レベル参照の正規化
+    venv_path = os.path.normpath(os.path.join(project_path, ".."))  # 上位レベル参照の正規化
 
     # AWSの認証情報や設定ファイルのディレクトリパス
     aws_setting_directory_path = os.path.join(venv_path, ".aws")
@@ -70,8 +72,6 @@ class SystemSetting:
     aws_config_file_path = os.path.join(aws_setting_directory_path, "config")
     # AWSの認証情報ファイルのパス
     aws_credentials_file_path = os.path.join(aws_setting_directory_path, "credentials")
-
-
 
     # アプリケーションの名前
     app_name = "ヤクミャクコンジャック"

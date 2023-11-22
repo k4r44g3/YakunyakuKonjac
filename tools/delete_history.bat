@@ -1,24 +1,27 @@
-@REM å±¥æ­´ãƒ•ã‚©ãƒ«ãƒ€ã¸ç§»å‹•
+@REM •¶šƒR[ƒh‚ğ"Shift-JIS"‚Éİ’è ƒƒbƒZ[ƒW‚Í”ñ•\¦
+chcp 932 >nul
+
+@REM —š—ğƒtƒHƒ‹ƒ_‚ÖˆÚ“®
 cd ..\src\history
 
-@REM å±¥æ­´ã®å‰Šé™¤
+@REM —š—ğ‚Ìíœ
 del /Q image_after\*
 del /Q image_before\*
 
-@REM .gitkeepã®ä½œæˆ
+@REM .gitkeep‚Ìì¬
 echo. > image_after\.gitkeep
 echo. > image_before\.gitkeep
 
-@REM ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãƒ•ã‚©ãƒ«ãƒ€ã¸ç§»å‹•
+@REM ƒvƒƒWƒFƒNƒgƒtƒHƒ‹ƒ_‚ÖˆÚ“®
 cd ..\..
 
-@REM ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã®å‰Šé™¤
+@REM ƒLƒƒƒbƒVƒ…‚Ìíœ
 rmdir /s /q src\__pycache__
 rmdir /s /q src\package\__pycache__
 rmdir /s /q src\package\translation\__pycache__
 rmdir /s /q src\package\window\__pycache__
 rmdir /s /q src\package\thread\__pycache__
 
-@REM ã‚¨ãƒ©ãƒ¼ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
+@REM ƒGƒ‰[ƒƒOƒtƒ@ƒCƒ‹íœ
 del log\error_detailed.log
 del log\error_simple.log

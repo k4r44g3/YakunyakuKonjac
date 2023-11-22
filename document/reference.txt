@@ -111,6 +111,12 @@ Python関連
     Pythonの型を完全に理解するためのtypingモジュール全解説(3.10対応)
     https://qiita.com/nicco_mirai/items/5591c1c48b1422c324c9
 
+    Python スクリプトを自動再起動するメモ
+    https://qiita.com/syoyo/items/77d859f9abdd7d1baaaf
+
+    os --- 雑多なオペレーティングシステムインターフェース
+    https://docs.python.org/ja/3/library/os.html
+
     並列処理関連
         Window.perform_long_operation Method
         https://pysimplegui.trinket.io/demo-programs#/multi-threaded/window-perform_long_operation-method
@@ -220,3 +226,22 @@ OCR関連
 
     【Python/PIL】縦横比を保ったまま矩形に合わせて画像をリサイズ（resize・thumnail）
     https://daeudaeu.com/pil-aspect/
+
+
+フォーマッタ関連
+    PythonのBlackフォーマッタがVSCodeの拡張機能として利用できるようになった
+    https://qiita.com/nujust/items/e0985240fd461e5c4c0a
+
+    VS Code で Python 用のフォーマッター (Black) を使う
+    https://maku.blog/p/4oybku6/
+
+    Pythonのコードフォーマッター(black)、リンター(flake8)をVSCode拡張機能で導入
+    https://itc-engineering-blog.netlify.app/blogs/vscode-extensions-black-flake8
+
+    Black Formatter
+    https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
+
+    python formatting in venv not working
+    https://github.com/microsoft/vscode-python/discussions/22140
+
+    

@@ -12,7 +12,6 @@ class GetKeyEventThread:
     """キーイベントの取得処理を行うスレッドクラス"""
 
     @staticmethod  # スタティックメソッドの定義
-    # @ErrorLog.parameter_decorator(None)  # エラーログを取得するデコレータ
     @ErrorLog.decorator  # エラーログを取得するデコレータ
     def run(setting_target_key):
         """キーイベントの取得
@@ -21,7 +20,7 @@ class GetKeyEventThread:
             setting_target_key (str): 設定変更対象のキー名
         """
 
-        # ウィンドウオブジェクトの保存
+        # ウィンドウオブジェクトの取得
         window = GlobalStatus.win_instance.window
         # 各キーの長押し状態を格納する辞書を初期化
         pressed_keys = {}

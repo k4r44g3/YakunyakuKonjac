@@ -93,17 +93,7 @@ class GetDragAreaThread:
             # 戻り値なし
             GetDragAreaThread.region = None
 
-
-    # def on_key_press(self, event):
-    #     """キーが押されたときのイベントハンドラ"""
-    #     # アプリケーションを終了
-    #     self.root.quit()
-
-    #     # アプリケーションを削除
-    #     self.root.destroy()
-
     @staticmethod  # スタティックメソッドの定義
-    # @ErrorLog.parameter_decorator(None)  # エラーログを取得するデコレータ
     @ErrorLog.decorator  # エラーログを取得するデコレータ
     def run():
         """ドラッグした領域の座標を取得する

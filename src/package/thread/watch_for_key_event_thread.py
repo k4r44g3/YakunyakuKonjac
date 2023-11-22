@@ -11,7 +11,6 @@ class WatchForKeyEventThread:
     """指定したキーイベントが発生するかどうか監視するスレッドクラス"""
 
     @staticmethod  # スタティックメソッドの定義
-    # @ErrorLog.parameter_decorator(None)  # エラーログを取得するデコレータ
     @ErrorLog.decorator  # エラーログを取得するデコレータ
     def run(window, key_binding_info_list):
         """指定したキーイベントが発生するかどうか監視する処理
@@ -25,7 +24,7 @@ class WatchForKeyEventThread:
                 - scan_code(int) : スキャンコード
         """
 
-        # ウィンドウオブジェクトの保存
+        # ウィンドウオブジェクトの取得
         window = GlobalStatus.win_instance.window
 
         # 各キーの長押し状態を格納する辞書を初期化

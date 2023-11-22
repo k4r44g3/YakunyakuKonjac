@@ -19,12 +19,14 @@ class BaseWin:
         GlobalStatus.win_instance = self  # 現在のウィンドウインスタンスの保持
         self.user_setting = UserSetting()  # ユーザ設定のインスタンス化
         self.transition_target_win = None  # 遷移先ウィンドウ名
+        self.is_restart_program = False  # 再起動するかどうか
 
     def start_win(self):
         """ウィンドウ開始処理"""
         Fn.time_log("ウィンドウ開始")  # ログ出力
         self.window = self.make_win()  # GUIウィンドウ作成処理
         self.window.finalize()  # GUIウィンドウ表示
+        self.window.force_focus()  # ウィンドウにフォーカスを持たせる
         self.event_start()  # イベント受付開始処理(終了処理が行われるまで繰り返す)
 
     def get_layout(self):
@@ -94,7 +96,6 @@ class BaseWin:
 
         # サブスレッドでエラーが発生したなら
         elif event == "-thread_error_event-" or GlobalStatus.is_sub_thread_error:
-            print("エラー発生")
             # エラーポップアップの表示
             sg.popup("\n".join(GlobalStatus.sub_thread_error_message))
             self.window_close()  # プログラム終了イベント処理
@@ -116,6 +117,13 @@ class BaseWin:
             transition_target_win(str): 遷移先ウィンドウ名
         """
         return self.transition_target_win
+
+    def get_is_restart_program(self):
+        """再起動するかどうかを取得する処理
+        Returns:
+            is_restart_program(bool): 再起動するかどうか
+        """
+        return self.is_restart_program
 
     # todo イベント処理記述
     def window_close(self):
@@ -181,9 +189,7 @@ class BaseWin:
                 # 値が範囲外なら
                 else:
                     # メッセージテキスト
-                    message_value = (
-                        f"  {str(min_value)}~{str(max_value)}の間で\n  入力してください。"
-                    )
+                    message_value = f"  {str(min_value)}~{str(max_value)}の間で\n  入力してください。"
 
                     # メッセージ末尾に改行を追加するなら
                     if is_add_newline_end:

@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta  # 日時, 時間差
 import time  # 時間測定
 import os  # ディレクトリ関連
+import sys  # Pythonのインタプリタや環境にアクセスするためのモジュール（引数の取得、システムパスの操作など）
+import subprocess  # 新しいプロセスを生成し、その入出力を管制するためのモジュール
 import re  # 正規表現
 
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
@@ -364,3 +366,61 @@ class Fn:
         file_name = file_base_name + image_file_extension
 
         return file_name  # ファイル名("yyyymmdd_hhmmss.拡張子")
+
+    @staticmethod  # スタティック(静的)メソッド
+    def command_run(command_list, file_path=None):
+        """与えられたコマンドのリストを実行する
+
+        Args:
+            command_list (list[command:str]): 実行するコマンドのリスト。
+            file_path (str, optional): 結果を書き込むファイルのパス。デフォルトではNone（ファイルへの書き込みは行われない）。
+
+        """
+
+        # 結果を書き込むファイルのパスが指定されている場合、そのファイルに出力する
+        if file_path is not None:
+            with open(file_path, "w") as f:  # 指定されたファイルを書き込みモードで開く
+                subprocess.run(
+                    args=command_list,  # コマンドのリスト
+                    check=True,  # 終了コードが0以外の時に例外を起こす
+                    stdout=f,  # 外部コマンドの標準出力のリダイレクト先
+                    creationflags=subprocess.CREATE_NO_WINDOW,  # コンソールウィンドウを開かない
+                )  # コマンドを実行、ファイルに出力
+
+        # 結果を書き込むファイルのパスが指定されていない場合、標準出力に出力
+        else:
+            subprocess.run(
+                args=command_list,  # コマンドのリスト
+                check=True,  # 終了コードが0以外の時に例外を起こす
+                creationflags=subprocess.CREATE_NO_WINDOW,  # コンソールウィンドウを開かない
+            )  # コマンドを実行
+
+    @staticmethod  # スタティック(静的)メソッド
+    def get_script_directory_path():
+        """現在のスクリプトファイルが存在するディレクトリのパスを取得する処理
+
+        Returns:
+            directory_path(src): 現在のスクリプトファイルが存在するディレクトリのパス
+        """
+        # ファイルが凍結(exe)なら
+        if getattr(sys, "frozen", False):
+            # 実行可能ファイルが存在するディレクトリのパス
+            return os.path.dirname((sys.executable))
+        else:
+            # スクリプトファイルが存在するディレクトリのパス
+            return os.path.dirname(__file__)
+
+    def create_aws_file():
+        """AWSの空の設定ファイルを作成する処理"""
+
+        # AWSの認証情報や設定ファイルのディレクトリが存在しないなら作成する
+        if not os.path.exists(SystemSetting.aws_setting_directory_path):
+            os.makedirs(SystemSetting.aws_setting_directory_path)
+
+        # 空のAWS設定ファイルを作成（既に存在する場合は何もしない）
+        with open(SystemSetting.aws_config_file_path, "a"):
+            pass
+
+        # 空のAWS認証情報ファイルを作成（既に存在する場合は何もしない）
+        with open(SystemSetting.aws_credentials_file_path, "a"):
+            pass
