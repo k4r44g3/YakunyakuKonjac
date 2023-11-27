@@ -116,7 +116,11 @@ class CharacterRecognition:
         logging.getLogger().setLevel(logging.ERROR)
 
         # OCRの作成
-        reader = easyocr.Reader(lang_list=ocr_lang_list)
+        reader = easyocr.Reader(
+            lang_list=ocr_lang_list,  # 抽出する言語のリスト
+            model_storage_directory=SystemSetting.easy_ocr_model_path,  # EasyOCRモデルのディレクトリパス
+            user_network_directory=SystemSetting.easy_ocr_network_path,  # EasyOCRで使用するネットワークモデルのディレクトリ
+        )
         # ロギングの設定をデフォルトに戻す
         logging.getLogger().setLevel(logging.WARNING)
         # 画像内のテキストを抽出する

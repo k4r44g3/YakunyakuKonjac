@@ -1,37 +1,34 @@
-import cv2
-from PIL import Image
-import os
-import numpy as np
+# 言語情報一覧リスト{日本語表記、英語表記、言語コード(ISO 639-1),フォントパス}
+language_list = [
+    {"ja_text": "アラビア語", "en_text": "Arabic", "code": "ar", "font_path": "font_Segoe_path"},
+    {
+        "ja_text": "中国語",
+        "en_text": "Chinese",
+        "code": "zh-CN",
+        "font_path": "font_MicrosoftYaHei_path",
+    },
+    {"ja_text": "英語", "en_text": "English", "code": "en", "font_path": "font_Segoe_path"},
+    {"ja_text": "フランス語", "en_text": "French", "code": "fr", "font_path": "font_Segoe_path"},
+    {"ja_text": "ドイツ語", "en_text": "German", "code": "de", "font_path": "font_Segoe_path"},
+    {"ja_text": "イタリア語", "en_text": "Italian", "code": "it", "font_path": "font_Segoe_path"},
+    {"ja_text": "日本語", "en_text": "Japanese", "code": "ja", "font_path": "font_YuGothic_path"},
+    {"ja_text": "韓国語", "en_text": "Korean", "code": "ko", "font_path": "font_MalgunGothic_path"},
+    {"ja_text": "ポルトガル語", "en_text": "Portuguese", "code": "pt", "font_path": "font_Segoe_path"},
+    {"ja_text": "ロシア語", "en_text": "Russian", "code": "ru", "font_path": "font_Segoe_path"},
+    {"ja_text": "スペイン語", "en_text": "Spanish", "code": "es", "font_path": "font_Segoe_path"},
+]
 
-def preprocess_image(image_path, output_path):
-    # 画像を読み込む
-    image = cv2.imread(image_path)
+# EasyOCR用の言語コード(ISO 639-2)のリスト((ISO 639-1):(ISO 639-2))
+EasyOCR_language_code = {"zh-CN": "ch_sim"}
 
-    # グレースケールに変換
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# 言語情報一覧リストから言語コードのリストを作成
+EasyOCR_language_code_list = [language_info["code"] for language_info in language_list]
 
-    # ノイズ除去
-    denoised = cv2.fastNlMeansDenoising(gray, None, 30, 7, 21)
+# EasyOCR用の言語コードに変更する
+for before_code, after_code in EasyOCR_language_code.items():
+    # 更新箇所の要素番号の取得
+    index = EasyOCR_language_code_list.index(before_code)
+    # 言語コードの更新
+    EasyOCR_language_code_list[index] = after_code
 
-    # 二値化処理（OTSUのアルゴリズムを使って自動的に閾値を決定）
-    _, binarized = cv2.threshold(denoised, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-
-    # モルフォロジー変換: 膨張と収縮を用いてノイズを除去
-    kernel = np.ones((1, 1), np.uint8)
-    morphed = cv2.morphologyEx(binarized, cv2.MORPH_CLOSE, kernel)
-    morphed = cv2.morphologyEx(morphed, cv2.MORPH_OPEN, kernel)
-
-    # エッジ強調
-    edged = cv2.Canny(morphed, 100, 200)
-
-    Image.fromarray(edged).show()
-
-    # 画像を保存する
-    # Image.fromarray(edged).save(output_path)
-
-# 使用例
-image_path = os.path.join(os.path.dirname(__file__), "test2.png")
-
-preprocess_image('test2.png', 'output_image.jpg')
-
-
+print(EasyOCR_language_code_list)

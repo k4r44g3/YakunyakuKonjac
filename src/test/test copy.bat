@@ -1,4 +1,4 @@
 echo start
-aws configure 2>error.log
+aws configure
 echo end
 pause

@@ -77,6 +77,11 @@ class SystemSetting:
     # AWSの認証情報ファイルのパス
     aws_credentials_file_path = os.path.join(aws_setting_directory_path, "credentials")
 
+    # EasyOCRモデルのディレクトリパス
+    easy_ocr_model_path = os.path.join(venv_path, ".EasyOCR")
+    # EasyOCRで使用するネットワークモデルのディレクトリ
+    easy_ocr_network_path = os.path.join(easy_ocr_model_path, "user_network")
+
     # アプリケーションの名前
     app_name = "ヤクミャクコンジャック"
 
