@@ -85,6 +85,9 @@ class SystemSetting:
     # アプリケーションの名前
     app_name = "ヤクミャクコンジャック"
 
+    # 翻訳スレッドの最大数
+    translation_thread_max = 4
+
     # 言語情報一覧リスト{日本語表記、英語表記、言語コード(ISO 639-1),フォントパス}
     language_list = [
         {"ja_text": "アラビア語", "en_text": "Arabic", "code": "ar", "font_path": font_Segoe_path},
@@ -106,7 +109,18 @@ class SystemSetting:
     ]
 
     # EasyOCR用の言語コード(ISO 639-2)のリスト((ISO 639-1):(ISO 639-2))
-    EasyOCR_language_code = {"zh-CN": "ch_sim"}
+    easy_ocr_update_language_code = {"zh-CN": "ch_sim"}
 
-    # 翻訳スレッドの最大数
-    translation_thread_max = 4
+    # EasyOCR用言語情報一覧リストの作成
+    # EasyOCR用言語情報一覧リスト（一部箇所でISO 639-2を使用）
+    easy_ocr_language_list = []
+    # 言語情報で走査
+    for language_info in language_list:
+        # 言語コードの取得
+        language_code = language_info["code"]
+        # 言語コードがEasyOCR用言語コードのリストに存在するなら
+        if language_code in easy_ocr_update_language_code:
+            # EasyOCR用言語コードに置き換える
+            language_info["code"] = easy_ocr_update_language_code[language_code]
+        # EasyOCR用言語情報一覧リストに追加する
+        easy_ocr_language_list.append(language_info)

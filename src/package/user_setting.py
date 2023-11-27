@@ -32,6 +32,7 @@ class UserSetting:
         "max_file_count": 50,  # 最大保存枚数
         "max_file_retention_days": 30,  # 最大保存期間(日)
         "window_theme": "DarkBlue3",  # ウィンドウのテーマ
+        "is_easy_ocr_model_exists": False,  # EasyOCRで使用されるモジュールが存在するかどうか
         # キーバインド設定情報の辞書
         "key_binding_info_list": [
             {

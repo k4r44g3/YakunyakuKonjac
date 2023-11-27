@@ -1,4 +1,4 @@
-import logging  # エラーログ記録
+import logging  # ログの機能を提供
 
 import boto3  # AWSのAIサービス
 import easyocr  # OCRライブラリ
@@ -99,12 +99,12 @@ class CharacterRecognition:
         language_code = user_setting.get_setting("source_language_code")
 
         # EasyOCR用言語コードのリスト
-        EasyOCR_language_code = SystemSetting.EasyOCR_language_code
+        easy_ocr_language_code = SystemSetting.easy_ocr_update_language_code
 
         # 言語コードがEasyOCR用言語コードのリストに存在するなら
-        if language_code in EasyOCR_language_code:
+        if language_code in easy_ocr_language_code:
             # EasyOCR用言語コードに置き換える
-            language_code = EasyOCR_language_code[language_code]
+            language_code = easy_ocr_language_code[language_code]
 
         ocr_lang_list = [language_code]  # 抽出する言語のリスト
 

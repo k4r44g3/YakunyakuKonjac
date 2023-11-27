@@ -26,25 +26,21 @@ except Exception as e:
 # その他の自作クラスのインポート
 try:
     import PySimpleGUI as sg  # GUI
-
     from package.fn import Fn  # 自作関数クラス
-
-    from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
     from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
-
-    from package.window.translation_win import TranslationWin  # 翻訳画面ウィンドウクラス
+    from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+    from package.window.aws_configure_win import AwsConfigureWin  # AWS設定画面ウィンドウクラス
+    from package.window.check_access_aws_win import CheckAccessAwsWin  # AWS接続テスト画面ウィンドウクラス
     from package.window.display_setting_win import DisplaySettingWin  # 表示設定画面ウィンドウクラス
-
-    # 環境設定画面ウィンドウクラス
-    from package.window.environment_setting_win import EnvironmentSettingWin
+    from package.window.easy_ocr_model_download_win import EasyOcrModelDownloadWin  # EasyOCRで使用するモデルのダウンロード画面クラス
+    from package.window.environment_setting_win import EnvironmentSettingWin  # 環境設定画面ウィンドウクラス
     from package.window.key_setting_win import KeySettingWin  # キー設定画面ウィンドウクラス
     from package.window.language_setting_win import LanguageSettingWin  # 言語設定画面ウィンドウクラス
     from package.window.save_setting_win import SaveSettingWin  # 保存設定画面ウィンドウクラス
     from package.window.shooting_setting_win import ShootingSettingWin  # 撮影設定画面ウィンドウクラス
     from package.window.theme_setting_win import ThemeSettingWin  # テーマ設定画面ウィンドウクラス
+    from package.window.translation_win import TranslationWin  # 翻訳画面ウィンドウクラス
     from package.window.user_info_win import UserInfoWin  # 利用者情報画面ウィンドウクラス
-    from package.window.aws_configure_win import AwsConfigureWin  # AWS設定画面ウィンドウクラス
-    from package.window.check_access_aws_win import CheckAccessAwsWin  # AWS接続テスト画面ウィンドウクラス
 
 except Exception as e:
     # エラーログの出力処理
@@ -66,15 +62,15 @@ class App:
         os.environ["AWS_SHARED_CREDENTIALS_FILE"] = SystemSetting.aws_credentials_file_path
 
         # ユーザ設定のインスタンス化
-        user_setting = UserSetting()
-
-        # AWSサービスにアクセス可能かどうか保存されていないなら
-        if user_setting.get_setting("can_access_aws_service") is None:
-            # AWSサービスにアクセス可能か確認する処理
-            user_setting.check_access_aws_service()
+        self.user_setting = UserSetting()
 
         # 翻訳前、後画像の両方が存在しない履歴ファイルを削除
         Fn.delete_unique_history_file()
+
+        # AWSサービスにアクセス可能かどうか保存されていないなら
+        if self.user_setting.get_setting("can_access_aws_service") is None:
+            # AWSサービスにアクセス可能か確認する処理
+            self.user_setting.check_access_aws_service()
 
         # メイン処理
         self.run()
@@ -86,51 +82,58 @@ class App:
 
         # ウィンドウクラスのマッピング辞書
         WIN_CLASS_DICT = {
-            "TranslationWin": TranslationWin,  # 翻訳画面ウィンドウクラス
+            "AwsConfigureWin": AwsConfigureWin,  # AWS設定画面ウィンドウクラス
+            "CheckAccessAwsWin": CheckAccessAwsWin,  # AWS接続テスト画面ウィンドウクラス
             "DisplaySettingWin": DisplaySettingWin,  # 表示設定画面ウィンドウクラス
+            "EasyOcrModelDownloadWin": EasyOcrModelDownloadWin,  # EasyOCRモデルダウンロードウィンドウクラス
             "EnvironmentSettingWin": EnvironmentSettingWin,  # 環境設定画面ウィンドウクラス
             "KeySettingWin": KeySettingWin,  # キー設定画面ウィンドウクラス
             "LanguageSettingWin": LanguageSettingWin,  # 言語設定画面ウィンドウクラス
             "SaveSettingWin": SaveSettingWin,  # 保存設定画面ウィンドウクラス
             "ShootingSettingWin": ShootingSettingWin,  # 撮影設定画面ウィンドウクラス
             "ThemeSettingWin": ThemeSettingWin,  # テーマ設定画面ウィンドウクラス
+            "TranslationWin": TranslationWin,  # 翻訳画面ウィンドウクラス
             "UserInfoWin": UserInfoWin,  # 利用者情報画面ウィンドウクラス
-            "AwsConfigureWin": AwsConfigureWin,  # AWS設定画面ウィンドウクラス
-            "CheckAccessAwsWin": CheckAccessAwsWin,  # AWS接続テスト画面ウィンドウクラス
         }
 
         Fn.time_log("システム開始")
 
-        # メインウィンドウの処理
-        transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
-        win_class = WIN_CLASS_DICT[transition_target_win]  # 遷移先ウィンドウクラスの取得
-        win_instance = win_class()  # ウィンドウ作成、ウィンドウクラスのインスタンスの保持
-        transition_target_win = win_instance.get_transition_target_win()  # 遷移先ウィンドウ名取得
-        is_restart_program = win_instance.get_is_restart_program()  # 再起動するかどうかを取得
+        # EasyOCRで使用されるモジュールが存在するかどうか
+        if self.user_setting.get_setting("is_easy_ocr_model_exists"):
+            # 翻訳画面ウィンドウ
+            transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
 
-        # 再起動しないなら
-        if not is_restart_program:
-            # 遷移先ウィンドウが存在する間、繰り返す
-            while transition_target_win is not None:
-                win_class = WIN_CLASS_DICT[transition_target_win]  # 遷移先ウィンドウクラス
-                win_instance = win_class()  # ウィンドウ作成、ウィンドウクラスのインスタンスの保持
-                transition_target_win = win_instance.get_transition_target_win()  # 遷移先ウィンドウ名取得
-                is_restart_program = win_instance.get_is_restart_program()  # 再起動するかどうかを取得
-
-        # 再起動するなら
-        if is_restart_program:
-            # 現在のプログラムを終了して再起動する処理
-            Fn.time_log("システム再起動")
-
-            # ! vscode上では動作しない
-            # 実行中のプロセスを新しいプログラムで置き換えるための関数
-            os.execl(
-                sys.executable,  # 実行可能ファイル
-                *([sys.executable] + sys.argv),  # 引数リスト
-            )
-        # 再起動しないなら
+        # EasyOCRで使用されるモジュールが存在しないなら
         else:
-            Fn.time_log("システム終了")
+            # EasyOCRで使用するモデルのダウンロードウィンドウクラス
+            transition_target_win = "EasyOcrModelDownloadWin"  # 遷移先ウィンドウ名
+
+        # 再起動するかどうか
+        is_restart_program = False
+
+        # 遷移先ウィンドウが存在する間、繰り返す
+        while transition_target_win is not None:
+            win_class = WIN_CLASS_DICT[transition_target_win]  # 遷移先ウィンドウクラス
+            win_instance = win_class()  # ウィンドウ作成、ウィンドウクラスのインスタンスの保持
+            transition_target_win = win_instance.get_transition_target_win()  # 遷移先ウィンドウ名取得
+            is_restart_program = win_instance.get_is_restart_program()  # 再起動するかどうかを取得
+
+        # 遷移先ウィンドウが存在しないなら
+        else:
+            # 再起動するなら
+            if is_restart_program:
+                # 現在のプログラムを終了して再起動する処理
+                Fn.time_log("システム再起動")
+
+                # ! vscode上では動作しない
+                # 実行中のプロセスを新しいプログラムで置き換えるための関数
+                os.execl(
+                    sys.executable,  # 実行可能ファイル
+                    *([sys.executable] + sys.argv),  # 引数リスト
+                )
+            # 再起動しないなら
+            else:
+                Fn.time_log("システム終了")
 
 
 if __name__ == "__main__":

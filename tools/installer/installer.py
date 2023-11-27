@@ -329,6 +329,7 @@ class Main:
 
         Args:
             window (sg.Window): Windowオブジェクト
+            message (src): 表示するメッセージ
         """
         # 表示メッセージの更新
         window["-install_progress-"].metadata["message"] = message

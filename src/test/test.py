@@ -19,16 +19,16 @@ language_list = [
 ]
 
 # EasyOCR用の言語コード(ISO 639-2)のリスト((ISO 639-1):(ISO 639-2))
-EasyOCR_language_code = {"zh-CN": "ch_sim"}
+easy_ocr_language_code = {"zh-CN": "ch_sim"}
 
 # 言語情報一覧リストから言語コードのリストを作成
-EasyOCR_language_code_list = [language_info["code"] for language_info in language_list]
+easy_ocr_language_code_list = [language_info["code"] for language_info in language_list]
 
 # EasyOCR用の言語コードに変更する
-for before_code, after_code in EasyOCR_language_code.items():
+for before_code, after_code in easy_ocr_language_code.items():
     # 更新箇所の要素番号の取得
-    index = EasyOCR_language_code_list.index(before_code)
+    index = easy_ocr_language_code_list.index(before_code)
     # 言語コードの更新
-    EasyOCR_language_code_list[index] = after_code
+    easy_ocr_language_code_list[index] = after_code
 
-print(EasyOCR_language_code_list)
+print(easy_ocr_language_code_list)
