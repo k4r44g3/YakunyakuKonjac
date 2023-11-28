@@ -2,6 +2,7 @@ import bisect  # 二分探索
 import os  # ディレクトリ関連
 import sys  # システム関連
 import threading  # スレッド関連
+import time  # 時間関係
 
 import PySimpleGUI as sg  # GUI
 from PIL import Image, ImageTk  # 画像処理
@@ -56,6 +57,9 @@ class TranslationWin(BaseWin):
 
         # 利用者が変更できる画像の拡大率
         self.user_zoom_scale = 1
+
+        # 最後に翻訳処理を行った時間
+        self.last_translation_time = None
 
         # ウィンドウ開始処理
         self.start_win()
@@ -439,27 +443,42 @@ class TranslationWin(BaseWin):
 
     def translate_thread_start(self):
         """翻訳処理を別スレッドで開始する処理"""
-        if self.thread_count < self.thread_max:
+
+        # 現在の時間を取得
+        current_time = time.time()
+
+        # 最後に翻訳処理を行った時間が設定されていないか、1秒以上経過しているなら
+        if self.last_translation_time is None or current_time - self.last_translation_time >= 1:
+            # 最後に処理した時間を更新
+            self.last_translation_time = current_time
+
             # 翻訳スレッド最大数を超えていないなら
-            self.thread_count += 1
-            Fn.time_log(f"スレッド開始 : {self.thread_count}")
+            if self.thread_count < self.thread_max:
+                # 翻訳スレッド数更新
+                self.thread_count += 1
+                Fn.time_log(f"スレッド開始 : {self.thread_count}")
 
-            # 翻訳処理を行うスレッド作成
-            self.translate_thread = threading.Thread(
-                # スレッド名
-                name=f"翻訳スレッド : {str(self.thread_count)}",
-                # スレッドで実行するメソッド
-                target=lambda: TranslateThread.run(),
-                daemon=True,  # メインスレッド終了時に終了する
-            )
+                # 翻訳処理を行うスレッド作成
+                self.translate_thread = threading.Thread(
+                    # スレッド名
+                    name=f"翻訳スレッド : {str(self.thread_count)}",
+                    # スレッドで実行するメソッド
+                    target=lambda: TranslateThread.run(),
+                    daemon=True,  # メインスレッド終了時に終了する
+                )
 
-            # 翻訳処理を行うスレッド開始、処理終了時にイベントを返す
-            self.translate_thread.start()
+                # 翻訳処理を行うスレッド開始、処理終了時にイベントを返す
+                self.translate_thread.start()
 
-        else:
             # 翻訳スレッド最大数を超えているなら
-            Fn.time_log("スレッド数オーバー")
-            self.is_thread_over = True  # スレッド数がオーバーするかどうか
+            else:
+                Fn.time_log("スレッド数オーバー")
+                self.is_thread_over = True  # スレッド数がオーバーするかどうか
+
+        # 最後に翻訳処理を行った時間から、1秒以上経過していないなら
+        else:
+            Fn.time_log('前回の翻訳からの経過時間が短すぎます。1秒以上の待機が必要です。')
+
 
     def translate_thread_end(self, values):
         """翻訳処理のスレッド終了イベント処理
@@ -473,12 +492,13 @@ class TranslationWin(BaseWin):
         Fn.time_log(f"スレッド終了 : {str(self.thread_count)}")
 
         # 余裕が出来たスレッドで翻訳処理を開始する処理
+        # スレッド数がオーバーしていたなら
         if self.is_thread_over:
-            # スレッド数がオーバーしていたなら
+            # 自動翻訳トグルボタンがオンなら
             if self.window["-toggle_auto_translation-"].metadata["is_toggle_on"]:
-                # 自動翻訳トグルボタンがオンなら
                 # 翻訳処理を別スレッドで開始
                 self.translate_thread_start()
+
             # スレッド数がオーバーするかどうか
             self.is_thread_over = False
 

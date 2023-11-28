@@ -18,21 +18,7 @@ class TranslateThread:
         window = GlobalStatus.win_instance.window
 
         # 翻訳処理
-        # file_name = Translation.save_history()
-
-        # ! デバッグ
-        try:
-            # 翻訳処理
-            file_name = Translation.save_history()
-        except:
-            import shutil  # ファイルのコピー
-
-            source_dir_path = SystemSetting.image_before_directory_path  # 翻訳前履歴画像フォルダパス
-            target_dir_path = SystemSetting.error_log_directory_path  # エラーログのディレクトリパス
-
-            shutil.copytree(source_dir_path, target_dir_path, dirs_exist_ok=True)  # エラーが発生した画像の保存
-            print("警告：エラーが発生した画像を保存しました")
-            raise  # エラーを発生させる
+        file_name = Translation.save_history()
 
         # ウィンドウが開いているなら
         if not (window.was_closed()):

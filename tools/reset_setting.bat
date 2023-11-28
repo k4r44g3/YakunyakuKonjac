@@ -3,3 +3,5 @@ chcp 932 >nul
 
 @REM İ’èƒtƒ@ƒCƒ‹íœ
 del ..\src\config\setting.json
+
+msg * Š®—¹‚µ‚Ü‚µ‚½
