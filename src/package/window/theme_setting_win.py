@@ -1,4 +1,5 @@
 import os  # ディレクトリ関連
+import random  # 乱数関連
 import sys  # システム関連
 
 import PySimpleGUI as sg  # GUI
@@ -57,10 +58,14 @@ class ThemeSettingWin(BaseWin):
                                 key="-theme_list-",  # 識別子
                                 enable_events=True,  # イベントを取得する
                                 default_values=[self.current_theme],  # デフォルト値
-                            )
-                        ]
+                            ),
+                        ],
                     ],
                 ),
+            ],
+            # ランダムテーマボタン
+            [
+                sg.Button("ランダム", key="-theme_random-"),
             ],
             [
                 sg.Push(),  # 右に寄せる
@@ -139,6 +144,35 @@ class ThemeSettingWin(BaseWin):
             elif event == "-theme_list-":
                 # 変更先テーマの取得
                 new_theme = values["-theme_list-"][0]
+                # テーマが変更されているなら
+                if new_theme != self.current_theme:
+                    # テーマの更新
+                    self.current_theme = new_theme
+
+                    # ウィンドウ位置、サイズの取得
+                    window_location = self.window.CurrentLocation()  # ウィンドウ位置
+
+                    # ウィンドウの位置の更新
+                    self.window_left_x = window_location[0]
+                    self.window_top_y = window_location[1]
+
+                    # ウィンドウを閉じる
+                    self.window.close()
+                    # ウィンドウ開始処理
+                    self.start_win()
+
+            # ランダムテーマボタン押下イベント
+            elif event == "-theme_random-":
+                # リストからランダムな要素番号を取得
+                random_index = random.randint(0, len(sg.theme_list()) - 1)
+                # テーマ選択リストボックスの更新
+                self.window["-theme_list-"].update(
+                    set_to_index=random_index,  # 値の設定
+                    scroll_to_index=random_index - 3,  # 最初に表示される要素番号の取得
+                )
+                # 変更先テーマの取得
+                new_theme = sg.theme_list()[random_index]
+
                 # テーマが変更されているなら
                 if new_theme != self.current_theme:
                     # テーマの更新
