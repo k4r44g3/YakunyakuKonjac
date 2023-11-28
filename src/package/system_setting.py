@@ -66,6 +66,12 @@ class SystemSetting:
     tool_path = os.path.join(project_path, "tools")
     # AWSの設定を行うbatファイルのパス
     tool_aws_config_path = os.path.join(tool_path, "aws_configure.bat")
+    # 履歴の削除を行うbatファイルのパス
+    tool_delete_history_path = os.path.join(tool_path, "delete_history.bat")
+    # ソフトウェアの初期化を行うbatファイルのパス
+    tool_initialize_software_path = os.path.join(tool_path, "initialize_software.bat")
+    # 設定のリセットを行うbatファイルのパス
+    tool_reset_setting_path = os.path.join(tool_path, "reset_setting.bat")
 
     # 仮想環境のルートディレクトリ
     venv_path = os.path.normpath(os.path.join(project_path, ".."))  # 上位レベル参照の正規化

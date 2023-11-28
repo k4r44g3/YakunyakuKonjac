@@ -9,7 +9,7 @@ log/error_simple.log
 src/history/image_after/*
 src/history/image_before/*
 
-# ディレクトリのみ表示
+# 履歴ディレクトリのみ表示
 !src/history/image_after/.gitkeep
 !src/history/image_before/.gitkeep
 

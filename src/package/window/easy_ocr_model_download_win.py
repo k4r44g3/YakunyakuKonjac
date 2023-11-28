@@ -47,11 +47,11 @@ class EasyOcrModelDownloadWin(BaseWin):
         layout = [
             [
                 sg.Text(
-                    text="EasyOCRのモデルダウンロード中",
+                    text="EasyOCRの検出モデルをダウンロード中",
                     key="-text-",
                     size=(40, 1),
                     metadata={
-                        "message": "EasyOCRモデルダウンロード中",  # 表示メッセージ
+                        "message": "EasyOCRの検出モデルをダウンロード中",  # 表示メッセージ
                         "progress_indicator_dot_count": 0,  # 進捗インジケーターの点の数
                     },
                 )
@@ -144,13 +144,24 @@ class EasyOcrModelDownloadWin(BaseWin):
         # ! NVIDIAのGPUの場合、処理速度高速
         # 警告ロギングを非表示にする
         logging.getLogger().setLevel(logging.ERROR)
+
+        # テキストの検出モデルのダウンロード
+        easyocr.Reader(
+            lang_list=[],  # 抽出する言語のリスト
+            recognizer=False,  # 言語モデルを読み込まない
+            model_storage_directory=SystemSetting.easy_ocr_model_path,  # EasyOCRモデルのディレクトリパス
+            user_network_directory=SystemSetting.easy_ocr_network_path,  # EasyOCRで使用するネットワークモデルのディレクトリ
+        )
+
         # 言語リストから言語コードを取り出す
         for lang_info in language_list:
             # プロセスの進捗状況メッセージの更新処理
             self.progress_message_update(f"{lang_info['ja_text']}のEasyOCRモデルをダウンロード中")
-            # OCRの作成
+
+            # 言語モデル(認識モデル)のダウンロード
             easyocr.Reader(
                 lang_list=[lang_info["code"]],  # 抽出する言語のリスト
+                detector=False,  # 検出モデルを読み込まない
                 model_storage_directory=SystemSetting.easy_ocr_model_path,  # EasyOCRモデルのディレクトリパス
                 user_network_directory=SystemSetting.easy_ocr_network_path,  # EasyOCRで使用するネットワークモデルのディレクトリ
             )

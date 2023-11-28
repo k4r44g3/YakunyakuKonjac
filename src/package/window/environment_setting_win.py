@@ -126,12 +126,24 @@ class EnvironmentSettingWin(BaseWin):
                 sg.Frame(title="翻訳ソフト", layout=translation_soft_layout),
             ],
             [
+                # AWS接続設定ボタン
+                sg.Button("AWS接続設定", key="-aws_config_button-", size=(16, 1)),
+            ],
+            [
                 # AWS接続テストボタン
                 sg.Button("AWS接続テスト", key="-check_access_aws_service-", size=(16, 1)),
             ],
             [
-                # AWS接続設定ボタン
-                sg.Button("AWS接続設定", key="-aws_config_button-", size=(16, 1)),
+                # 履歴削除ボタン
+                sg.Button("履歴削除", key="-delete_history-", size=(16, 1)),
+            ],
+            [
+                # 設定リセットボタン
+                sg.Button("設定リセット", key="-reset_setting-", size=(16, 1)),
+            ],
+            [
+                # 初期化ボタン
+                sg.Button("初期化", key="-initialize_software-", size=(16, 1)),
             ],
             [
                 sg.Push(),  # 右に寄せる
@@ -186,6 +198,30 @@ class EnvironmentSettingWin(BaseWin):
                 self.transition_target_win = "AwsConfigureWin"  # 遷移先ウィンドウ名
                 self.window_close()  # プログラム終了イベント処理
 
+            # 履歴削除ボタン押下イベント
+            elif event == "-delete_history-":
+                # バッチファイルを実行するイベントの処理
+                self.bat_file_event(
+                    popup_message="履歴を削除しますか？",  # ポップアップで表示するメッセージ
+                    bat_file_path=SystemSetting.tool_delete_history_path,  #  バッチファイルのパス
+                )
+
+            # 設定リセットボタン押下イベント
+            elif event == "-reset_setting-":
+                # バッチファイルを実行するイベントの処理
+                self.bat_file_event(
+                    popup_message="設定をリセットしますか？",  # ポップアップで表示するメッセージ
+                    bat_file_path=SystemSetting.tool_reset_setting_path,  #  バッチファイルのパス
+                )
+
+            # 初期化ボタン押下イベント
+            elif event == "-initialize_software-":
+                # バッチファイルを実行するイベントの処理
+                self.bat_file_event(
+                    popup_message="初期化しますか？\nAWSの設定やEasyOCRモデルのデータなどもリセットされます。",  # ポップアップで表示するメッセージ
+                    bat_file_path=SystemSetting.tool_initialize_software_path,  #  バッチファイルのパス
+                )
+
     # todo イベント処理記述
 
     def get_update_setting(self, values):
@@ -231,6 +267,40 @@ class EnvironmentSettingWin(BaseWin):
         elif not now_visible and event == "-AmazonTextract-":
             # 表示状態に変更
             self.window["-ocr_amazon_textract_message-"].update(visible=True)
+
+    def bat_file_event(self, popup_message, bat_file_path):
+        """バッチファイルを実行するイベントの処理
+
+        Args:
+            popup_message (str): ポップアップで表示するメッセージ
+            bat_file_path (str): バッチファイルのパス
+        """
+        # ウィンドウを非表示にする
+        self.window.hide()
+        # ポップアップを表示する
+        popup_status = sg.popup_yes_no(popup_message)
+
+        # ポップアップウィンドウで閉じるボタン,Alt+F4が押されたなら
+        if popup_status is None:
+            self.window_close()  # プログラム終了イベント処理
+            return  # メソッドの処理を終了する
+
+        # ポップアップでYesが押されたなら
+        elif popup_status == "Yes":
+            # バッチファイルの実行
+            subprocess.run(bat_file_path)
+
+            # ポップアップの表示
+            sg.popup("プログラムを再起動します。")
+
+            # 現在のプログラムを終了して再起動する処理
+            self.is_restart_program = True  # 再起動するかどうか
+            self.window_close()  # プログラム終了イベント処理
+
+            return # メソッドの処理を終了する
+
+        # ウィンドウを表示する
+        self.window.un_hide()
 
 
 # ! デバッグ用
