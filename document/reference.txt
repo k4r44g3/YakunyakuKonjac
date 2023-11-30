@@ -165,6 +165,20 @@ Python関連
         【Python】Selenium：IE、Firefox操作時のコマンドプロンプトを非表示にする方法
         https://blog2.k05.biz/2020/06/python-selenium-ie-console.html
 
+        第14回　WshShellオブジェクトを利用する（3）
+        https://atmarkit.itmedia.co.jp/ait/articles/0712/27/news083.html
+
+        Windows スクリプト ホストを使用してデスクトップ ショートカットを作成する方法
+        https://learn.microsoft.com/ja-jp/troubleshoot/windows-client/admin-development/create-desktop-shortcut-with-wsh
+
+        ショートカットファイルを作成する方法
+        https://www.projectgroup.info/tips/Windows/vbs_0001.html
+
+        Windows 10のペイントでオリジナルのアイコンを作成する方法
+        https://faq.nec-lavie.jp/qasearch/1007/app/servlet/relatedqa?QID=020075
+
+        アイコン (設計の基本)
+        https://learn.microsoft.com/ja-jp/windows/win32/uxguide/vis-icons
 
 contents_changed
 

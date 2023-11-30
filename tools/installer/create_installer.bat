@@ -1,39 +1,55 @@
-@REM ä»®æƒ³ç’°å¢ƒä½œæˆ
+@REM ƒtƒ@ƒCƒ‹•Û‘¶‚ÉAƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğ"Shift-JIS"‚É‚·‚é
+
+@REM ƒRƒ}ƒ“ƒh‚ğ•\¦‚µ‚È‚¢
+@REM @echo off
+
+@REM •¶šƒR[ƒh‚ğ"Shift-JIS"‚Éİ’è ƒƒbƒZ[ƒW‚Í”ñ•\¦
+chcp 932 >nul
+
+@REM ‰¼‘zŠÂ‹«ì¬
 py -3.8 -m venv venv_installer
-@REM ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ä»®æƒ³ç’°å¢ƒã®ãƒ«ãƒ¼ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ã™ã‚‹
+@REM ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ğ‰¼‘zŠÂ‹«‚Ìƒ‹[ƒgƒfƒBƒŒƒNƒgƒŠ‚É‚·‚é
 cd venv_installer
-@REM ä»®æƒ³ç’°å¢ƒã®æœ‰åŠ¹åŒ–
+@REM ‰¼‘zŠÂ‹«‚Ì—LŒø‰»
 call Scripts\activate.bat
 
-@REM ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
-@REM ã‚°ãƒ©ãƒ•ã‚£ã‚«ãƒ«ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹(GUI)ã‚’ç°¡å˜ã«ä½œæˆã™ã‚‹ãŸã‚ã®ãƒ„ãƒ¼ãƒ«
+@REM ƒpƒbƒP[ƒWƒCƒ“ƒXƒg[ƒ‹
+@REM ƒOƒ‰ƒtƒBƒJƒ‹ƒ†[ƒU[ƒCƒ“ƒ^[ƒtƒFƒCƒX(GUI)‚ğŠÈ’P‚Éì¬‚·‚é‚½‚ß‚Ìƒc[ƒ‹
 pip install PySimpleGUI
 
-@REM Pythonãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ã‚¹ã‚¿ãƒ³ãƒ‰ã‚¢ãƒ­ãƒ³ã®å®Ÿè¡Œå¯èƒ½ãƒ•ã‚¡ã‚¤ãƒ«(exe, dmg, etc.)ã«å¤‰æ›ã™ã‚‹ãŸã‚ã®ãƒ„ãƒ¼ãƒ«
+@REM PythonƒvƒƒOƒ‰ƒ€‚ğƒXƒ^ƒ“ƒhƒAƒƒ“‚ÌÀs‰Â”\ƒtƒ@ƒCƒ‹(exe, dmg, etc.)‚É•ÏŠ·‚·‚é‚½‚ß‚Ìƒc[ƒ‹
 pip install pyinstaller
 
-@REM ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ä¸€è¦§å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
+@REM ƒpƒbƒP[ƒWˆê——o—Íƒtƒ@ƒCƒ‹‚Ìì¬
 pip freeze > requirements.txt
 
-@REM srcãƒ•ã‚©ãƒ«ãƒ€ã®ä½œæˆ
+@REM srcƒtƒHƒ‹ƒ_‚Ìì¬
 md src
 
-@REM installer.pyã®ã‚³ãƒ”ãƒ¼
-copy ..\installer.py src
+@REM ƒCƒ“ƒXƒg[ƒ‰‚ÌƒXƒNƒŠƒvƒg‚ÌƒRƒs[
+copy ..\installer_public.py src
 
-@REM exeãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
-pyinstaller src\installer.py --onefile --noconsole
+copy ..\installer_private.py src
 
-@REM exeãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚³ãƒ”ãƒ¼
-copy dist\installer.exe ..\
+@REM exeƒtƒ@ƒCƒ‹‚Ìì¬(1‚Â‚Ìƒtƒ@ƒCƒ‹‚É‚Ü‚Æ‚ß‚éAƒRƒ“ƒ\[ƒ‹”ñ•\¦AƒLƒƒƒbƒVƒ…‚Ìíœ, –¼‘Ow’è)
+pyinstaller src\installer_public.py --onefile --noconsole --clean --name installer_public.exe
 
-@REM ä»®æƒ³ç’°å¢ƒã‹ã‚‰æŠœã‘å‡ºã™
+@REM exeƒtƒ@ƒCƒ‹‚ÌƒRƒs[
+copy dist\installer_public.exe ..\
+
+@REM exeƒtƒ@ƒCƒ‹‚Ìì¬(1‚Â‚Ìƒtƒ@ƒCƒ‹‚É‚Ü‚Æ‚ß‚éAƒRƒ“ƒ\[ƒ‹”ñ•\¦AƒLƒƒƒbƒVƒ…‚Ìíœ, –¼‘Ow’è)
+pyinstaller src\installer_private.py --onefile --noconsole --clean --name installer_private.exe
+
+@REM exeƒtƒ@ƒCƒ‹‚ÌƒRƒs[
+copy dist\installer_private.exe ..\
+
+@REM ‰¼‘zŠÂ‹«‚©‚ç”²‚¯o‚·
 call Scripts\deactivate.bat
 
-@REM ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’ä»®æƒ³ç’°å¢ƒã®å¤–ã«ã™ã‚‹
+@REM ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ğ‰¼‘zŠÂ‹«‚ÌŠO‚É‚·‚é
 cd ..
 
-@REM ä»®æƒ³ç’°å¢ƒã®å‰Šé™¤
+@REM ‰¼‘zŠÂ‹«‚Ìíœ
 RMDIR /S /Q venv_installer
 
-pause
+msg * ƒCƒ“ƒXƒg[ƒ‰‚Ìì¬‚ªŠ®—¹‚µ‚Ü‚µ‚½

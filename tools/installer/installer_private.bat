@@ -1,43 +1,81 @@
-@REM AWSã®è¨­å®š
-@REM aws configure
+@REM ƒtƒ@ƒCƒ‹•Û‘¶‚ÉAƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğ"Shift-JIS"‚É‚·‚é
 
-@REM ä»®æƒ³ç’°å¢ƒä½œæˆ
+@REM ƒRƒ}ƒ“ƒh‚ğ•\¦‚µ‚È‚¢
+@REM @echo off
+
+@REM •¶šƒR[ƒh‚ğ"Shift-JIS"‚Éİ’è ƒƒbƒZ[ƒW‚Í”ñ•\¦
+chcp 932 >nul
+
+@REM ‰¼‘zŠÂ‹«ì¬
 py -3.8 -m venv venv_YakunyakuKonjac
 cd venv_YakunyakuKonjac
 call Scripts\activate.bat
 
-@REM ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ« ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã‚’100ç§’ã«å¤‰æ›´
+@REM ƒpƒbƒP[ƒWƒCƒ“ƒXƒg[ƒ‹ ƒ^ƒCƒ€ƒAƒEƒg‚ğ100•b‚É•ÏX
 
-@REM AWSé–¢é€£
+@REM AWSŠÖ˜A
 pip --default-timeout=100 install awscli
 pip --default-timeout=100 install boto3
-@REM OCRé–¢é€£
+@REM OCRŠÖ˜A
 pip --default-timeout=100 install easyocr
-@REM ç¿»è¨³é–¢é€£
+@REM –|–óŠÖ˜A
 pip --default-timeout=100 install deep-translator
-@REM GUIé–¢é€£
+@REM GUIŠÖ˜A
 pip --default-timeout=100 install keyboard
 pip --default-timeout=100 install pyautogui
 pip --default-timeout=100 install PySimpleGUI
 
-@REM pip install black
-
-@REM ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ä¸€è¦§å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
+@REM ƒpƒbƒP[ƒWˆê——o—Íƒtƒ@ƒCƒ‹‚Ìì¬
 pip freeze > requirements.txt
 
-@REM gitã‹ã‚‰ã‚¯ãƒ­ãƒ¼ãƒ³
+@REM git‚©‚çƒNƒ[ƒ“
 git clone https://github.com/pppp-987/YakunyakuKonjac.git
 
-@REM ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã«ç§»å‹•
+@REM ƒvƒƒWƒFƒNƒgƒtƒ@ƒCƒ‹‚ÉˆÚ“®
 cd YakunyakuKonjac
 
-@REM ãƒ–ãƒ©ãƒ³ãƒå¤‰æ›´
+@REM ƒuƒ‰ƒ“ƒ`•ÏX
 git checkout environment
 
-@REM ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹æˆãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ
-@REM tree /f > directory_tree.txt
+@REM ƒVƒ‡[ƒgƒJƒbƒgì¬ VBScriptg—p
 
-@REM VScodeã§é–‹ã
-@REM ã‚¤ãƒ³ã‚¿ãƒ—ãƒªã‚¿ã‚’ .\Scripts\python.exeã«è¨­å®š
+@REM ƒVƒ‡[ƒgƒJƒbƒg‚ÌƒŠƒ“ƒNæƒpƒX
+set ShortcutPath="%~dp0\app.lnk"
 
-pause
+@REM ƒVƒ‡[ƒgƒJƒbƒg‚Ì•Û‘¶æƒpƒX
+set TargetPath="%cd%\tools\app.bat"
+
+@REM ƒVƒ‡[ƒgƒJƒbƒg‚ÌƒAƒCƒRƒ“‚ÌƒpƒX
+set ShortcutIconPath="%cd%\static\icon\app.ico"
+
+@REM ì‹ÆƒtƒHƒ‹ƒ_‚ÌƒpƒX
+set WorkingDirectoryPath="%cd%\tools"
+
+@REM ˆê“I‚ÈVBScriptƒtƒ@ƒCƒ‹‚Ìì¬
+copy nul CreateShortcut.vbs
+
+@REM WScript.ShellƒIƒuƒWƒFƒNƒg‚Ìì¬
+echo Set WScriptShell = WScript.CreateObject("WScript.Shell") >> CreateShortcut.vbs
+
+@REM ƒVƒ‡[ƒgƒJƒbƒg‚Ìì¬
+echo Set Shortcut = WScriptShell.CreateShortcut(%ShortcutPath%) >> CreateShortcut.vbs
+
+@REM ƒVƒ‡[ƒgƒJƒbƒg‚ÌƒŠƒ“ƒNæƒpƒX‚Ìİ’è
+echo Shortcut.TargetPath = %TargetPath% >> CreateShortcut.vbs
+
+@REM ì‹ÆƒtƒHƒ‹ƒ_‚Ìİ’è
+echo Shortcut.WorkingDirectory = %WorkingDirectoryPath% >> CreateShortcut.vbs
+
+@REM ƒVƒ‡[ƒgƒJƒbƒgƒAƒCƒRƒ“‚Ìİ’è
+echo Shortcut.IconLocation = %ShortcutIconPath% >> CreateShortcut.vbs
+
+@REM ƒVƒ‡[ƒgƒJƒbƒg‚ğ•Û‘¶
+echo Shortcut.Save >> CreateShortcut.vbs
+
+@REM VBSƒtƒ@ƒCƒ‹‚ğÀs‚µ‚ÄƒVƒ‡[ƒgƒJƒbƒg‚ğì¬
+cscript CreateShortcut.vbs
+
+@REM ˆê“I‚Éì¬‚µ‚½VBSƒtƒ@ƒCƒ‹‚ğíœ
+del CreateShortcut.vbs
+
+msg * ƒCƒ“ƒXƒg[ƒ‹‚ªŠ®—¹‚µ‚Ü‚µ‚½
