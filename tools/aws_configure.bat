@@ -1,7 +1,7 @@
 @REM ファイル保存時に、エンコーディングを"Shift-JIS"にする
 
 @REM コマンドを表示しない
-@REM @echo off
+@echo off
 
 @REM 文字コードを"Shift-JIS"に設定 メッセージは非表示
 chcp 932 >nul

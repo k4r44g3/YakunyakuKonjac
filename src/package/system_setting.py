@@ -124,9 +124,12 @@ class SystemSetting:
     for language_info in language_list:
         # 言語コードの取得
         language_code = language_info["code"]
+        # EasyOCR用の言語情報の取得
+        easy_ocr_language_info = language_info.copy()
+
         # 言語コードがEasyOCR用言語コードのリストに存在するなら
         if language_code in easy_ocr_update_language_code:
             # EasyOCR用言語コードに置き換える
-            language_info["code"] = easy_ocr_update_language_code[language_code]
+            easy_ocr_language_info["code"] = easy_ocr_update_language_code[language_code]
         # EasyOCR用言語情報一覧リストに追加する
-        easy_ocr_language_list.append(language_info)
+        easy_ocr_language_list.append(easy_ocr_language_info)
