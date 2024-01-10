@@ -195,8 +195,14 @@ class InstallThread:
 
             # プロジェクトディレクトリが存在しないなら
             if not os.path.isdir(os.path.join(venv_path, Setting.git_repository_name)):
-                # gitからクローンする
-                Fn.command_run(["git", "clone", Setting.git_url])
+                #! 公開用なら
+                if Setting.is_public:
+                    # gitからクローンする(最新のコミットのみ)
+                    Fn.command_run(["git", "clone", "--depth", "1", Setting.git_url])
+                #! 公開用でないなら
+                else:
+                    # gitからクローンする(最新のコミットのみ)
+                    Fn.command_run(["git", "clone", "-b", "environment", "--depth", "1", Setting.git_url])
 
             # プロジェクトディレクトリが存在するなら
             else:
@@ -205,14 +211,6 @@ class InstallThread:
 
                 # gitからプルする
                 Fn.command_run(["git", "pull", "origin"])
-
-            #! 公開用(デバッグ用)でないなら
-            if not Setting.is_public:
-                # カレントディレクトリをプロジェクトディレクトリに変更
-                os.chdir(os.path.join(venv_path, Setting.git_repository_name))
-
-                # ブランチ変更
-                Fn.command_run(["git", "checkout", "environment"])
 
             # インストール状況のメッセージの更新処理
             Main.install_progress_message_update(window, message="ショートカット作成中")

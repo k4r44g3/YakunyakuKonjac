@@ -40,6 +40,23 @@ https://karupoimou.hatenablog.com/entry/20200427/1587975580
     シグナルを利用した仕組みはwindows非対応(signal.SIGALRM) UNIX系のみ
     サブスレッドではオブジェクトのシリアライズ（プロセス間通信のためのデータのエンコード）中にエラーが発生する
 
+バグの概要
+    ソフトウェアのダウンロードに失敗する
+バグの問題
+    git clone時に、Gitクローンエラー (RPC failed; curl 92 HTTP/2 stream 7 was not closed cleanly)が発生する。
+    Gitリポジトリをクローンする際にネットワーク接続が不安定であるか、サーバー側で問題が発生している
+対処法
+    インターネット接続を確認して再試行してもらう
+
+    Gitのグローバル設定でHTTP通信バージョンをHTTP/1.1に設定する
+        速度が安定する代わりに低下する
+
+    gitバッファサイズを変更する
+        メモリ使用量が増加する
+
+参考先
+    エラー: RPC が失敗しました。カール 92 HTTP/2 ストリーム 0 が正常に閉じられませんでした: PROTOCOL_ERROR (err 1)
+    https://stackoverflow.com/questions/59282476/error-rpc-failed-curl-92-http-2-stream-0-was-not-closed-cleanly-protocol-erro
 
 
 

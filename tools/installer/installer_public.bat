@@ -1,10 +1,25 @@
 @REM ファイル保存時に、エンコーディングを"Shift-JIS"にする
 
 @REM コマンドを表示しない
-@REM @echo off
+@echo off
 
 @REM 文字コードを"Shift-JIS"に設定 メッセージは非表示
 chcp 932 >nul
+
+REM Pythonのバージョンを確認
+py -3.8 --version >nul 2>&1
+
+REM Python 3.8が見つからない場合はメッセージを表示
+if %errorlevel% neq 0 (
+  msg * "このアプリケーションを実行するにはPython 3.8が必要です。"^
+
+  "Python 3.8をインストールしてから再度実行してください。"
+  pause
+  exit
+)
+
+@REM コマンドを表示する
+@echo on
 
 @REM 仮想環境作成
 py -3.8 -m venv venv_YakunyakuKonjac
@@ -28,12 +43,20 @@ pip --default-timeout=100 install PySimpleGUI
 @REM パッケージ一覧出力ファイルの作成
 pip freeze > requirements.txt
 
-@REM gitからクローン
-git clone https://github.com/pppp-987/Yakunyakukonjac_Public.git
+@REM gitからクローン(最新のコミットのみ)
+git clone --depth 1 https://github.com/pppp-987/Yakunyakukonjac_Public.git
+
+@REM エラーが発生したなら(終了コードが0以外なら)
+if %errorlevel% neq 0 (
+  msg * "ソフトウェアのダウンロードに失敗しました。"^
+
+  "インターネット接続を確認して再試行してください。"
+  pause
+  exit
+)
 
 @REM プロジェクトファイルに移動
 cd Yakunyakukonjac_Public
-
 
 @REM ショートカット作成 VBScript使用
 
@@ -77,5 +100,3 @@ cscript CreateShortcut.vbs
 del CreateShortcut.vbs
 
 msg * インストールが完了しました
-
-pause
