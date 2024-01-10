@@ -44,7 +44,7 @@ pip --default-timeout=100 install PySimpleGUI
 pip freeze > requirements.txt
 
 @REM gitからクローン(最新のコミットのみ)
-git clone --depth 1 https://github.com/pppp-987/Yakunyakukonjac_Public.git
+git clone --depth 1 https://github.com/k4r44g3/YakunyakuKonjac.git
 
 @REM エラーが発生したなら(終了コードが0以外なら)
 if %errorlevel% neq 0 (
@@ -56,7 +56,7 @@ if %errorlevel% neq 0 (
 )
 
 @REM プロジェクトファイルに移動
-cd Yakunyakukonjac_Public
+cd YakunyakuKonjac
 
 @REM ショートカット作成 VBScript使用
 

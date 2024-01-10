@@ -109,8 +109,8 @@ class Setting:
     # プロジェクトが存在するGitのURLとリポジトリ名の取得
     # 公開用なら
     if is_public:
-        git_url = "https://github.com/pppp-987/Yakunyakukonjac_Public.git"  # URL
-        git_repository_name = "Yakunyakukonjac_Public"  # リポジトリ名
+        git_url = "https://github.com/k4r44g3/YakunyakuKonjac.git"  # URL
+        git_repository_name = "YakunyakuKonjac"  # リポジトリ名
 
     # 公開用でないなら
     else:

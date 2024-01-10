@@ -11,5 +11,5 @@
     YakunyakuKonjac.lnkを実行する。
 
     YakunyakuKonjac.lnkを使用しない場合、
-    venv_YakunyakuKonjac\YakunyakuKonjac_Public\tools\app.batを実行してください。
+    venv_YakunyakuKonjac\YakunyakuKonjac\tools\app.batを実行してください。
 
