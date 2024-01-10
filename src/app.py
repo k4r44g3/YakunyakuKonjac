@@ -53,8 +53,15 @@ class App:
     def __init__(self):
         """コンストラクタ"""
 
-        # AWSの設定ファイルを作成する処理
-        Fn.create_aws_file()
+        # AWSの認証情報や設定ファイルのディレクトリが存在しないなら
+        if not os.path.exists(SystemSetting.aws_setting_directory_path):
+            # AWSの設定ファイルを作成する処理
+            Fn.create_aws_file()
+            # AWSの設定ファイルが空かどうか
+            is_aws_file_empty = True
+        else:
+            # AWSの設定ファイルが空かどうか
+            is_aws_file_empty = False
 
         # AWSの設定ファイルのパスの設定
         os.environ["AWS_CONFIG_FILE"] = SystemSetting.aws_config_file_path
@@ -67,8 +74,8 @@ class App:
         # 翻訳前、後画像の両方が存在しない履歴ファイルを削除
         Fn.delete_unique_history_file()
 
-        # AWSサービスにアクセス可能かどうか保存されていないなら
-        if self.user_setting.get_setting("can_access_aws_service") is None:
+        # AWSサービスにアクセス可能かどうか保存されていないかつ、AWSの設定ファイルが空でないなら
+        if self.user_setting.get_setting("can_access_aws_service") is None and not is_aws_file_empty:
             # AWSサービスにアクセス可能か確認する処理
             self.user_setting.check_access_aws_service()
 
