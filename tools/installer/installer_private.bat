@@ -40,7 +40,7 @@ git checkout environment
 @REM ショートカット作成 VBScript使用
 
 @REM ショートカットのリンク先パス
-set ShortcutPath="%~dp0\app.lnk"
+set ShortcutPath="%~dp0\YakunyakuKonjac.lnk"
 
 @REM ショートカットの保存先パス
 set TargetPath="%cd%\tools\app.bat"

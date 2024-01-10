@@ -1,6 +1,6 @@
 venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
-│  pyvenv.cfg -  仮想環境の設定ファイル
-│  requirements.txt - プロジェクトで必要となるパッケージの情報を示すテキストファイル
+│   pyvenv.cfg -  仮想環境の設定ファイル
+│   requirements.txt - プロジェクトで必要となるパッケージの情報を示すテキストファイル
 │
 ├─.aws - AWSの認証情報や設定ファイルが格納されるディレクトリ
 │       config - AWSの設定を保存するために使用するファイル
@@ -17,13 +17,14 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
 ├─Scripts - 仮想環境に関連するスクリプトが格納されるディレクトリ
 ├─share - 仮想環境に関連する共有リソースが格納されるディレクトリ
 └─YakunyakuKonjac - 仮想環境内でのプロジェクトのルートディレクトリ
-    │  .gitignore - Gitの無視設定ファイル
+    │   .gitignore - Gitの無視設定ファイル
     │
     ├─document - ドキュメンテーション関連のファイルを格納するディレクトリ
     │   │   directory_tree.txt - ディレクトリ構造の詳細を示すテキストファイル
     │   │   Git.txt - Gitのコマンドの詳細を示すテキストファイル
     │   │   manual.txt - ソフトウェアの使い方を示すテキストファイル
     │   │   patch_notes.txt - ソフトウェアの更新情報を示すテキストファイル
+    │   │   readme.txt - ソフトウェアの説明を示すテキストファイル
     │   │   reference.txt - プロジェクトの参考文献や資料を格納するテキストファイル
     │   │   todo.txt - プロジェクトに関連するタスクやToDoリストを含むテキストファイル
     │   │
@@ -34,7 +35,7 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
     │               settings.json - プロジェクトやフォルダーの一般的な設定を保存するファイル
     │
     ├─log - 設定情報を含むファイルを格納するディレクトリ
-    │   .   gitkeep - Gitが空のディレクトリを保持するためのファイル
+    │       .gitkeep - Gitが空のディレクトリを保持するためのファイル
     │       error_detailed.log - エラーの詳細な情報を含むログファイル
     │       error_simple.log - エラーの基本情報を含むログファイル
     │
@@ -108,7 +109,6 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
     │           default_image_after.png - デフォルトの翻訳前画像ファイル
     │           default_image_before.png - - デフォルトの翻訳後画像ファイル
     │
-    │
     └─tools - プロジェクトに関連するスクリプトが格納されるディレクトリ
         │   app.bat - アプリケーションの実行バッチファイル
         │   aws_configure.bat - awsの設定を行うバッチファイル
@@ -118,10 +118,11 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
         │   reset_setting.bat - 設定をリセットするためのバッチファイル
         │
         └─installer - インストーラーに関連するスクリプトが格納されるディレクトリ
-                create_installer.bat - インストーラー作成に必要な環境の構築を行うバッチファイル
-                installer_private.py - 非公開用ソフトウェアのインストーラー作成に関連するコードを提供するPythonファイル
-                installer_private.bat - 非公開用ソフトウェアのインストールを行うバッチファイル
-                installer_private.exe - 非公開用ソフトウェアのインストールを行う実行ファイル
-                installer_public.py - 公開用ソフトウェアのインストーラー作成に関連するコードを提供するPythonファイル
-                installer_public.bat - 公開用ソフトウェアのインストールを行うバッチファイル
-                installer_public.exe - 公開用ソフトウェアのインストールを行う実行ファイル
+            │   installer_private.bat - 非公開用ソフトウェアのインストールを行うバッチファイル
+            │   installer_public.bat - 公開用ソフトウェアのインストールを行うバッチファイル
+            │
+            └─installer_create - インストーラーに関連するスクリプトが格納されるディレクトリ
+                    app.ico - アプリケーションのアイコンの画像ファイル
+                    create_installer.bat - インストーラー作成に必要な環境の構築を行うバッチファイル
+                    installer_private.py - 非公開用ソフトウェアのインストーラー作成に関連するコードを提供するPythonファイル
+                    installer_public.py - 公開用ソフトウェアのインストーラー作成に関連するコードを提供するPythonファイル
