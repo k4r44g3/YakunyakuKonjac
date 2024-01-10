@@ -79,3 +79,5 @@ cscript CreateShortcut.vbs
 del CreateShortcut.vbs
 
 msg * インストールが完了しました
+
+pause

@@ -1,5 +1,10 @@
-@REM AWSの設定
-@REM aws configure
+@REM ファイル保存時に、エンコーディングを"Shift-JIS"にする
+
+@REM コマンドを表示しない
+@REM @echo off
+
+@REM 文字コードを"Shift-JIS"に設定 メッセージは非表示
+chcp 932 >nul
 
 @REM 仮想環境作成
 py -3.8 -m venv venv_YakunyakuKonjac
@@ -19,8 +24,6 @@ pip --default-timeout=100 install deep-translator
 pip --default-timeout=100 install keyboard
 pip --default-timeout=100 install pyautogui
 pip --default-timeout=100 install PySimpleGUI
-
-@REM pip install black
 
 @REM パッケージ一覧出力ファイルの作成
 pip freeze > requirements.txt
