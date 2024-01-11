@@ -105,7 +105,13 @@ class AwsConfigureWin(BaseWin):
             # 表示メッセージの設定
             sg.popup("AWS設定の変更は正常に終了しました。\n設定を適用するためにプログラムを再起動します。")
 
-            update_setting = {"can_access_aws_service": None}  # 更新する設定
+            # 更新する設定
+            update_setting = {
+                # AWSのサービスにアクセス可能かどうか
+                "can_access_aws_service": False,
+                # AWS接続テストを行うかどうか
+                "is_aws_access_check": True,
+            }
             self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
 
             # 現在のプログラムを終了して再起動する処理

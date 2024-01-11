@@ -20,7 +20,8 @@ class UserSetting:
         "ss_bottom_y": 720,  # 撮影範囲の下側y座標
         "ocr_soft": "EasyOCR",  # OCRソフト
         "translation_soft": "GoogleTranslator",  # 翻訳ソフト
-        "can_access_aws_service": None,  # AWSのサービスにアクセス可能かどうか
+        "can_access_aws_service": False,  # AWSのサービスにアクセス可能かどうか
+        "is_aws_access_check": False,  # AWS接続テストを行うかどうか
         "source_language_code": "en",  # 翻訳元言語
         "target_language_code": "ja",  # 翻訳先言語
         "window_left_x": None,  # ウィンドウの左側x座標
@@ -140,13 +141,9 @@ class UserSetting:
         with open(setting_file_path, "w") as f:  # ファイルを開く(書き込み)
             json.dump(obj=self.setting, fp=f, indent=2)  # ファイルに読み込む
 
-    def check_access_aws_service(self, is_show_success_message=False):
-        """AWSサービスにアクセス可能か確認する処理
+    def check_access_aws_service(self):
+        """AWSサービスにアクセス可能か確認する処理"""
 
-        Args:
-            is_show_success_message (bool, optional): アクセス成功時にメッセージを表示するかどうか。
-                - デフォルトはFalse
-        """
         # AWSの設定ファイルのパスの設定
         os.environ["AWS_CONFIG_FILE"] = SystemSetting.aws_config_file_path
         # AWSの認証情報ファイルのパスの設定
@@ -181,7 +178,12 @@ class UserSetting:
         # AWSのサービスにアクセス可能かどうか
         can_access_aws_service = aws_service_exception is None
         # 更新する設定
-        update_setting = {"can_access_aws_service": can_access_aws_service}
+        update_setting = {
+            # AWSのサービスにアクセス可能かどうか
+            "can_access_aws_service": can_access_aws_service,
+            # AWS接続テストを行うかどうか
+            "is_aws_access_check": False,
+        }
 
         # AWSのサービスにアクセスできないなら
         if not can_access_aws_service:
@@ -229,26 +231,21 @@ class UserSetting:
             # ログに表示させる
             print("\n".join(message))
 
-            # AWSのサービスのアクセスに成功した場合、メッセージを表示しないなら
-            if not is_show_success_message:
-                return
+        # 現在のスレッドがメインスレッドかどうか
+        is_main_thread = threading.current_thread() == threading.main_thread()
 
-        # AWSのサービスにアクセスできないまたは、AWSのサービスのアクセスに成功した場合、メッセージを表示するなら
-        if not can_access_aws_service or is_show_success_message:
-            # 現在のスレッドがメインスレッドかどうか
-            is_main_thread = threading.current_thread() == threading.main_thread()
-            # 現在のスレッドがメインスレッドなら
-            if is_main_thread:
-                # エラーポップアップの作成
-                sg.popup("\n".join(message))
+        # 現在のスレッドがメインスレッドなら
+        if is_main_thread:
+            # エラーポップアップの作成
+            sg.popup("\n".join(message))
 
-            # 現在のスレッドがメインスレッドでないなら
-            else:
-                # 現在開いているウィンドウクラスのインスタンスでウィンドウオブジェクトが作成されているかどうか
-                if hasattr(GlobalStatus.win_instance, "window"):
-                    # ウィンドウオブジェクトの取得
-                    window = GlobalStatus.win_instance.window
-                    # ウィンドウが閉じられていないなら
-                    if not window.was_closed():
-                        # スレッドから、キーイベントを送信
-                        window.write_event_value(key="-check_access_aws_thread_end-", value=message)
+        # 現在のスレッドがメインスレッドでないなら
+        else:
+            # 現在開いているウィンドウクラスのインスタンスでウィンドウオブジェクトが作成されているかどうか
+            if hasattr(GlobalStatus.win_instance, "window"):
+                # ウィンドウオブジェクトの取得
+                window = GlobalStatus.win_instance.window
+                # ウィンドウが閉じられていないなら
+                if not window.was_closed():
+                    # スレッドから、キーイベントを送信
+                    window.write_event_value(key="-check_access_aws_thread_end-", value=message)

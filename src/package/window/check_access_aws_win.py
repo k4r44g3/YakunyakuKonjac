@@ -68,9 +68,7 @@ class CheckAccessAwsWin(BaseWin):
             name="AWS接続テストスレッド",
             # スレッドで実行するメソッド
             # AWSサービスにアクセス可能か確認する処理
-            target=lambda: self.user_setting.check_access_aws_service(
-                is_show_success_message=True,  # アクセス成功時にメッセージを表示するかどうか
-            ),
+            target=lambda: self.user_setting.check_access_aws_service(),
             daemon=True,  # メインスレッド終了時に終了する
         )
 
