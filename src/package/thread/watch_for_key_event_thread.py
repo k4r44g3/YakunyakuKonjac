@@ -41,14 +41,19 @@ class WatchForKeyEventThread:
             is_ascii_char_key = bool(re.match(r"^[!-~]$", key_name))
             # キー名がファンクションキーかどうか
             is_function_key = bool(re.match(r"^f([1-9]|1[0-2])$", key_name))
+            # キー名が修飾キーかどうか
+            is_modifier_key = key_name in ["shift", "ctrl", "alt", "right shift", "right ctrl", "right alt"]
 
-            # キーがASCII印字可能文字、ファンクションキーのどちらかなら
-            if is_ascii_char_key or is_function_key:
+            # 既にaltキーが押されているかつ、新たにf4キーが押されたなら
+            if ("alt" in pressed_keys.values() or "right alt" in pressed_keys.values()) and key_name == "f4":
+                return
+
+            # キーがASCII印字可能文字、ファンクションキー、修飾キーのいずれかなら
+            if is_ascii_char_key or is_function_key or is_modifier_key:
                 # イベントがキーの押下イベントである場合
                 if event_type == keyboard.KEY_DOWN:
+                    # キーが長押しされていない場合
                     if scan_code not in pressed_keys:
-                        # キーが長押しされていない場合
-
                         # キー長押し状態の保存
                         pressed_keys[scan_code] = key_name
 
@@ -69,7 +74,7 @@ class WatchForKeyEventThread:
                                 ):
                                     # スレッドから、キーイベントを送信
                                     window.write_event_value(
-                                        key="-keyboard_event-",
+                                        key="-watch_for_key_event-",
                                         value=key_binding_info["gui_key"],  # 識別子
                                     )
 

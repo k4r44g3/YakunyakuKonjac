@@ -40,14 +40,13 @@ class GetKeyEventThread:
             # キー名がファンクションキーかどうか
             is_function_key = bool(re.match(r"^f([1-9]|1[0-2])$", key_name))
 
-            # 押下されたキー名のチェック
+            # キーがASCII印字可能文字、ファンクションキーのどちらかなら
             if is_ascii_char_key or is_function_key:
-                # キーがASCII印字可能文字、ファンクションキーのどちらかなら
+                # イベントがキーの押下イベントであるなら
                 if event_type == keyboard.KEY_DOWN:
-                    # イベントがキーの押下イベントである場合
+                    # キーが長押しされていないなら
                     if scan_code not in pressed_keys:
-                        # キーが長押しされていない場合
-                        key = "-keyboard_event-"
+                        key = "-key_event-"
                         value = {
                             "key_name": key_name,  # キー名
                             "scan_code": scan_code,  # スキャンコード

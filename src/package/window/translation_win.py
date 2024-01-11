@@ -371,8 +371,8 @@ class TranslationWin(BaseWin):
                 self.history_file_select_botton(event)  # 履歴ファイル選択ボタンイベント
 
             # キーイベントが発生したなら
-            elif "-keyboard_event-" in values:
-                event_name = values["-keyboard_event-"]  # 対応するイベント名
+            elif "-watch_for_key_event-" in values:
+                event_name = values["-watch_for_key_event-"]  # 対応するイベント名
                 # 翻訳イベント
                 if event_name == "-translate_key-":
                     self.translate_thread_start()  # 翻訳処理を別スレッドで開始

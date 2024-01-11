@@ -146,15 +146,15 @@ class KeySettingWin(BaseWin):
             # キー入力待ち状態なら
             elif self.window.metadata["is_key_input_waiting_state"]:
                 # キー押下イベントなら
-                if event == "-keyboard_event-":
+                if event == "-key_event-":
                     # キー名とスキャンコードが他と重複していないなら
                     if not self.is_duplicate(values):
                         # キーバインド設定の表示の更新処理
                         self.update_key_binding_view(
                             # 設定変更対象のキー名
-                            setting_target_key=values["-keyboard_event-"]["setting_target_key"],
-                            key_name=values["-keyboard_event-"]["key_name"],  # 押下されたキー名
-                            scan_code=values["-keyboard_event-"]["scan_code"],  # 押下されたスキャンコード
+                            setting_target_key=values["-key_event-"]["setting_target_key"],
+                            key_name=values["-key_event-"]["key_name"],  # 押下されたキー名
+                            scan_code=values["-key_event-"]["scan_code"],  # 押下されたスキャンコード
                         )
 
                 # 変更対象のキー設定ボタン押下イベントが発生した場合
@@ -230,9 +230,9 @@ class KeySettingWin(BaseWin):
         """
 
         # 設定変更対象のキー名
-        setting_target_key = values["-keyboard_event-"]["setting_target_key"]
-        key_name = values["-keyboard_event-"]["key_name"]  # 押下されたキー名
-        scan_code = values["-keyboard_event-"]["scan_code"]  # 押下されたスキャンコード
+        setting_target_key = values["-key_event-"]["setting_target_key"]
+        key_name = values["-key_event-"]["key_name"]  # 押下されたキー名
+        scan_code = values["-key_event-"]["scan_code"]  # 押下されたスキャンコード
 
         # 他のキーバインド設定のキー名リスト作成
         another_key_name_list = []
