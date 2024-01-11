@@ -184,6 +184,10 @@ Python関連
         https://qiita.com/sasaki_hir/items/413127e523dbe2b21c74
 
 その他
+    GitHubのリリース機能の使い方
+    https://qiita.com/okdyy75/items/83e3f2ae0bbc0284a92c
+
+
 
 AWS関連
     AWS CLI を設定する環境変数
