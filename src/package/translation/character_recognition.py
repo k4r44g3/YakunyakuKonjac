@@ -11,11 +11,11 @@ from PIL import Image  # 画像処理
 class CharacterRecognition:
     """文字認識機能関連のクラス"""
 
-    def get_text_data_dict(user_setting, ss_file_path):
+    def get_text_data_dict(user_setting: "UserSetting", ss_file_path: str) -> list:
         """画像からテキスト情報を取得
         Args:
             user_setting(UserSetting): ユーザーが変更可能の設定
-            ss_file_path(src): スクショ画像のファイルパス
+            ss_file_path(str): スクショ画像のファイルパス
         Returns:
             text_data_dict(List[text_list,text_region_list]): テキスト情報リスト
                 - text_list(List[text(str)]) : テキスト内容のリスト
@@ -37,10 +37,10 @@ class CharacterRecognition:
 
         return text_data_list  # テキスト情報のリスト
 
-    def amazon_textract_ocr(ss_file_path):
+    def amazon_textract_ocr(ss_file_path: str) -> list:
         """AmazonTextractを使用して画像からテキスト情報を取得
         Args:
-            ss_file_path(src): スクショ画像のファイルパス
+            ss_file_path(str): スクショ画像のファイルパス
 
         Returns:
             text_data_dict(List[text_list,text_region_list]): テキスト情報リスト
@@ -83,11 +83,11 @@ class CharacterRecognition:
         }
         return text_data_list  # テキスト情報のリスト
 
-    def easy_ocr(user_setting, ss_file_path):
+    def easy_ocr(user_setting: "UserSetting", ss_file_path: str) -> list:
         """EasyOCRを使用して画像からテキスト情報を取得
         Args:
             user_setting(UserSetting): ユーザーが変更可能の設定
-            ss_file_path(src): スクショ画像のファイルパス
+            ss_file_path(str): スクショ画像のファイルパス
 
         Returns:
             text_data_dict(List[text_list,text_region_list]): テキスト情報リスト
@@ -151,7 +151,7 @@ class CharacterRecognition:
 
         return text_data_list  # テキスト情報のリスト
 
-    def remove_empty_text_data(text_data_list):
+    def remove_empty_text_data(text_data_list: list) -> None:
         """テキスト内容が空である要素の削除
 
         Args:

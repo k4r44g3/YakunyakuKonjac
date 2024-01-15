@@ -31,7 +31,6 @@ try:
     from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
     from package.window.aws_configure_win import AwsConfigureWin  # AWS設定画面ウィンドウクラス
     from package.window.check_access_aws_win import CheckAccessAwsWin  # AWS接続テスト画面ウィンドウクラス
-    from package.window.display_setting_win import DisplaySettingWin  # 表示設定画面ウィンドウクラス
     from package.window.easy_ocr_model_download_win import EasyOcrModelDownloadWin  # EasyOCRで使用するモデルのダウンロード画面クラス
     from package.window.environment_setting_win import EnvironmentSettingWin  # 環境設定画面ウィンドウクラス
     from package.window.key_setting_win import KeySettingWin  # キー設定画面ウィンドウクラス
@@ -40,7 +39,9 @@ try:
     from package.window.shooting_setting_win import ShootingSettingWin  # 撮影設定画面ウィンドウクラス
     from package.window.theme_setting_win import ThemeSettingWin  # テーマ設定画面ウィンドウクラス
     from package.window.translation_win import TranslationWin  # 翻訳画面ウィンドウクラス
-    from package.window.user_info_win import UserInfoWin  # 利用者情報画面ウィンドウクラス
+
+    # from package.window.display_setting_win import DisplaySettingWin  # 表示設定画面ウィンドウクラス
+    # from package.window.user_info_win import UserInfoWin  # 利用者情報画面ウィンドウクラス
 
 except Exception as e:
     # エラーログの出力処理
@@ -50,7 +51,7 @@ except Exception as e:
 class App:
     """アプリケーションのメインクラス"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """コンストラクタ"""
 
         # AWSの設定ファイルを作成する処理
@@ -76,7 +77,7 @@ class App:
         self.run()
 
     @ErrorLog.decorator  # エラーログの出力
-    def run(self):
+    def run(self) -> None:
         """メインの処理"""
         # 必要クラスのインポート
 
@@ -84,7 +85,7 @@ class App:
         WIN_CLASS_DICT = {
             "AwsConfigureWin": AwsConfigureWin,  # AWS設定画面ウィンドウクラス
             "CheckAccessAwsWin": CheckAccessAwsWin,  # AWS接続テスト画面ウィンドウクラス
-            "DisplaySettingWin": DisplaySettingWin,  # 表示設定画面ウィンドウクラス
+            # "DisplaySettingWin": DisplaySettingWin,  # 表示設定画面ウィンドウクラス
             "EasyOcrModelDownloadWin": EasyOcrModelDownloadWin,  # EasyOCRモデルダウンロードウィンドウクラス
             "EnvironmentSettingWin": EnvironmentSettingWin,  # 環境設定画面ウィンドウクラス
             "KeySettingWin": KeySettingWin,  # キー設定画面ウィンドウクラス
@@ -93,7 +94,7 @@ class App:
             "ShootingSettingWin": ShootingSettingWin,  # 撮影設定画面ウィンドウクラス
             "ThemeSettingWin": ThemeSettingWin,  # テーマ設定画面ウィンドウクラス
             "TranslationWin": TranslationWin,  # 翻訳画面ウィンドウクラス
-            "UserInfoWin": UserInfoWin,  # 利用者情報画面ウィンドウクラス
+            # "UserInfoWin": UserInfoWin,  # 利用者情報画面ウィンドウクラス
         }
 
         Fn.time_log("システム開始")

@@ -3,7 +3,6 @@ import os  # ディレクトリ関連
 
 import boto3  # AWSのAIサービス
 import easyocr  # OCRライブラリ
-
 from PIL import Image  # 画像処理
 
 
@@ -11,7 +10,7 @@ def easy_ocr(ss_file_path):
     """EasyOCRを使用して画像からテキスト情報を取得
     Args:
         user_setting(UserSetting): ユーザーが変更可能の設定
-        ss_file_path(src): スクショ画像のファイルパス
+        ss_file_path(str): スクショ画像のファイルパス
 
     Returns:
         text_data_dict(List[text_list,text_region_list]): テキスト情報リスト

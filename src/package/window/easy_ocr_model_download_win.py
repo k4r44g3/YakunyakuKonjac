@@ -105,11 +105,11 @@ class EasyOcrModelDownloadWin(BaseWin):
                     # プロセスの進捗インジケーターの点の数を更新する処理
                     self.progress_dot_count_update()
 
-    def progress_message_update(self, message):
+    def progress_message_update(self, message: str) -> None:
         """プロセスの進捗状況メッセージの更新処理
 
         Args:
-            message (src): 表示するメッセージ
+            message (str): 表示するメッセージ
         """
         # 表示メッセージの更新
         self.window["-text-"].metadata["message"] = message
@@ -118,7 +118,7 @@ class EasyOcrModelDownloadWin(BaseWin):
         # 表示メッセージの更新
         self.window["-text-"].update(value=message)
 
-    def progress_dot_count_update(self):
+    def progress_dot_count_update(self) -> None:
         """プロセスの進捗インジケーターの点の数を更新する処理"""
 
         # 進捗インジケーターの点の数の取得
@@ -136,7 +136,7 @@ class EasyOcrModelDownloadWin(BaseWin):
             value=f"{message}{'.' * now_dot_count}{' ' * (3-now_dot_count)}"
         )
 
-    def easy_ocr_model_download(self):
+    def easy_ocr_model_download(self) -> None:
         """EasyOCRモデルをダウンロードする処理"""
         # ダウンロードする言語のリスト
         language_list = SystemSetting.easy_ocr_language_list

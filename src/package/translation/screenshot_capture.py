@@ -3,12 +3,13 @@ import os
 import pyautogui  # スクショ撮影
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
+from PIL import Image  # 画像処理
 
 
 class ScreenshotCapture:
     """スクリーンショット撮影機能関連のクラス"""
 
-    def get_screenshot(user_setting):
+    def get_screenshot(user_setting: "UserSetting") -> None:
         """スクリーンショットの撮影
         Args:
             user_setting(UserSetting): ユーザーが変更可能の設定
@@ -28,11 +29,11 @@ class ScreenshotCapture:
 
         return screenshot_image  # スクショ画像
 
-    def save_screenshot(screenshot_image, file_name):
+    def save_screenshot(screenshot_image: "Image", file_name: str) -> str:
         """スクリーンショットの保存
         Args:
             screenshot_image(Image): スクショ画像
-            file_name(src): ファイル名(撮影日時)
+            file_name(str): ファイル名(撮影日時)
         Returns:
             ss_file_path(str): スクショ画像のファイルパス
         """

@@ -1,6 +1,7 @@
 import json  # jsonファイルの読み書き
 import os  # ディレクトリ関連
 import threading  # スレッド関連
+from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
 import boto3  # AWSのAIサービス
 import PySimpleGUI as sg  # GUI
@@ -13,7 +14,7 @@ class UserSetting:
     """ユーザーが変更可能の設定クラス"""
 
     # デフォルトの設定
-    default_user_setting = {
+    default_user_setting: Dict[str, Union[int, float, str, bool, dict]] = {
         "ss_left_x": 0,  # 撮影範囲の左側x座標
         "ss_top_y": 0,  # 撮影範囲の上側y座標
         "ss_right_x": 1280,  # 撮影範囲の右側x座標
@@ -69,11 +70,11 @@ class UserSetting:
         ],
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """コンストラクタ 初期設定"""
         self.setting = self.load_setting_file()  # 設定ファイルを読み込む
 
-    def get_setting(self, key):
+    def get_setting(self, key: str) -> str:
         """設定を取得する
 
         Args:
@@ -85,7 +86,7 @@ class UserSetting:
         """
         return self.setting[key]  # 設定辞書の値
 
-    def get_all_setting(self):
+    def get_all_setting(self) -> dict:
         """設定を全て取得する
 
         Returns:
@@ -93,7 +94,7 @@ class UserSetting:
         """
         return self.setting  # 設定
 
-    def create_setting_file(self):
+    def create_setting_file(self) -> dict:
         """設定ファイルを新規作成して辞書として返す
 
         Returns:
@@ -105,7 +106,7 @@ class UserSetting:
             json.dump(obj=default_setting, fp=f, indent=2)  # ファイルの新規作成
         return default_setting  # デフォルト設定を戻り値に指定
 
-    def load_setting_file(self):
+    def load_setting_file(self) -> dict:
         """設定ファイルを読み込み辞書として返す
         設定ファイルが存在しない場合は新規作成する
 
@@ -125,7 +126,7 @@ class UserSetting:
             setting = self.create_setting_file()  # デフォルトを戻り値に指定
         return setting  # 設定を戻り値に指定
 
-    def save_setting_file(self, update_setting):
+    def save_setting_file(self, update_setting: dict) -> None:
         """現在の設定を更新して、jsonファイルに保存する
 
         Args:
@@ -141,7 +142,7 @@ class UserSetting:
         with open(setting_file_path, "w") as f:  # ファイルを開く(書き込み)
             json.dump(obj=self.setting, fp=f, indent=2)  # ファイルに読み込む
 
-    def check_access_aws_service(self):
+    def check_access_aws_service(self) -> None:
         """AWSサービスにアクセス可能か確認する処理"""
 
         # AWSの設定ファイルのパスの設定

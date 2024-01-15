@@ -3,6 +3,7 @@ import os  # ディレクトリ関連
 import sys  # システム関連
 import threading  # スレッド関連
 import time  # 時間関係
+from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
 import PySimpleGUI as sg  # GUI
 from PIL import Image, ImageTk  # 画像処理
@@ -21,8 +22,6 @@ from package.thread.get_drag_area_thread import GetDragAreaThread  # ドラッ�
 from package.thread.translate_thread import TranslateThread  # 翻訳処理を行うスレッドクラス
 from package.thread.translate_timing_thread import TranslateTimingThread  # 自動翻訳のタイミングを取得するスレッドクラス
 from package.thread.watch_for_key_event_thread import WatchForKeyEventThread  # 指定したキーイベントが発生するかどうか監視するスレッドクラス
-from package.translation.translation import Translation  # 翻訳機能関連のクラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 
@@ -431,7 +430,7 @@ class TranslationWin(BaseWin):
         self.exit_event()  # イベント終了処理
         self.window.metadata["is_exit"] = True  # イベント受付終了
 
-    def translate_thread_start(self):
+    def translate_thread_start(self) -> None:
         """翻訳処理を別スレッドで開始する処理"""
 
         # 現在の時間を取得
@@ -469,7 +468,7 @@ class TranslationWin(BaseWin):
         else:
             Fn.time_log("前回の翻訳からの経過時間が短すぎます。1秒以上の待機が必要です。")
 
-    def translate_thread_end(self, values):
+    def translate_thread_end(self, values: dict) -> None:
         """翻訳処理のスレッド終了イベント処理
 
         Args:
@@ -549,7 +548,7 @@ class TranslationWin(BaseWin):
         # 翻訳前、後画像の変更処理
         self.image_change(max(self.history_file_name_list))
 
-    def toggle_auto_translation_event(self):
+    def toggle_auto_translation_event(self) -> None:
         """自動翻訳トグルボタン押下イベント処理"""
         # トグルボタンがオンかどうか取得
         is_toggle_on = self.window["-toggle_auto_translation-"].metadata["is_toggle_on"]
@@ -570,7 +569,7 @@ class TranslationWin(BaseWin):
             # 自動翻訳のタイミングを取得するスレッドの開始
             self.translate_timing_thread_start()
 
-    def translate_timing_thread_start(self):
+    def translate_timing_thread_start(self) -> None:
         """自動翻訳のタイミングを取得するスレッドの開始処理"""
         # 自動翻訳トグルボタンがオンかどうか取得
         is_toggle_auto_translation = self.window["-toggle_auto_translation-"].metadata["is_toggle_on"]
@@ -590,7 +589,7 @@ class TranslationWin(BaseWin):
             # 自動翻訳のタイミングを取得するスレッド開始、タイミング毎にイベントを返す
             self.translate_timing_thread.start()
 
-    def image_change(self, file_name):
+    def image_change(self, file_name: str) -> None:
         """翻訳前、後画像の変更処理
 
         Args:
@@ -611,7 +610,7 @@ class TranslationWin(BaseWin):
         # 画像のサイズを変更してウィンドウを更新する処理
         self.resize_and_refresh_gui()
 
-    def user_zoom_scale_change(self):
+    def user_zoom_scale_change(self) -> None:
         """利用者が変更できる拡大率の変更"""
         # 利用者が変更できる拡大率
         if self.user_zoom_scale == 1:
@@ -624,7 +623,7 @@ class TranslationWin(BaseWin):
         # 画像のサイズを変更してウィンドウを更新する処理
         self.resize_and_refresh_gui()
 
-    def resize_and_refresh_gui(self):
+    def resize_and_refresh_gui(self) -> None:
         """画像のサイズを変更してウィンドウを更新する処理"""
         # 繰り返しに使う識別子の情報をまとめた辞書
         key_info_dict = {
@@ -680,7 +679,7 @@ class TranslationWin(BaseWin):
         # ウィンドウを強制的に更新
         self.window.refresh()
 
-    def get_fit_zoom_scale(self, image, max_size):
+    def get_fit_zoom_scale(self, image: Image, max_size: List[int]) -> int:
         """画像を与えられた範囲に収まるようにするための拡大率を取得
 
         Args:
@@ -700,7 +699,7 @@ class TranslationWin(BaseWin):
 
         return fit_zoom_scale  # 画像を与えられた範囲に収まるようにするための拡大率
 
-    def history_file_list_box(self, values):
+    def history_file_list_box(self, values: dict) -> None:
         """履歴ファイル選択リストボックスイベントの処理
 
         Args:
@@ -716,8 +715,8 @@ class TranslationWin(BaseWin):
             # 翻訳前、後画像の変更処理
             self.image_change(file_name)
 
-    def history_file_select_botton(self, key):
-        """履歴ファイル選択リストボックスイベントの処理
+    def history_file_select_botton(self, key: str) -> None:
+        """履歴ファイル選択ボタンイベントの処理
 
         Args:
             key (str): 要素識別子
@@ -753,7 +752,7 @@ class TranslationWin(BaseWin):
                 # 翻訳前、後画像の変更処理
                 self.image_change(file_name)
 
-    def set_ss_region_event(self):
+    def set_ss_region_event(self) -> None:
         """撮影範囲設定ボタン押下イベント処理"""
         # ドラッグした領域の座標を取得するスレッド作成
         thread = threading.Thread(
@@ -790,10 +789,6 @@ class TranslationWin(BaseWin):
                 update_setting["ss_bottom_y"] = GetDragAreaThread.region["bottom"]
 
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
-
-        # サブスレッドでエラーが発生したら
-        else:
-            return "error"
 
 
 # ! デバッグ用

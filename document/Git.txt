@@ -221,6 +221,8 @@ https://qiita.com/shuntaro_tamura/items/db1aef9cf9d78db50ffe
 [Git]コミットの取り消し、打ち消し、上書き
 https://qiita.com/shuntaro_tamura/items/06281261d893acf049ed
 
+Github内の過去のバージョンを取得する方法
+https://qiita.com/samurai_runner/items/7812749493554208aeae
 
 書式
     git reset HEAD
@@ -228,3 +230,7 @@ https://qiita.com/shuntaro_tamura/items/06281261d893acf049ed
     ステージング領域のリセット(前回のコミット時に戻す)
 補足
     HEADは今自分が作業している場所を示すポインタ(今自分が作業をしているブランチの最新のコミットを示すポインタ)
+
+
+過去のバージョンに戻す
+    git checkout [SHA]

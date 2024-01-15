@@ -192,11 +192,11 @@ class SaveSettingWin(BaseWin):
         # 更新する設定
         return update_setting
 
-    def input_text_event(self, event, values):
+    def input_text_event(self, event: str, values: dict) -> None:
         """数字の入力値が有効かどうかを判定してGUI更新処理を行う処理
 
         Args:
-            event (_type_): 識別子
+            event (str): 識別子
             values (dict): 各要素の値の辞書
         """
         # 継承元の数字の入力値が有効かどうかを判定してGUI更新処理を行う処理を呼び出す

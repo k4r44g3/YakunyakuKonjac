@@ -1,5 +1,6 @@
 import os  # ディレクトリ管理
 import sys  # システム関連
+from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
 # 翻訳されたテキストを日本語で表示するためにフォントとサイズを指定
 from PIL import Image, ImageDraw, ImageFont
@@ -18,7 +19,9 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 class TranslationImage:
     """オーバーレイ翻訳画像作成機能関連のクラス"""
 
-    def get_overlay_translation_image(user_setting, ss_file_path, text_after_list, text_region_list):
+    def get_overlay_translation_image(
+        user_setting: "UserSetting", ss_file_path: str, text_after_list: List[str], text_region_list: Dict[str, int]
+    ) -> "Image":
         """オーバーレイ翻訳画像の取得
 
         Args:
@@ -57,38 +60,8 @@ class TranslationImage:
 
         return image_out
 
-    def get_font_ja_size_list(font_path, text_after_list, text_region_list):
-        """日本語フォントサイズのリストの取得
-
-        Args:
-            font_path(str) : フォントファイルのパス
-            text_after_list(List[text_after(str)]) : 翻訳後テキスト内容のリスト
-            text_region_list(List[text_region]): テキスト範囲のリスト
-                - text_region(dict{Left:int, Top:int, Width:int, Height:int}): テキスト範囲
-
-        Returns:
-            font_size_list (list[font_size]): フォントサイズのリスト
-                - font_size(int): フォントサイズ(偶数)
-        """
-        font_size_list = []  # フォントサイズのリスト
-        # ブロックごとに走査
-        for text_after, text_region in zip(text_after_list, text_region_list):
-            max_w_font_size = text_region["width"] // len(text_after)  # 横の最大フォントサイズ
-            max_h_font_size = text_region["height"]  # 縦の最大フォントサイズ
-
-            font_size = min(max_w_font_size, max_h_font_size)  # 最大フォントサイズが小さい方に設定する
-
-            # フォントサイズが偶数になるように処理
-            if font_size % 2 == 1:  # フォントサイズが奇数なら
-                font_size -= 1  # フォントサイズを1小さくする
-
-            font_size_list.append(font_size)  # フォントサイズの保存
-        return font_size_list  # フォントサイズのリスト
-
-    def find_max_font_size(font_path, text_after_list, text_region_list):
+    def find_max_font_size(font_path: str, text_after_list: List[str], text_region_list: Dict[str, int]) -> List[int]:
         """テキストボックスに収まる最大のフォントサイズのリストの取得
-
-        日本語以外のフォントに使用
 
         Args:
             font_path(str) : フォントファイルのパス
@@ -138,7 +111,9 @@ class TranslationImage:
 
         return font_size_list  # テキストボックスに収まる最大のフォントサイズのリスト
 
-    def remove_empty_text_data(font_size_list, text_after_list, text_region_list):
+    def remove_empty_text_data(
+        font_size_list: List[int], text_after_list: List[str], text_region_list: Dict[str, int]
+    ) -> None:
         """フォントサイズが0である要素の削除
 
         Args:
@@ -158,7 +133,7 @@ class TranslationImage:
             del text_after_list[delete_index]
             del text_region_list[delete_index]
 
-    def fill_text_box_image(draw, text_region_list):
+    def fill_text_box_image(draw: "ImageDraw", text_region_list: Dict[str, int]) -> None:
         """画像内のテキストボックスを塗りつぶす処理
 
         Args:
@@ -184,7 +159,13 @@ class TranslationImage:
                 outline=background_border_color,  # 背景の枠線の色
             )
 
-    def draw_text_image(draw, font_path, text_after_list, text_region_list, font_size_list):
+    def draw_text_image(
+        draw: "ImageDraw",
+        font_path: str,
+        text_after_list: List[str],
+        text_region_list: Dict[str, int],
+        font_size_list: List[int],
+    ):
         """画像にテキストを描画する処理
 
         Args:
@@ -216,11 +197,11 @@ class TranslationImage:
                     font=font_image,
                 )
 
-    def save_overlay_translation_image(overlay_translation_image, file_name):
+    def save_overlay_translation_image(overlay_translation_image: Image, file_name: str) -> str:
         """オーバーレイ翻訳画像の保存
         Args:
             overlay_translation_image(Image): オーバーレイ翻訳画像
-            file_name(src): ファイル名(撮影日時)
+            file_name(str): ファイル名(撮影日時)
         Returns:
             overlay_translation_image_path(str): オーバーレイ翻訳画像のファイルパス
         """

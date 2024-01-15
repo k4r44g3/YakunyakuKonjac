@@ -19,7 +19,7 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 class Translation:
     """翻訳機能関連のクラス"""
 
-    def save_history():
+    def save_history() -> str:
         """翻訳前,結果を履歴に保存する
 
         Returns:

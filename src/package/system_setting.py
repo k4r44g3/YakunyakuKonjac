@@ -1,106 +1,107 @@
 import os  # ディレクトリ関連
+from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
 
 class SystemSetting:
     """ユーザーが変更不可能の設定クラス"""
 
-    debug = True  # デバッグモード
+    debug: bool = True  # デバッグモードかどうか
 
     # 画像ファイル形式
-    image_file_extension = ".png"
+    image_file_extension: str = ".png"
 
     # パッケージのルートディレクトリ
-    package_path = os.path.dirname(__file__)  # パッケージディレクトリパス
+    package_path: str = os.path.dirname(__file__)  # パッケージディレクトリパス
 
     # ソースコードを格納するディレクトリ
-    src_path = os.path.normpath(os.path.join(package_path, ".."))  # 上位レベル参照の正規化
+    src_path: str = os.path.normpath(os.path.join(package_path, ".."))  # 上位レベル参照の正規化
 
     # 設定ファイル保存先設定
-    setting_directory_path = os.path.join(src_path, "config")  # ディレクトリパス
-    setting_file_path = os.path.join(setting_directory_path, "setting.json")  # 設定ファイルパス
+    setting_directory_path: str = os.path.join(src_path, "config")  # ディレクトリパス
+    setting_file_path: str = os.path.join(setting_directory_path, "setting.json")  # 設定ファイルパス
 
     # 履歴ディレクトリパス
-    history_directory_path = os.path.join(src_path, "history")
+    history_directory_path: str = os.path.join(src_path, "history")
     # 翻訳前画像保存先設定
-    image_before_directory_path = os.path.join(history_directory_path, "image_before")  # ディレクトリパス
+    image_before_directory_path: str = os.path.join(history_directory_path, "image_before")  # ディレクトリパス
     # 翻訳後画像保存先設定
-    image_after_directory_path = os.path.join(history_directory_path, "image_after")  # ディレクトリパス
+    image_after_directory_path: str = os.path.join(history_directory_path, "image_after")  # ディレクトリパス
 
     # デバッグ用ディレクトリパス
-    debug_directory_path = os.path.join(src_path, "debug_history")
+    debug_directory_path: str = os.path.join(src_path, "debug_history")
 
     # プロジェクトのルートディレクトリ
-    project_path = os.path.normpath(os.path.join(src_path, ".."))  # 上位レベル参照の正規化
+    project_path: str = os.path.normpath(os.path.join(src_path, ".."))  # 上位レベル参照の正規化
 
     # エラーログのディレクトリパス
-    error_log_directory_path = os.path.join(project_path, "log")  # ディレクトリパス
+    error_log_directory_path: str = os.path.join(project_path, "log")  # ディレクトリパス
     # エラー基本情報のログファイルの保存場所
-    simple_error_log_file_path = os.path.join(error_log_directory_path, "error_simple.log")
+    simple_error_log_file_path: str = os.path.join(error_log_directory_path, "error_simple.log")
     # エラー詳細情報のログファイルの保存場所
-    detailed_error_log_file_path = os.path.join(error_log_directory_path, "error_detailed.log")
+    detailed_error_log_file_path: str = os.path.join(error_log_directory_path, "error_detailed.log")
 
     # 静的ファイル保存先設定
-    static_path = os.path.join(project_path, "static")
+    static_path: str = os.path.join(project_path, "static")
 
     # フォントディレクトリパス
-    font_path = os.path.join(static_path, "font")
+    font_path: str = os.path.join(static_path, "font")
     # Yu Gothic のパス 和文フォント 游ゴシック
-    font_YuGothic_path = os.path.join(font_path, "YuGothM.ttc")
+    font_YuGothic_path: str = os.path.join(font_path, "YuGothM.ttc")
     # Segoe のパス 欧文フォント
-    font_Segoe_path = os.path.join(font_path, "segoeui.ttf")
+    font_Segoe_path: str = os.path.join(font_path, "segoeui.ttf")
     # Microsoft YaHei のパス 簡体字フォント
-    font_MicrosoftYaHei_path = os.path.join(font_path, "msyh.ttc")
+    font_MicrosoftYaHei_path: str = os.path.join(font_path, "msyh.ttc")
     # Malgun Gothic のパス ハングルフォント
-    font_MalgunGothic_path = os.path.join(font_path, "malgun.ttf")
+    font_MalgunGothic_path: str = os.path.join(font_path, "malgun.ttf")
 
     # 画像ファイルが格納されるディレクトリのパス
-    image_path = os.path.join(static_path, "image")
+    image_path: str = os.path.join(static_path, "image")
     # OCRの動作チェックに使用する画像ファイルのパス
-    check_ocr_image_path = os.path.join(image_path, "check_ocr.png")
+    check_ocr_image_path: str = os.path.join(image_path, "check_ocr.png")
     # デフォルトの翻訳前画像ファイルのパス
-    default_image_before_path = os.path.join(image_path, "default_image_before.png")
+    default_image_before_path: str = os.path.join(image_path, "default_image_before.png")
     # デフォルトの翻訳後画像ファイルのパス
-    default_image_after_path = os.path.join(image_path, "default_image_after.png")
+    default_image_after_path: str = os.path.join(image_path, "default_image_after.png")
 
     # アイコン画像ファイルが格納されるディレクトリのパス
-    icon_path = os.path.join(static_path, "icon")
+    icon_path: str = os.path.join(static_path, "icon")
     # アプリケーションのアイコン画像ファイルのパス
-    app_icon_file_path = os.path.join(icon_path, "app.ico")
+    app_icon_file_path: str = os.path.join(icon_path, "app.ico")
 
     # プロジェクトに関連するスクリプトが格納されるディレクトリのパス
-    tool_path = os.path.join(project_path, "tools")
+    tool_path: str = os.path.join(project_path, "tools")
     # AWSの設定を行うbatファイルのパス
-    tool_aws_config_path = os.path.join(tool_path, "aws_configure.bat")
+    tool_aws_config_path: str = os.path.join(tool_path, "aws_configure.bat")
     # 履歴の削除を行うbatファイルのパス
-    tool_delete_history_path = os.path.join(tool_path, "delete_history.bat")
+    tool_delete_history_path: str = os.path.join(tool_path, "delete_history.bat")
     # ソフトウェアの初期化を行うbatファイルのパス
-    tool_initialize_software_path = os.path.join(tool_path, "initialize_software.bat")
+    tool_initialize_software_path: str = os.path.join(tool_path, "initialize_software.bat")
     # 設定のリセットを行うbatファイルのパス
-    tool_reset_setting_path = os.path.join(tool_path, "reset_setting.bat")
+    tool_reset_setting_path: str = os.path.join(tool_path, "reset_setting.bat")
 
     # 仮想環境のルートディレクトリ
-    venv_path = os.path.normpath(os.path.join(project_path, ".."))  # 上位レベル参照の正規化
+    venv_path: str = os.path.normpath(os.path.join(project_path, ".."))  # 上位レベル参照の正規化
 
     # AWSの認証情報や設定ファイルのディレクトリパス
-    aws_setting_directory_path = os.path.join(venv_path, ".aws")
+    aws_setting_directory_path: str = os.path.join(venv_path, ".aws")
     # AWSの設定ファイルのパス
-    aws_config_file_path = os.path.join(aws_setting_directory_path, "config")
+    aws_config_file_path: str = os.path.join(aws_setting_directory_path, "config")
     # AWSの認証情報ファイルのパス
-    aws_credentials_file_path = os.path.join(aws_setting_directory_path, "credentials")
+    aws_credentials_file_path: str = os.path.join(aws_setting_directory_path, "credentials")
 
     # EasyOCRモデルのディレクトリパス
-    easy_ocr_model_path = os.path.join(venv_path, ".EasyOCR")
+    easy_ocr_model_path: str = os.path.join(venv_path, ".EasyOCR")
     # EasyOCRで使用するネットワークモデルのディレクトリ
-    easy_ocr_network_path = os.path.join(easy_ocr_model_path, "user_network")
+    easy_ocr_network_path: str = os.path.join(easy_ocr_model_path, "user_network")
 
     # アプリケーションの名前
-    app_name = "ヤクミャクコンジャック"
+    app_name: str = "ヤクミャクコンジャック"
 
     # 翻訳スレッドの最大数
-    translation_thread_max = 4
+    translation_thread_max: int = 4
 
     # 言語情報一覧リスト{日本語表記、英語表記、言語コード(ISO 639-1),フォントパス}
-    language_list = [
+    language_list: List[Dict[str, str]] = [
         {"ja_text": "アラビア語", "en_text": "Arabic", "code": "ar", "font_path": font_Segoe_path},
         {
             "ja_text": "中国語",
@@ -120,11 +121,11 @@ class SystemSetting:
     ]
 
     # EasyOCR用の言語コード(ISO 639-2)のリスト((ISO 639-1):(ISO 639-2))
-    easy_ocr_update_language_code = {"zh-CN": "ch_sim"}
+    easy_ocr_update_language_code: Dict[str, str] = {"zh-CN": "ch_sim"}
 
     # EasyOCR用言語情報一覧リストの作成
     # EasyOCR用言語情報一覧リスト（一部箇所でISO 639-2を使用）
-    easy_ocr_language_list = []
+    easy_ocr_language_list: List[Dict[str, str]] = []
     # 言語情報で走査
     for language_info in language_list:
         # 言語コードの取得
