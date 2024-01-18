@@ -185,6 +185,21 @@ push (ローカルのセーブデータをクラウドにアップロード)
 説明
     リモートブランチの削除
 
+git reset (--hard/--soft) ワーキングツリー、インデックス、HEADを使いこなす方法
+https://qiita.com/shuntaro_tamura/items/db1aef9cf9d78db50ffe
+
+[Git]コミットの取り消し、打ち消し、上書き
+https://qiita.com/shuntaro_tamura/items/06281261d893acf049ed
+
+Github内の過去のバージョンを取得する方法
+https://qiita.com/samurai_runner/items/7812749493554208aeae
+
+【git stash】コミットはせずに変更を退避したいとき
+https://qiita.com/chihiro/items/f373873d5c2dfbd03250
+
+色々な git stash
+https://qiita.com/akasakas/items/768c0b563b96f8a9be9d
+
 
 リセット(戻る)
 書式
@@ -199,32 +214,6 @@ push (ローカルのセーブデータをクラウドにアップロード)
     最終コミット前まで戻す　ファイル変更内容もすべて戻す
 
 書式
-    git stash
-説明
-    作業をコミットせずメモリに一時保存する
-    別のフォルダを複製するようなもの
-    ブランチを間違えたときなどに使用する
-
-書式
-    git stash pop
-説明
-    メモリに一時保存した作業を適用する
-
-書式
-    git stash clear
-説明
-    全てのstashの削除
-
-git reset (--hard/--soft) ワーキングツリー、インデックス、HEADを使いこなす方法
-https://qiita.com/shuntaro_tamura/items/db1aef9cf9d78db50ffe
-
-[Git]コミットの取り消し、打ち消し、上書き
-https://qiita.com/shuntaro_tamura/items/06281261d893acf049ed
-
-Github内の過去のバージョンを取得する方法
-https://qiita.com/samurai_runner/items/7812749493554208aeae
-
-書式
     git reset HEAD
 説明
     ステージング領域のリセット(前回のコミット時に戻す)
@@ -234,3 +223,64 @@ https://qiita.com/samurai_runner/items/7812749493554208aeae
 
 過去のバージョンに戻す
     git checkout [SHA]
+
+
+書式
+    スタッシュする
+        git stash
+        git stash save
+    メッセージをつけてスタッシュする
+        git stash save "message"
+説明
+    作業をコミットせずメモリに一時保存する
+    別のフォルダを複製するようなもの
+    ブランチを間違えたときなどに使用する
+    git stash saveの方は複数のオプションをつけれる
+
+オプション
+    -u
+        新規作成ファイル(追跡対象に含まれていないファイル)も退避する
+
+書式
+    git stash list
+説明
+    メモリに一時保存した作業の一覧を表示する
+
+書式
+    N番目にスタッシュしたファイルの一覧を表示
+        git stash show stash@{N}
+    N番目にスタッシュしたファイルの変更差分を表示
+        git stash show -p stash@{N}
+説明
+    メモリに一時保存した作業の詳細を表示する
+
+書式
+    最新のスタッシュを適用し、残す
+        git stash apply
+    N番目のスタッシュを適用し、残す
+        git stash apply stash@{N}
+説明
+    メモリに一時保存した作業を適用する
+    取り出した作業は削除されない
+
+書式
+    最新のスタッシュを適用し、削除 
+        git stash pop
+    N番目のスタッシュを適用し、削除
+        git stash pop stash@{N}
+説明
+    メモリに一時保存した作業を適用する
+    取り出した作業は削除する
+
+書式
+    最新のスタッシュを削除
+        git stash drop
+    N番目のスタッシュを削除
+        git stash drop stash@{N}
+説明
+    メモリに一時保存した作業を削除する
+
+書式
+    git stash clear
+説明
+    全てのstashの削除

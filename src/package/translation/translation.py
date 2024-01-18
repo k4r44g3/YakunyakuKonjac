@@ -45,7 +45,7 @@ class Translation:
 
         # ! デバック用
         # ss_file_path = Debug.ss_file_path  # スクショ画像パス
-        # ss_file_path = os.path.join(Debug.debug_directory_path , "test.png")  # スクショ画像パス
+        # ss_file_path = os.path.join(Debug.debug_directory_path, "test.png")  # スクショ画像パス
 
         # 文字認識機能
         text_data_dict = CharacterRecognition.get_text_data_dict(user_setting, ss_file_path)  # 画像からテキスト情報を取得

@@ -22,7 +22,7 @@ class BaseWin:
 
     def start_win(self) -> None:
         """ウィンドウ開始処理"""
-        Fn.time_log("ウィンドウ開始")  # ログ出力
+        # Fn.time_log("ウィンドウ開始")  # ログ出力
         self.window = self.make_win()  # GUIウィンドウ作成処理
         self.window.finalize()  # GUIウィンドウ表示
         self.window.force_focus()  # ウィンドウにフォーカスを持たせる
@@ -119,7 +119,7 @@ class BaseWin:
 
     def end_win(self) -> None:
         """ウィンドウ終了処理"""
-        Fn.time_log("ウィンドウ終了")  # ログ出力
+        # Fn.time_log("ウィンドウ終了")  # ログ出力
         self.window.close()  # ウィンドウを閉じる
 
     def get_transition_target_win(self) -> str:

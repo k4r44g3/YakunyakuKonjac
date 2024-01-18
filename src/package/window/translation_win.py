@@ -337,7 +337,7 @@ class TranslationWin(BaseWin):
                 # 画面遷移を行うかどうか
                 if menu_key.startswith("transition_"):  # menu_keyにtransitionが含まれるなら
                     self.transition_target_win = menu_key.split("_")[1]  # 遷移先ウィンドウ名
-                    Fn.time_log(self.transition_target_win, "に画面遷移")
+                    # Fn.time_log(self.transition_target_win, "に画面遷移")
                     self.window_close()  # プログラム終了イベント処理
 
             # 翻訳ボタン押下イベント

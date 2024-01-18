@@ -125,6 +125,8 @@ class CharacterRecognition:
         logging.getLogger().setLevel(logging.WARNING)
         # 画像内のテキストを抽出する
         result = reader.readtext(ss_file_path)
+        # ! 複数行対応 精度が悪い
+        # result = reader.readtext(ss_file_path, paragraph=True)
 
         # 段落ごとに走査
         for text_box in result:
