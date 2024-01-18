@@ -31,6 +31,7 @@ try:
     from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
     from package.window.aws_configure_win import AwsConfigureWin  # AWS設定画面ウィンドウクラス
     from package.window.check_access_aws_win import CheckAccessAwsWin  # AWS接続テスト画面ウィンドウクラス
+    from package.window.display_setting_win import DisplaySettingWin  # 表示設定画面ウィンドウクラス
     from package.window.easy_ocr_model_download_win import EasyOcrModelDownloadWin  # EasyOCRで使用するモデルのダウンロード画面クラス
     from package.window.environment_setting_win import EnvironmentSettingWin  # 環境設定画面ウィンドウクラス
     from package.window.key_setting_win import KeySettingWin  # キー設定画面ウィンドウクラス
@@ -40,7 +41,6 @@ try:
     from package.window.theme_setting_win import ThemeSettingWin  # テーマ設定画面ウィンドウクラス
     from package.window.translation_win import TranslationWin  # 翻訳画面ウィンドウクラス
 
-    # from package.window.display_setting_win import DisplaySettingWin  # 表示設定画面ウィンドウクラス
     # from package.window.user_info_win import UserInfoWin  # 利用者情報画面ウィンドウクラス
 
 except Exception as e:
@@ -85,7 +85,7 @@ class App:
         WIN_CLASS_DICT = {
             "AwsConfigureWin": AwsConfigureWin,  # AWS設定画面ウィンドウクラス
             "CheckAccessAwsWin": CheckAccessAwsWin,  # AWS接続テスト画面ウィンドウクラス
-            # "DisplaySettingWin": DisplaySettingWin,  # 表示設定画面ウィンドウクラス
+            "DisplaySettingWin": DisplaySettingWin,  # 表示設定画面ウィンドウクラス
             "EasyOcrModelDownloadWin": EasyOcrModelDownloadWin,  # EasyOCRモデルダウンロードウィンドウクラス
             "EnvironmentSettingWin": EnvironmentSettingWin,  # 環境設定画面ウィンドウクラス
             "KeySettingWin": KeySettingWin,  # キー設定画面ウィンドウクラス

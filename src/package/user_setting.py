@@ -35,6 +35,14 @@ class UserSetting:
         "max_file_retention_days": 30,  # 最大保存期間(日)
         "window_theme": "DarkBlue3",  # ウィンドウのテーマ
         "is_easy_ocr_model_exists": False,  # EasyOCRで使用されるモジュールが存在するかどうか
+        # 翻訳画面の要素を表示するかどうかの辞書
+        "translation_element_visible_dict": {
+            "translation_button_visible": True,  # 翻訳ボタン
+            "toggle_auto_translation_visible": True,  # 自動翻訳ボタン
+            "history_file_time_list_visible": True,  # 履歴選択ボックス
+            "image_before_visible": True,  # 翻訳前画像
+            "image_after_visible": True,  # 翻訳跡画像
+        },
         # キーバインド設定情報の辞書
         "key_binding_info_list": [
             {

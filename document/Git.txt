@@ -264,7 +264,7 @@ https://qiita.com/akasakas/items/768c0b563b96f8a9be9d
     取り出した作業は削除されない
 
 書式
-    最新のスタッシュを適用し、削除 
+    最新のスタッシュを適用し、削除
         git stash pop
     N番目のスタッシュを適用し、削除
         git stash pop stash@{N}
