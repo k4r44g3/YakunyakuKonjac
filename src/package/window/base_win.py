@@ -1,5 +1,6 @@
 import os  # ディレクトリ関連
 import sys  # システム関連
+from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
 import PySimpleGUI as sg  # GUI
 from package.error_log import ErrorLog  # エラーログに関するクラス
@@ -12,29 +13,29 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 class BaseWin:
     """ウィンドウの基本クラス"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """コンストラクタ 初期設定"""
         GlobalStatus.win_instance = self  # 現在のウィンドウインスタンスの保持
         self.user_setting = UserSetting()  # ユーザ設定のインスタンス化
         self.transition_target_win = None  # 遷移先ウィンドウ名
         self.is_restart_program = False  # 再起動するかどうか
 
-    def start_win(self):
+    def start_win(self) -> None:
         """ウィンドウ開始処理"""
-        Fn.time_log("ウィンドウ開始")  # ログ出力
+        # Fn.time_log("ウィンドウ開始")  # ログ出力
         self.window = self.make_win()  # GUIウィンドウ作成処理
         self.window.finalize()  # GUIウィンドウ表示
         self.window.force_focus()  # ウィンドウにフォーカスを持たせる
         self.event_start()  # イベント受付開始処理(終了処理が行われるまで繰り返す)
 
-    def get_layout(self):
+    def get_layout(self) -> List[Any]:
         """ウィンドウレイアウト作成処理
 
         Returns:
             layout(list): ウィンドウのレイアウト
         """
 
-    def make_win(self):
+    def make_win(self) -> sg.Window:
         """GUIウィンドウ作成処理
 
         Returns:
@@ -57,7 +58,7 @@ class BaseWin:
 
         return window  # GUIウィンドウ設定
 
-    def get_base_window_args(self):
+    def get_base_window_args(self) -> Dict[str, Any]:
         """基本となるGUIウィンドウで設定する引数の辞書の取得
 
         Returns:
@@ -70,7 +71,7 @@ class BaseWin:
             "resizable": True,  # ウィンドウサイズ変更可能
             "finalize": True,  # 入力待ち までの間にウィンドウを表示する
             "enable_close_attempted_event": True,  # タイトルバーの[X]ボタン押下,Alt+F4時にイベントが返される
-            "icon": SystemSetting.app_icon_file_path, # アイコの設定
+            "icon": SystemSetting.app_icon_file_path,  # アイコの設定
             # メタデータ
             "metadata": {
                 "is_exit": False,  # ウィンドウを閉じるかどうか
@@ -79,23 +80,23 @@ class BaseWin:
         # 基本となるGUIウィンドウで設定する引数の辞書
         return base_window_args
 
-    def event_start(self):
+    def event_start(self) -> None:
         """イベント受付開始処理
         指定したボタンが押された時などのイベント処理内容
         終了処理が行われるまで繰り返す
         """
 
-    def exit_event(self):
+    def exit_event(self) -> None:
         """イベント終了処理"""
         # todo 終了設定(保存など)
         self.end_win()  # ウィンドウ終了処理
 
-    def base_event(self, event, values):
+    def base_event(self, event: str, values: Dict[str, Any]) -> bool:
         """共通のイベントの処理
 
         Args:
-            event (_type_): 識別子
-            values (dict): 各要素の値の辞書
+            event (str): 識別子
+            values (Dict[str,Any]): 各要素の値の辞書
         Return:
             is_base_event(bool): 共通のイベントが発生したかどうか
         """
@@ -116,12 +117,12 @@ class BaseWin:
         else:
             return False  # 共通のイベントが発生したかどうか
 
-    def end_win(self):
+    def end_win(self) -> None:
         """ウィンドウ終了処理"""
-        Fn.time_log("ウィンドウ終了")  # ログ出力
+        # Fn.time_log("ウィンドウ終了")  # ログ出力
         self.window.close()  # ウィンドウを閉じる
 
-    def get_transition_target_win(self):
+    def get_transition_target_win(self) -> str:
         """遷移先ウィンドウ名の取得
 
         Returns:
@@ -129,7 +130,7 @@ class BaseWin:
         """
         return self.transition_target_win
 
-    def get_is_restart_program(self):
+    def get_is_restart_program(self) -> bool:
         """再起動するかどうかを取得する処理
         Returns:
             is_restart_program(bool): 再起動するかどうか
@@ -137,7 +138,7 @@ class BaseWin:
         return self.is_restart_program
 
     # todo イベント処理記述
-    def window_close(self):
+    def window_close(self) -> None:
         """プログラム終了イベント処理
 
         閉じるボタン押下,Alt+F4イベントが発生したら
@@ -145,21 +146,21 @@ class BaseWin:
         self.exit_event()  # イベント終了処理
         self.window.metadata["is_exit"] = True  # イベント受付終了
 
-    def get_update_setting(self, values):
+    def get_update_setting(self, values: Dict[str, Any]) -> Dict[str, Any]:
         """更新する設定の取得
 
         Args:
-            values (dict): 各要素の値の辞書
+            values (dict[str,Any]): 各要素の値の辞書
         Returns:
-            update_setting (dict): 更新する設定の値の辞書
+            update_setting (dict[str,Any]): 更新する設定の値の辞書
         """
 
-    def transition_to_translation_win(self):
+    def transition_to_translation_win(self) -> None:
         """翻訳画面に遷移する処理"""
         self.transition_target_win = "TranslationWin"  # 遷移先ウィンドウ名
         self.window_close()  # プログラム終了イベント処理
 
-    def check_valid_number_event(self, window, event, values):
+    def check_valid_number_event(self, window: sg.Window, event: str, values: Dict[str, Any]) -> bool:
         """数字の入力値が有効かどうかを判定してGUI更新処理を行う処理
 
         エラーメッセージの表示や非表示、およびボタンの有効/無効の設定を行う

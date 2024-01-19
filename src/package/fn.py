@@ -4,6 +4,7 @@ import subprocess  # 新しいプロセスを生成し、その入出力を管�
 import sys  # Pythonのインタプリタや環境にアクセスするためのモジュール（引数の取得、システムパスの操作など）
 import time  # 時間測定
 from datetime import datetime, timedelta  # 日時, 時間差
+from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
 from package.system_setting import SystemSetting  # ユーザーが変更不可の設定クラス
 
@@ -12,7 +13,7 @@ class Fn:
     """自作関数クラス
     全体に適応される"""
 
-    def sleep(ms):
+    def sleep(ms: int) -> None:
         """指定された時間だけプログラムを一時停止
 
         Args:
@@ -20,7 +21,7 @@ class Fn:
         """
         time.sleep(ms / 1000)
 
-    def log(*text):
+    def log(*text: str) -> None:
         """ログの表示
             デバッグモードでのみ動作する
         Args:
@@ -34,7 +35,7 @@ class Fn:
                 # 要素数が2以上ならタプルにする
                 print(text)
 
-    def time_log(*text):
+    def time_log(*text: str) -> None:
         """ログと現在時刻の表示
             デバッグモードでのみ動作する
         Args:
@@ -49,7 +50,7 @@ class Fn:
                 # 要素数が2以上ならタプルにする
                 print(text, now.strftime("%H:%M:%S.%f")[:-3])  # 時刻の表示（ミリ秒三桁まで）
 
-    def check_number_string(value):
+    def check_number_string(value: str) -> bool:
         """数字文字列かどうかを判定する
 
         Args:
@@ -62,7 +63,7 @@ class Fn:
         # 文字列が数字のみで構成され、かつ少なくとも1文字以上の数字を含むかどうかを返す
         return bool(re.match(r"^[0-9]+$", value))
 
-    def get_now_file_base_name():
+    def get_now_file_base_name() -> str:
         """ファイルのベース名用現在時刻の取得
         Returns:
             now_file_base_name(str) : ファイルのベース名用現在時刻("yyyymmdd_hhmmss")
@@ -71,11 +72,11 @@ class Fn:
         now_file_base_name = now.strftime("%Y%m%d_%H%M%S")  # 時刻の表示
         return now_file_base_name  # ファイルのベース名用現在時刻
 
-    def save_text_file(text_list, file_path):
+    def save_text_file(text_list: List[str], file_path: str) -> None:
         """テキストファイルへの保存
         Args:
             text_list(list[text:str]): テキストリスト
-            filepath(src): ファイルパス
+            filepath(str): ファイルパス
         """
         file = open(file_path, "w", encoding="utf-8")  # 新規書き込みでテキストファイルを開く
         # file = open(text_filepath, "w",)  # 新規書き込みでテキストファイルを開く
@@ -85,19 +86,19 @@ class Fn:
                 file.write(text_before + "\n")  # ファイルに書き込む
         file.close()  # ファイルを閉じる
 
-    def get_max_file_name(dir_path):
+    def get_max_file_name(dir_path: str) -> str:
         """辞書順で最大のファイル名を取得
         Args:
             dir_path (str): ディレクトリパス
 
         Returns:
-            max_file_name: 辞書順で最大のファイル名
+            max_file_name(str): 辞書順で最大のファイル名
         """
         file_list = os.listdir(dir_path)  # ファイル名のリストを取得
         max_file_name = max(file_list)  # 辞書順で最大のファイル名を取得
         return max_file_name  # 辞書順で最大のファイル名
 
-    def get_history_file_name_list():
+    def get_history_file_name_list() -> List[str]:
         """履歴ファイル名のリストを取得
 
         翻訳前、後画像の両方が存在する履歴ファイル名を取得
@@ -140,7 +141,7 @@ class Fn:
         # 履歴ファイル名のリスト
         return history_file_name_list
 
-    def get_history_file_time_list(history_file_name_list):
+    def get_history_file_time_list(history_file_name_list: List[str]) -> List[str]:
         """履歴ファイル日時のリストを取得
 
         Args:
@@ -157,7 +158,7 @@ class Fn:
             history_file_time_list.append(file_time)
         return history_file_time_list  # 履歴ファイル日時のリスト
 
-    def delete_unique_history_file():
+    def delete_unique_history_file() -> None:
         """翻訳前、後画像の両方が存在しない履歴ファイルを削除"""
         # 翻訳前画像保存先設定
         image_before_directory_path = SystemSetting.image_before_directory_path  # ディレクトリパス
@@ -224,13 +225,13 @@ class Fn:
             # 翻訳後画像フォルダから削除
             os.remove(os.path.join(image_after_directory_path, file_name))
 
-    def search_dict_in_list(lst, key_name, value):
+    def search_dict_in_list(lst: List[Dict], key_name: str, value: Any) -> Dict:
         """与えられたリスト内の辞書から指定したキーと値に一致する辞書を取得
 
         Args:
-            lst (list of dict): 検索対象の辞書要素が格納されたリスト
+            lst (list[dict]): 検索対象の辞書要素が格納されたリスト
             key_name (str): 検索に使用するキーの名前
-            value (任意の型) 検索する値
+            value (Any) 検索する値
 
         Returns:
             dict: 一致する辞書（最初に見つかったもの）
@@ -241,7 +242,9 @@ class Fn:
                 # 辞書のキーと値が一致するなら一致する辞書を返す
                 return item
 
-    def check_file_limits(directory_path, max_file_size_mb, max_file_count, max_file_retention_days):
+    def check_file_limits(
+        directory_path: str, max_file_size_mb: int, max_file_count: int, max_file_retention_days: int
+    ) -> Dict[str, bool]:
         """指定された制限を超えているかどうかをチェックして結果を返すメソッド
 
         Args:
@@ -327,7 +330,7 @@ class Fn:
         # 指定された制限を超えているかどうかを保存する辞書
         return check_file_limit_dict
 
-    def convert_time_from_filename(file_name):
+    def convert_time_from_filename(file_name: str) -> str:
         """ファイル名から日時を取得
 
         Args:
@@ -345,7 +348,7 @@ class Fn:
         file_time = dt.strftime("%Y/%m/%d %H:%M:%S")
         return file_time  # 日時("%Y/%m/%d %H:%M:%S")
 
-    def convert_filename_from_time(file_time):
+    def convert_filename_from_time(file_time: str) -> str:
         """日時からファイル名を取得
 
         Args:
@@ -366,12 +369,12 @@ class Fn:
         return file_name  # ファイル名("yyyymmdd_hhmmss.拡張子")
 
     @staticmethod  # スタティック(静的)メソッド
-    def command_run(command_list, file_path=None):
+    def command_run(command_list: List[str], file_path: Optional[str] = None) -> None:
         """与えられたコマンドのリストを実行する
 
         Args:
             command_list (list[command:str]): 実行するコマンドのリスト。
-            file_path (str, optional): 結果を書き込むファイルのパス。デフォルトではNone（ファイルへの書き込みは行われない）。
+            file_path (Optional[str]): 結果を書き込むファイルのパス。デフォルトではNone（ファイルへの書き込みは行われない）。
 
         """
 
@@ -394,11 +397,11 @@ class Fn:
             )  # コマンドを実行
 
     @staticmethod  # スタティック(静的)メソッド
-    def get_script_directory_path():
+    def get_script_directory_path() -> str:
         """現在のスクリプトファイルが存在するディレクトリのパスを取得する処理
 
         Returns:
-            directory_path(src): 現在のスクリプトファイルが存在するディレクトリのパス
+            directory_path(str): 現在のスクリプトファイルが存在するディレクトリのパス
         """
         # ファイルが凍結(exe)なら
         if getattr(sys, "frozen", False):
@@ -408,7 +411,7 @@ class Fn:
             # スクリプトファイルが存在するディレクトリのパス
             return os.path.dirname(__file__)
 
-    def create_aws_file():
+    def create_aws_file() -> None:
         """AWSの空の設定ファイルを作成する処理"""
 
         # AWSの認証情報や設定ファイルのディレクトリが存在しないなら作成する

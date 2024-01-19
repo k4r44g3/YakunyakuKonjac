@@ -101,7 +101,7 @@ class CheckAccessAwsWin(BaseWin):
                     # プロセスの進捗インジケーターの点の数を更新する処理
                     self.progress_dot_count_update()
 
-    def progress_dot_count_update(self):
+    def progress_dot_count_update(self) -> None:
         """プロセスの進捗インジケーターの点の数を更新する処理"""
 
         # 進捗インジケーターの点の数の取得

@@ -3,6 +3,7 @@ import os  # ディレクトリ関連
 import sys  # システム関連
 import threading  # スレッド関連
 import time  # 時間関係
+from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
 import PySimpleGUI as sg  # GUI
 from PIL import Image, ImageTk  # 画像処理
@@ -21,8 +22,6 @@ from package.thread.get_drag_area_thread import GetDragAreaThread  # ドラッ�
 from package.thread.translate_thread import TranslateThread  # 翻訳処理を行うスレッドクラス
 from package.thread.translate_timing_thread import TranslateTimingThread  # 自動翻訳のタイミングを取得するスレッドクラス
 from package.thread.watch_for_key_event_thread import WatchForKeyEventThread  # 指定したキーイベントが発生するかどうか監視するスレッドクラス
-from package.translation.translation import Translation  # 翻訳機能関連のクラス
-from package.user_setting import UserSetting  # ユーザーが変更可能の設定クラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 
@@ -101,9 +100,64 @@ class TranslationWin(BaseWin):
             "image_after": Image.open(now_image_after_path),  # 翻訳後画像
         }
 
+        # 翻訳画面の要素を表示するかどうかの辞書の取得
+        translation_element_visible_dict = self.user_setting.get_setting("translation_element_visible_dict")
+
+        # 翻訳ボタンのレイアウト
+        translation_button_layout = sg.Button(
+            button_text="翻訳",  # ボタンテキスト
+            key="-translation_button-",  # 識別子
+            size=(12, 3),  # サイズ(フォントサイズ)(w,h)
+            visible=translation_element_visible_dict["translation_button_visible"],  # 表示するかどうか
+        )
+
+        # 自動翻訳用トグルボタンのレイアウト
+        toggle_auto_translation_layout = sg.Button(
+            button_text="自動翻訳開始",  # ボタンテキスト
+            key="-toggle_auto_translation-",  # 識別子
+            size=(12, 3),  # サイズ(フォントサイズ)(w,h)
+            visible=translation_element_visible_dict["toggle_auto_translation_visible"],  # 表示するかどうか
+            # メタデータ
+            metadata={
+                "is_toggle_on": False,  # トグルボタンがオンかどうか
+                "toggle_button_text": {False: "自動撮影開始", True: "自動撮影停止"},  # トグルボタンテキスト
+                "toggle_on_count": 0,  # トグルボタンがオンに切り替わった回数
+            },
+        )
+
+        # 履歴ファイル選択フレーム
+        history_file_time_list_frame = sg.Frame(
+            title="履歴ファイル選択",
+            visible=translation_element_visible_dict["history_file_time_list_visible"],  # 表示するかどうか
+            layout=[
+                [
+                    # 前の履歴を表示するボタン
+                    sg.Button(
+                        button_text="◀",  # ボタンテキスト
+                        key="-history_file_time_list_sub-",  # 識別子
+                    ),
+                    # 履歴ファイル選択リストボックス
+                    sg.Listbox(
+                        values=self.history_file_time_list,  # ファイル日時のリスト
+                        size=(18, 1),
+                        key="-history_file_time_list-",
+                        default_values=now_file_time,  # デフォルト値
+                        no_scrollbar=True,  # スクロールバーの非表示
+                        enable_events=True,  # イベントを取得する
+                    ),
+                    # 後の履歴を表示するボタン
+                    sg.Button(
+                        button_text="▶",  # ボタンテキスト
+                        key="-history_file_time_list_add-",  # 識別子
+                    ),
+                ],
+            ],
+        )
+
         # 翻訳前の画像のフレーム
         image_before_frame = sg.Frame(
             title="翻訳前画像",
+            visible=translation_element_visible_dict["image_before_visible"],  # 表示するかどうか
             layout=[
                 [
                     sg.Column(
@@ -134,9 +188,10 @@ class TranslationWin(BaseWin):
             expand_y=True,  # 縦方向に自動的に拡大
         )
 
-        # 翻訳後の画像のフレーム5
+        # 翻訳後の画像のフレーム
         image_after_frame = sg.Frame(
             title="翻訳後画像",
+            visible=translation_element_visible_dict["image_after_visible"],  # 表示するかどうか
             layout=[
                 [
                     sg.Column(
@@ -167,8 +222,6 @@ class TranslationWin(BaseWin):
             expand_y=True,  # 縦方向に自動的に拡大
         )
 
-        # todo ウィンドウのテーマの設定
-
         # メニューバー設定
         menuber = [
             [
@@ -176,7 +229,7 @@ class TranslationWin(BaseWin):
                 [
                     "撮影設定 (&Q)::transition_ShootingSettingWin::",
                     "言語設定 (&W)::transition_LanguageSettingWin::",
-                    # "表示設定 (&E)::transition_DisplaySettingWin::",
+                    "表示設定 (&E)::transition_DisplaySettingWin::",
                     "キー設定 (&R)::transition_KeySettingWin::",
                     "テーマ設定 (&T)::transition_ThemeSettingWin::",
                     "保存設定 (&Y)::transition_SaveSettingWin::",
@@ -188,71 +241,70 @@ class TranslationWin(BaseWin):
 
         # レイアウト指定
         layout = [
-            [[sg.Menu(menuber, key="-menu-")]],  # メニューバー
-            [
-                sg.Push(),  # 中央に寄せる
-                # 翻訳用ボタン
-                sg.Button(
-                    button_text="翻訳",  # ボタンテキスト
-                    key="-translation_button-",  # 識別子
-                    size=(12, 3),  # サイズ(フォントサイズ)(w,h)
-                    # expand_x = True, #  Trueの場合、要素はx方向に自動的に拡大
-                    # expand_y = True, #  Trueの場合、要素はy方向に自動的に拡大
-                ),
-                # 自動翻訳用トグルボタン
-                sg.Button(
-                    button_text="自動翻訳開始",  # ボタンテキスト
-                    key="-toggle_auto_translation-",  # 識別子
-                    size=(12, 3),  # サイズ(フォントサイズ)(w,h)
-                    # メタデータ
-                    metadata={
-                        "is_toggle_on": False,  # トグルボタンがオンかどうか
-                        "toggle_button_text": {False: "自動撮影開始", True: "自動撮影停止"},  # トグルボタンテキスト
-                        "toggle_on_count": 0,  # トグルボタンがオンに切り替わった回数
-                    },
-                ),
-                sg.Push(),  # 中央に寄せる
-            ],
-            [
-                sg.Push(),  # 中央に寄せる
-                # 履歴ファイル選択フレーム
-                sg.Frame(
-                    title="履歴ファイル選択",
-                    layout=[
-                        [
-                            # 前の履歴を表示するボタン
-                            sg.Button(
-                                button_text="◀",  # ボタンテキスト
-                                key="-history_file_time_list_sub-",  # 識別子
-                            ),
-                            # 履歴ファイル選択リストボックス
-                            sg.Listbox(
-                                values=self.history_file_time_list,  # ファイル日時のリスト
-                                size=(18, 1),
-                                key="-history_file_time_list-",
-                                default_values=now_file_time,  # デフォルト値
-                                no_scrollbar=True,  # スクロールバーの非表示
-                                enable_events=True,  # イベントを取得する
-                            ),
-                            # 後の履歴を表示するボタン
-                            sg.Button(
-                                button_text="▶",  # ボタンテキスト
-                                key="-history_file_time_list_add-",  # 識別子
-                            ),
-                        ],
-                    ],
-                ),
-                sg.Push(),  # 中央に寄せる
-            ],
-            [
-                # 翻訳前の画像のフレーム
-                image_before_frame
-            ],
-            [
-                # 翻訳後の画像のフレーム
-                image_after_frame
-            ],
+            [sg.Menu(menuber, key="-menu-")],  # メニューバー
         ]
+
+        # 翻訳ボタンまたは、自動翻訳ボタンを表示するなら
+        if (
+            translation_element_visible_dict["translation_button_visible"]
+            or translation_element_visible_dict["toggle_auto_translation_visible"]
+        ):
+            # 追加する行を作成
+            new_row = []
+            new_row.append(sg.Push())  # 中央に寄せる
+
+            # 翻訳ボタンを表示するなら
+            if translation_element_visible_dict["translation_button_visible"]:
+                # 翻訳ボタンのレイアウト
+                new_row.append(translation_button_layout)
+
+            # 自動翻訳ボタンを表示するなら
+            if translation_element_visible_dict["toggle_auto_translation_visible"]:
+                # 自動翻訳用トグルボタンのレイアウト
+                new_row.append(toggle_auto_translation_layout)
+
+            new_row.append(sg.Push())  # 中央に寄せる
+
+            # レイアウトに作成した行を追加する
+            layout.append(new_row)
+
+        # 履歴選択フレームを表示するなら
+        if translation_element_visible_dict["history_file_time_list_visible"]:
+            # レイアウトに履歴ファイル選択フレームを追加する
+            layout.append(
+                [
+                    sg.Push(),  # 中央に寄せる
+                    # 履歴ファイル選択フレーム
+                    history_file_time_list_frame,
+                    sg.Push(),  # 中央に寄せる
+                ]
+            )
+
+        # 履歴選択フレームを表示しないなら
+        else:
+            # レイアウトに履歴ファイル選択フレームを追加する(非表示)
+            layout.append([sg.pin(history_file_time_list_frame)])
+
+        # 翻訳前画像フレームを表示するなら
+        if translation_element_visible_dict["image_before_visible"]:
+            # レイアウトに翻訳前画像フレームを追加する
+            layout.append([image_before_frame])
+
+        # 翻訳前画像フレームを表示しないなら
+        else:
+            # レイアウトに翻訳前画像フレームを追加する(非表示)
+            layout.append([sg.pin(image_before_frame)])
+
+        # 翻訳後画像フレームを表示するなら
+        if translation_element_visible_dict["image_after_visible"]:
+            # レイアウトに翻訳後画像フレームを追加する
+            layout.append([image_after_frame])
+
+        # 翻訳後画像フレームを表示しないなら
+        else:
+            # レイアウトに翻訳後画像フレームを追加する(非表示)
+            layout.append([sg.pin(image_after_frame)])
+
         return layout  # レイアウト
 
     def make_win(self):
@@ -338,7 +390,7 @@ class TranslationWin(BaseWin):
                 # 画面遷移を行うかどうか
                 if menu_key.startswith("transition_"):  # menu_keyにtransitionが含まれるなら
                     self.transition_target_win = menu_key.split("_")[1]  # 遷移先ウィンドウ名
-                    Fn.time_log(self.transition_target_win, "に画面遷移")
+                    # Fn.time_log(self.transition_target_win, "に画面遷移")
                     self.window_close()  # プログラム終了イベント処理
 
             # 翻訳ボタン押下イベント
@@ -431,7 +483,7 @@ class TranslationWin(BaseWin):
         self.exit_event()  # イベント終了処理
         self.window.metadata["is_exit"] = True  # イベント受付終了
 
-    def translate_thread_start(self):
+    def translate_thread_start(self) -> None:
         """翻訳処理を別スレッドで開始する処理"""
 
         # 現在の時間を取得
@@ -469,7 +521,7 @@ class TranslationWin(BaseWin):
         else:
             Fn.time_log("前回の翻訳からの経過時間が短すぎます。1秒以上の待機が必要です。")
 
-    def translate_thread_end(self, values):
+    def translate_thread_end(self, values: dict) -> None:
         """翻訳処理のスレッド終了イベント処理
 
         Args:
@@ -549,7 +601,7 @@ class TranslationWin(BaseWin):
         # 翻訳前、後画像の変更処理
         self.image_change(max(self.history_file_name_list))
 
-    def toggle_auto_translation_event(self):
+    def toggle_auto_translation_event(self) -> None:
         """自動翻訳トグルボタン押下イベント処理"""
         # トグルボタンがオンかどうか取得
         is_toggle_on = self.window["-toggle_auto_translation-"].metadata["is_toggle_on"]
@@ -570,7 +622,7 @@ class TranslationWin(BaseWin):
             # 自動翻訳のタイミングを取得するスレッドの開始
             self.translate_timing_thread_start()
 
-    def translate_timing_thread_start(self):
+    def translate_timing_thread_start(self) -> None:
         """自動翻訳のタイミングを取得するスレッドの開始処理"""
         # 自動翻訳トグルボタンがオンかどうか取得
         is_toggle_auto_translation = self.window["-toggle_auto_translation-"].metadata["is_toggle_on"]
@@ -590,7 +642,7 @@ class TranslationWin(BaseWin):
             # 自動翻訳のタイミングを取得するスレッド開始、タイミング毎にイベントを返す
             self.translate_timing_thread.start()
 
-    def image_change(self, file_name):
+    def image_change(self, file_name: str) -> None:
         """翻訳前、後画像の変更処理
 
         Args:
@@ -611,7 +663,7 @@ class TranslationWin(BaseWin):
         # 画像のサイズを変更してウィンドウを更新する処理
         self.resize_and_refresh_gui()
 
-    def user_zoom_scale_change(self):
+    def user_zoom_scale_change(self) -> None:
         """利用者が変更できる拡大率の変更"""
         # 利用者が変更できる拡大率
         if self.user_zoom_scale == 1:
@@ -624,7 +676,7 @@ class TranslationWin(BaseWin):
         # 画像のサイズを変更してウィンドウを更新する処理
         self.resize_and_refresh_gui()
 
-    def resize_and_refresh_gui(self):
+    def resize_and_refresh_gui(self) -> None:
         """画像のサイズを変更してウィンドウを更新する処理"""
         # 繰り返しに使う識別子の情報をまとめた辞書
         key_info_dict = {
@@ -680,7 +732,7 @@ class TranslationWin(BaseWin):
         # ウィンドウを強制的に更新
         self.window.refresh()
 
-    def get_fit_zoom_scale(self, image, max_size):
+    def get_fit_zoom_scale(self, image: Image, max_size: List[int]) -> int:
         """画像を与えられた範囲に収まるようにするための拡大率を取得
 
         Args:
@@ -700,7 +752,7 @@ class TranslationWin(BaseWin):
 
         return fit_zoom_scale  # 画像を与えられた範囲に収まるようにするための拡大率
 
-    def history_file_list_box(self, values):
+    def history_file_list_box(self, values: dict) -> None:
         """履歴ファイル選択リストボックスイベントの処理
 
         Args:
@@ -716,8 +768,8 @@ class TranslationWin(BaseWin):
             # 翻訳前、後画像の変更処理
             self.image_change(file_name)
 
-    def history_file_select_botton(self, key):
-        """履歴ファイル選択リストボックスイベントの処理
+    def history_file_select_botton(self, key: str) -> None:
+        """履歴ファイル選択ボタンイベントの処理
 
         Args:
             key (str): 要素識別子
@@ -753,7 +805,7 @@ class TranslationWin(BaseWin):
                 # 翻訳前、後画像の変更処理
                 self.image_change(file_name)
 
-    def set_ss_region_event(self):
+    def set_ss_region_event(self) -> None:
         """撮影範囲設定ボタン押下イベント処理"""
         # ドラッグした領域の座標を取得するスレッド作成
         thread = threading.Thread(
@@ -790,10 +842,6 @@ class TranslationWin(BaseWin):
                 update_setting["ss_bottom_y"] = GetDragAreaThread.region["bottom"]
 
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
-
-        # サブスレッドでエラーが発生したら
-        else:
-            return "error"
 
 
 # ! デバッグ用

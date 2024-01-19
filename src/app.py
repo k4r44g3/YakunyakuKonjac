@@ -40,7 +40,8 @@ try:
     from package.window.shooting_setting_win import ShootingSettingWin  # 撮影設定画面ウィンドウクラス
     from package.window.theme_setting_win import ThemeSettingWin  # テーマ設定画面ウィンドウクラス
     from package.window.translation_win import TranslationWin  # 翻訳画面ウィンドウクラス
-    from package.window.user_info_win import UserInfoWin  # 利用者情報画面ウィンドウクラス
+
+    # from package.window.user_info_win import UserInfoWin  # 利用者情報画面ウィンドウクラス
 
 except Exception as e:
     # エラーログの出力処理
@@ -50,7 +51,7 @@ except Exception as e:
 class App:
     """アプリケーションのメインクラス"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """コンストラクタ"""
 
         # AWSの設定ファイルを作成する処理
@@ -76,7 +77,7 @@ class App:
         self.run()
 
     @ErrorLog.decorator  # エラーログの出力
-    def run(self):
+    def run(self) -> None:
         """メインの処理"""
         # 必要クラスのインポート
 
@@ -93,7 +94,7 @@ class App:
             "ShootingSettingWin": ShootingSettingWin,  # 撮影設定画面ウィンドウクラス
             "ThemeSettingWin": ThemeSettingWin,  # テーマ設定画面ウィンドウクラス
             "TranslationWin": TranslationWin,  # 翻訳画面ウィンドウクラス
-            "UserInfoWin": UserInfoWin,  # 利用者情報画面ウィンドウクラス
+            # "UserInfoWin": UserInfoWin,  # 利用者情報画面ウィンドウクラス
         }
 
         Fn.time_log("システム開始")

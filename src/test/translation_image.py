@@ -46,22 +46,32 @@ class TranslationImage:
         # フォントパスの取得
         font_path = Fn.search_dict_in_list(language_list, "code", target_language_code)["font_path"]
 
-        # フォントサイズの計算
-        font_size_list = TranslationImage.find_max_font_size(font_path, text_after_list, text_region_list)
+        # フォントサイズと行数の計算
+        font_size_info = TranslationImage.find_max_font_size(font_path, text_after_list, text_region_list)
+
+        # フォントサイズ
+        font_size_list = [d["font_size_list"] for d in font_size_info]
+
+        # 行数
+        line_count_list = [d["line_count_list"] for d in font_size_info]
 
         # フォントサイズが0である要素の削除
-        TranslationImage.remove_empty_text_data(font_size_list, text_after_list, text_region_list)
+        TranslationImage.remove_empty_text_data(font_size_list, text_after_list, text_region_list, line_count_list)
 
         # 画像内のテキストボックスを塗りつぶす処理
         TranslationImage.fill_text_box_image(draw, text_region_list)
 
         # 画像にテキストを描画する処理
-        TranslationImage.draw_text_image(draw, font_path, text_after_list, text_region_list, font_size_list)
+        TranslationImage.draw_text_image(
+            draw, font_path, text_after_list, text_region_list, font_size_list, line_count_list
+        )
 
         return image_out
 
-    def find_max_font_size(font_path: str, text_after_list: List[str], text_region_list: Dict[str, int]) -> List[int]:
-        """テキストボックスに収まる最大のフォントサイズのリストの取得
+    def find_max_font_size(
+        font_path: str, text_after_list: List[str], text_region_list: List[Dict[str, int]]
+    ) -> List[Dict[str, List[int]]]:
+        """テキストボックスに収まる最大のフォントサイズと行数のリストの取得
 
         Args:
             font_path(str) : フォントファイルのパス
@@ -70,18 +80,19 @@ class TranslationImage:
                 - text_region(dict{Left:int, Top:int, Width:int, Height:int}): テキスト範囲
 
         Returns:
-            font_size_list (list[font_size]): 最大のフォントサイズのリスト
-                - font_size(int): 最大のフォントサイズ(偶数)
+            font_size_info(list[dict{font_size_list, line_count_list}]): 最大のフォントサイズと行数のリスト
+                - font_size_list(list[font_size(int)]): 最大のフォントサイズ(偶数)のリスト
+                - line_count_list(list[line_count(int)]): 行数のリスト
         """
-        font_size_list = []  # フォントサイズのリスト
+        font_size_info = []  # フォントサイズのリスト
         # ブロックごとに走査
         for text_after, text_region in zip(text_after_list, text_region_list):
             if text_after is not None:
                 # 翻訳後テキストが存在するなら
+                line_count = 1  # 行数
                 # テキストボックスの幅と高さを取得
                 text_box_width = text_region["width"]
                 text_box_height = text_region["height"]
-
                 font_size = 2  # フォントサイズの初期値
                 font_image = ImageFont.truetype(font_path, font_size)  # フォントオブジェクトの作成
 
@@ -99,20 +110,51 @@ class TranslationImage:
                     now_text_width = now_text_region[2] - now_text_region[0]  # テキストサイズの横幅取得
                     # テキストサイズの縦幅
                     # ? 欧米文字などは文字によって縦幅が違う
-                    now_text_height = font_size * 1.5  # テキストサイズの横幅取得
+                    now_text_height = font_size * 1.5  # テキストサイズの縦幅取得
+                    # now_text_height = now_text_region[3] - now_text_region[1]  # テキストサイズの縦幅取得
 
-                    if now_text_width < text_box_width and now_text_height < text_box_height:
-                        # テキストボックスに収まらないなら
-                        font_size += 2
-                    else:
-                        # テキストボックスに収まるなら
-                        font_size_list.append(font_size - 2)  # 収まるサイズに戻して保存
-                        break
+                    # 改行分の空白文字を現在のテキストサイズの横幅に追加する処理
+                    # 複数行なら
+                    if line_count > 1:
+                        # 全角空白文字の範囲の取得
+                        full_width_space_region = draw.textbbox((0, 0), text="　", font=font_image)
+                        # 全角空白文字の横幅の取得
+                        full_width_space_width = full_width_space_region[2] - full_width_space_region[0]
+                        # 改行分の空白文字を現在のテキストサイズの横幅に追加
+                        now_text_width += full_width_space_width * (line_count - 1)
 
-        return font_size_list  # テキストボックスに収まる最大のフォントサイズのリスト
+                    # 縦幅がテキストボックスに収まるなら
+                    if now_text_height < text_box_height / line_count:
+                        # 横幅がテキストボックスに収まるなら。（複数行の場合は行数分テキストボックスを拡大）
+                        if now_text_width < text_box_width * line_count:
+                            # フォントサイズを加算する
+                            font_size += 2
+                            continue
+
+                        # 横幅がテキストボックスに収まらないなら
+                        else:
+                            # 改行するとテキストボックスに収まるなら
+                            if (now_text_width < text_box_width * (line_count + 1)) and (  # 1行に繋げた時に横幅が超えない
+                                now_text_height < text_box_height / (line_count + 1)  # 改行した時に縦幅が超えないなら
+                            ):
+                                # 行数を増やす
+                                line_count += 1
+                                continue
+
+                    # 改行してもテキストボックスに収まらないなら
+                    font_size -= 2  # 収まるサイズに戻す
+
+                    # フォントサイズと行数を保存
+                    font_size_info.append({"font_size_list": font_size, "line_count_list": line_count})
+                    break
+
+        return font_size_info  # テキストボックスに収まる最大のフォントサイズのリスト
 
     def remove_empty_text_data(
-        font_size_list: List[int], text_after_list: List[str], text_region_list: Dict[str, int]
+        font_size_list: List[int],
+        text_after_list: List[str],
+        text_region_list: Dict[str, int],
+        line_count_list: List[int],
     ) -> None:
         """フォントサイズが0である要素の削除
 
@@ -121,6 +163,7 @@ class TranslationImage:
             text_after_list(List[text_after(str)]) : 翻訳後テキスト内容のリスト
             text_region_list(List[text_region]): テキスト範囲のリスト
                 - text_region(dict{Left:int, Top:int, Width:int, Height:int}): テキスト範囲
+            line_count_list(list[line_count(int)]): 行数のリスト
         """
         # フォントサイズが0である要素番号のリストの取得
         zero_font_size_index_list = [index for index, font_size in enumerate(font_size_list) if font_size == 0]
@@ -131,6 +174,7 @@ class TranslationImage:
             del font_size_list[delete_index]
             del text_after_list[delete_index]
             del text_region_list[delete_index]
+            del line_count_list[delete_index]
 
     def fill_text_box_image(draw: "ImageDraw", text_region_list: Dict[str, int]) -> None:
         """画像内のテキストボックスを塗りつぶす処理
@@ -164,7 +208,8 @@ class TranslationImage:
         text_after_list: List[str],
         text_region_list: Dict[str, int],
         font_size_list: List[int],
-    ):
+        line_count_list: List[int],
+    ) -> None:
         """画像にテキストを描画する処理
 
         Args:
@@ -173,28 +218,84 @@ class TranslationImage:
             text_after_list(List[text_after(str)]) : 翻訳後テキスト内容のリスト
             text_region_list(List[text_region]): テキスト範囲のリスト
                 - text_region(dict{Left:int, Top:int, Width:int, Height:int}): テキスト範囲
-            font_size_list (list[font_size(int)]): 最大のフォントサイズ(偶数)のリスト
+            font_size_list (list[font_size]): 最大のフォントサイズ(偶数)のリスト
+            line_count_list(list[line_count(int)]): 行数のリスト
         """
         font_color = "#000"  # フォントカラー
 
         # ブロックごとに走査
-        for text_after, text_region, font_size in zip(
+        for text_after, text_region, font_size, line_count in zip(
             text_after_list,  # 翻訳語テキスト内容のリスト
             text_region_list,  # テキスト範囲のリスト
             font_size_list,  # フォントサイズのリスト
+            line_count_list,  # 行数のリスト
         ):
             # 翻訳後テキストが存在するなら
             if text_after is not None:
                 # フォントの設定
                 font_image = ImageFont.truetype(font_path, font_size)
 
-                # 翻訳されたテキストを指定した座標に描画
-                draw.text(
-                    (text_region["left"], text_region["top"]),
-                    text_after,
-                    fill=font_color,
-                    font=font_image,
-                )
+                # テキストが1行なら
+                if line_count == 1:
+                    # 翻訳されたテキストを指定した座標に描画
+                    draw.text(
+                        (text_region["left"], text_region["top"]),
+                        text_after,
+                        fill=font_color,
+                        font=font_image,
+                    )
+                # テキストが複数行なら
+                else:
+                    # 全体のテキスト範囲を計算
+                    all_text_region = draw.textbbox((0, 0), text=text_after + "　" * line_count, font=font_image)
+
+                    # 全体のテキスト幅を計算
+                    all_text_width = all_text_region[2] - all_text_region[0]  # テキストサイズの横幅取得
+
+                    # 1行あたりの最大幅を計算
+                    line_text_max_width = all_text_width / line_count
+                    # 結果を格納するリスト
+                    text_lines = []
+                    current_line = ""  # 現在の行のテキスト
+                    current_width = 0  # 現在の行の幅
+
+                    # 1文字ずつ走査
+                    for text_index, char in enumerate(text_after):
+                        # 現在の文字の範囲を計算
+                        char_region = draw.textbbox((0, 0), text=char, font=font_image)
+
+                        # 現在の文字の横幅を計算
+                        char_width = char_region[2] - char_region[0]  # テキストサイズの横幅取得
+
+                        # テキストの末尾でないなら
+                        if text_index != len(text_after) - 1:
+                            # 現在の行に文字を追加しても最大幅を超えないなら
+                            if current_width + char_width <= line_text_max_width and text_index != len(text_after) - 1:
+                                current_line += char  # 現在の行に文字を追加
+                                current_width += char_width  # 現在の行の幅を加算
+
+                            # 現在の行に文字を追加すると最大幅を超えるなら
+                            else:
+                                text_lines.append(current_line)  # 現在の行の保存
+                                current_line = char  # 新しい行に文字を追加
+                                current_width = char_width  # 新しい行に幅を追加
+
+                        # テキストの末尾なら
+                        else:
+                            current_line += char  # 現在の行に文字を追加
+                            current_width += char_width  # 現在の行の幅を加算
+                            text_lines.append(current_line)  # 現在の行の保存
+
+                    # 翻訳後テキストを改行する
+                    text_after = "\n".join(text_lines)
+
+                    # 翻訳されたテキストを指定した座標に描画
+                    draw.text(
+                        (text_region["left"], text_region["top"]),
+                        text_after,
+                        fill=font_color,
+                        font=font_image,
+                    )
 
     def save_overlay_translation_image(overlay_translation_image: Image, file_name: str) -> str:
         """オーバーレイ翻訳画像の保存

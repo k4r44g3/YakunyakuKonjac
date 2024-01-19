@@ -1,0 +1,68 @@
+class Frame(Element)
+ |  Frame(title, layout, title_color=None, background_color=None, title_location=None, relief='groove', size=(None, None), s=(None, None), font=None, pad=None, p=None, border_width=None, key=None, k=None, tooltip=None, right_click_menu=None, expand_x=False, expand_y=False, grab=None, visible=True, element_justification='left', vertical_alignment=None, metadata=None)
+ |
+ |  他の要素を含むフレーム要素。要素の周りに線とテキストラベルが含まれています。
+ |
+ |  メソッド解決順序:
+ |      Frame
+ |      Element
+ |      builtins.object
+ |
+ |  ここで定義されているメソッド:
+ |
+ |  AddRow = add_row(self, *args)
+ |  レイアウト内に新しい行を追加します。
+ |
+ |  Layout = layout(self, rows)
+ |  フレーム内にレイアウトを設定します。
+ |
+ |  Update = update(self, value=None, visible=None)
+ |  フレームの値または可視性を更新します。
+ |
+ |  __init__(self, title, layout, title_color=None, background_color=None, title_location=None, relief='groove', size=(None, None), s=(None, None), font=None, pad=None, p=None, border_width=None, key=None, k=None, tooltip=None, right_click_menu=None, expand_x=False, expand_y=False, grab=None, visible=True, element_justification='left', vertical_alignment=None, metadata=None)
+ |      :param title:                 フレームの "ラベル" またはタイトルとして表示されるテキスト
+ |      :type title:                  (str)
+ |      :param layout:                フレーム内に配置するレイアウト
+ |      :type layout:                 List[List[Elements]]
+ |      :param title_color:           タイトルテキストの色
+ |      :type title_color:            (str)
+ |      :param background_color:      フレームの背景色
+ |      :type background_color:       (str)
+ |      :param title_location:        テキストタイトルを配置する位置。TITLE_LOCATION_TOP TITLE_LOCATION_BOTTOM TITLE_LOCATION_LEFT TITLE_LOCATION_RIGHT TITLE_LOCATION_TOP_LEFT TITLE_LOCATION_TOP_RIGHT TITLE_LOCATION_BOTTOM_LEFT TITLE_LOCATION_BOTTOM_RIGHT などの選択肢があります。
+ |      :type title_location:         (enum)
+ |      :param relief:                レリーフスタイル。他の要素と同じ値です。RELIEF_RAISED RELIEF_SUNKEN RELIEF_FLAT RELIEF_RIDGE RELIEF_GROOVE RELIEF_SOLID などの選択肢があります。
+ |      :type relief:                 (enum)
+ |      :param size:                  フレームの初期ハードコードサイズ（幅、高さ）。以前は問題がありましたが、4.53.0で修正され、sizeパラメーターを使用する場合にColumnsよりも優れて機能します。
+ |      :type size:                   (int, int)
+ |      :param s:                     sizeパラメーターと同様。これはエイリアスです。どちらかが設定されている場合、設定されている方が使用されます。両方設定されている場合、sizeが使用されます。
+ |      :type s:                      (int, int)  | (None, None) | int
+ |      :param font:                  タイトルのフォントファミリー、サイズなどを指定します。タプルまたは単一の文字列形式 'name size styles'。スタイル: italic * roman bold normal underline overstrike
+ |      :type font:                   (strまたは(str、int、str)またはNone)
+ |      :param pad:                   要素の周りに配置する余白の量（ピクセル単位）（左/右、上/下）または（（左、右）、（上、下））または整数。整数の場合、タプル（int、int）に変換されます。
+ |      :type pad:                    (int、int)または（（int、int）、（int、int））または（int、（int、int））または（（int、int）、int） | int
+ |      :param p:                     padパラメーターと同様。これはエイリアスです。どちらかが設定されている場合、設定されている方が使用されます。両方設定されている場合、padが使用されます。
+ |      :type p:                      (int、int)または（（int、int）、（int、int））または（int、（int、int））または（（int、int）、int） | int
+ |      :param border_width:          要素の周りの境界線の幅（ピクセル単位）
+ |      :type border_width:           (int)
+ |      :param key:                   すべての他の要素からこの要素を一意に識別する値。要素の検索や返り値の際に使用されます。ウィンドウ内で一意である必要があります。
+ |      :type key:                    str | int | tuple | object
+ |      :param k:                     キーと同じです。kまたはkeyのどちらかを使用できます。どちらかが設定されている場合、設定されている方が使用されます。
+ |      :type k:                      str | int | tuple | object
+ |      :param tooltip:               要素にマウスを乗せると表示されるテキスト
+ |      :type tooltip:                (str)
+ |      :param right_click_menu:      この要素が右クリックされたときに表示されるメニューアイテムのリストのリスト。詳細なフォーマットについてはユーザードキュメントを参照してください。
+ |      :type right_click_menu:       List[List[ List[str] | str ]]
+ |      :param expand_x:              Trueの場合、要素はX方向に自動的に拡張して利用可能なスペースを埋めます。
+ |      :type expand_x:               (bool)
+ |      :param expand_y:              Trueの場合、要素はY方向に自動的に拡張して利用可能なスペースを埋めます。
+ |      :type expand_y:               (bool)
+ |      :param grab:                  Trueの場合、この要素をつかんでウィンドウを移動できます。デフォルトはFalseです。
+ |      :type grab:                   (bool)
+ |      :param visible:               要素の可視性状態を設定します。
+ |      :type visible:                (bool)
+ |      :param element_justification: フレーム内のすべての要素に対する配置 'left'、'right'、'center' は有効な値です。
+ |      :type element_justification:  (str)
+ |      :param vertical_alignment:    行の 'top'、'center'、'bottom' にフレームを配置します（t、c、r でも使用できます）。デフォルトは設定なし（tkinterが決定します）。
+ |      :type vertical_alignment:     (str)
+ |      :param metadata:              任意のユーザーメタデータを設定できます。
+ |      :type metadata:               (Any)

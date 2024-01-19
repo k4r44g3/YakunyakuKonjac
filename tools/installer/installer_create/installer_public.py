@@ -43,7 +43,7 @@ class Fn:
         """現在のスクリプトファイルが存在するディレクトリのパスを取得する処理
 
         Returns:
-            directory_path(src): 現在のスクリプトファイルが存在するディレクトリのパス
+            directory_path(str): 現在のスクリプトファイルが存在するディレクトリのパス
         """
         # ファイルが凍結(exe)なら
         if getattr(sys, "frozen", False):
@@ -382,7 +382,7 @@ class Main:
 
         Args:
             window (sg.Window): Windowオブジェクト
-            message (src): 表示するメッセージ
+            message (str): 表示するメッセージ
         """
         # 表示メッセージの更新
         window["-install_progress-"].metadata["message"] = message

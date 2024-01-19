@@ -183,7 +183,7 @@ class KeySettingWin(BaseWin):
         # 更新する設定
         return update_setting
 
-    def key_event_start(self, event):
+    def key_event_start(self, event: str) -> None:
         """キーイベントを取得するスレッドを開始する処理
 
         Args:
@@ -220,7 +220,7 @@ class KeySettingWin(BaseWin):
         # スレッド開始
         thread.start()
 
-    def is_duplicate(self, values):
+    def is_duplicate(self, values: dict) -> bool:
         """キー名とスキャンコードの重複チェックを行う
 
         Args:
@@ -252,7 +252,7 @@ class KeySettingWin(BaseWin):
         # キー名とスキャンコードが他と重複しているかどうか
         return (key_name in another_key_name_list) or (scan_code in another_scan_code_list)
 
-    def update_key_binding_view(self, setting_target_key, key_name, scan_code):
+    def update_key_binding_view(self, setting_target_key: str, key_name: str, scan_code: int) -> None:
         """キーバインド設定の表示の更新処理
 
         Args:

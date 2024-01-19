@@ -250,7 +250,7 @@ class EnvironmentSettingWin(BaseWin):
         # 更新する設定
         return update_setting
 
-    def ocr_amazon_textract_message_event(self, event):
+    def ocr_amazon_textract_message_event(self, event: str) -> None:
         """OCRがAmazonTextractの場合に表示するメッセージの表示/非表示を切り替える
 
         Args:
@@ -268,7 +268,7 @@ class EnvironmentSettingWin(BaseWin):
             # 表示状態に変更
             self.window["-ocr_amazon_textract_message-"].update(visible=True)
 
-    def bat_file_event(self, popup_message, bat_file_path):
+    def bat_file_event(self, popup_message: str, bat_file_path: str) -> None:
         """バッチファイルを実行するイベントの処理
 
         Args:
@@ -297,7 +297,7 @@ class EnvironmentSettingWin(BaseWin):
             self.is_restart_program = True  # 再起動するかどうか
             self.window_close()  # プログラム終了イベント処理
 
-            return # メソッドの処理を終了する
+            return  # メソッドの処理を終了する
 
         # ウィンドウを表示する
         self.window.un_hide()

@@ -1,3 +1,5 @@
+from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
+
 import boto3  # AWSのAIサービス
 from deep_translator import GoogleTranslator  # google翻訳
 from package.fn import Fn  # 自作関数クラス
@@ -8,7 +10,7 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 class TextTranslation:
     """テキスト翻訳機能関連のクラス"""
 
-    def get_text_after_list(user_setting, text_before_list):
+    def get_text_after_list(user_setting: "UserSetting", text_before_list: List[str]) -> List[str]:
         """翻訳後テキストの取得
 
         Args:
@@ -31,7 +33,7 @@ class TextTranslation:
             text_after_list = TextTranslation.google_translator(user_setting, text_before_list)
         return text_after_list  # 翻訳後テキストのリスト
 
-    def amazon_translate(user_setting, text_before_list):
+    def amazon_translate(user_setting: "UserSetting", text_before_list: List[str]) -> List[str]:
         """AmazonTranslateを使用して、翻訳後テキストを取得
 
         Args:
@@ -60,7 +62,7 @@ class TextTranslation:
 
         return text_after_list  # 翻訳後テキストのリスト
 
-    def google_translator(user_setting, text_before_list):
+    def google_translator(user_setting: "UserSetting", text_before_list: List[str]) -> List[str]:
         """GoogleTranslatorを使用して、翻訳後テキストを取得
 
         Args:

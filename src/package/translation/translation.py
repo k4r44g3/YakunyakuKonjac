@@ -19,7 +19,7 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 class Translation:
     """翻訳機能関連のクラス"""
 
-    def save_history():
+    def save_history() -> str:
         """翻訳前,結果を履歴に保存する
 
         Returns:
@@ -45,7 +45,7 @@ class Translation:
 
         # ! デバック用
         # ss_file_path = Debug.ss_file_path  # スクショ画像パス
-        # ss_file_path = os.path.join(Debug.debug_directory_path , "test.png")  # スクショ画像パス
+        # ss_file_path = os.path.join(Debug.debug_directory_path, "test.png")  # スクショ画像パス
 
         # 文字認識機能
         text_data_dict = CharacterRecognition.get_text_data_dict(user_setting, ss_file_path)  # 画像からテキスト情報を取得

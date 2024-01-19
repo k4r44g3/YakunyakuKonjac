@@ -171,7 +171,30 @@ class ShootingSettingWin(BaseWin):
                 # 数字の入力値が有効かどうかを判定してGUI更新処理を行う処理
                 self.input_text_event(event, values)
 
-    def get_ss_region_text(self):
+    def get_update_setting(self, values):
+        """更新する設定の取得
+
+        Args:
+            values (dict): 各要素の値の辞書
+        Returns:
+            update_setting (dict): 更新する設定の値の辞書
+        """
+        # 更新する設定
+        update_setting = {}
+        # キー名の両端のハイフンを取り除く
+        update_setting["translation_interval_sec"] = int(values["-translation_interval_sec-"])  # 翻訳間隔(秒)
+        # 撮影範囲の左側x座標
+        update_setting["ss_left_x"] = int(self.ss_region_info_dict["left"]["value"])
+        # 撮影範囲の上側y座標
+        update_setting["ss_top_y"] = int(self.ss_region_info_dict["top"]["value"])
+        # 撮影範囲の右側x座標
+        update_setting["ss_right_x"] = int(self.ss_region_info_dict["right"]["value"])
+        # 撮影範囲の下側y座標
+        update_setting["ss_bottom_y"] = int(self.ss_region_info_dict["bottom"]["value"])
+        # 更新する設定
+        return update_setting
+
+    def get_ss_region_text(self) -> str:
         """撮影範囲表示テキストの取得
 
         Returns:
@@ -188,7 +211,7 @@ class ShootingSettingWin(BaseWin):
         ss_region_text = ss_region_text.rstrip("\n")
         return ss_region_text  # 撮影範囲表示テキスト
 
-    def set_ss_region_event(self):
+    def set_ss_region_event(self) -> None:
         """撮影範囲設定ボタン押下イベント処理"""
         # ドラッグした領域の座標を取得するスレッド作成
         thread = threading.Thread(
@@ -226,38 +249,11 @@ class ShootingSettingWin(BaseWin):
                 # 撮影範囲表示テキストの更新
                 self.window["-ss_region_text-"].update(value=ss_region_text)
 
-        # サブスレッドでエラーが発生したら
-        else:
-            return "error"
-
-    def get_update_setting(self, values):
-        """更新する設定の取得
-
-        Args:
-            values (dict): 各要素の値の辞書
-        Returns:
-            update_setting (dict): 更新する設定の値の辞書
-        """
-        # 更新する設定
-        update_setting = {}
-        # キー名の両端のハイフンを取り除く
-        update_setting["translation_interval_sec"] = int(values["-translation_interval_sec-"])  # 翻訳間隔(秒)
-        # 撮影範囲の左側x座標
-        update_setting["ss_left_x"] = int(self.ss_region_info_dict["left"]["value"])
-        # 撮影範囲の上側y座標
-        update_setting["ss_top_y"] = int(self.ss_region_info_dict["top"]["value"])
-        # 撮影範囲の右側x座標
-        update_setting["ss_right_x"] = int(self.ss_region_info_dict["right"]["value"])
-        # 撮影範囲の下側y座標
-        update_setting["ss_bottom_y"] = int(self.ss_region_info_dict["bottom"]["value"])
-        # 更新する設定
-        return update_setting
-
-    def input_text_event(self, event, values):
+    def input_text_event(self, event: str, values: dict) -> None:
         """数字の入力値が有効かどうかを判定してGUI更新処理を行う処理
 
         Args:
-            event (_type_): 識別子
+            event (str): 識別子
             values (dict): 各要素の値の辞書
         """
         # 継承元の数字の入力値が有効かどうかを判定してGUI更新処理を行う処理を呼び出す

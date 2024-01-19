@@ -92,12 +92,11 @@ class AwsConfigureWin(BaseWin):
                     is_successful=values["-aws_configure_thread_end-"],  # AWSの設定の変更中に中断されてないかどう
                 )
 
-    def aws_configure_thread_end_event(self, is_successful):
+    def aws_configure_thread_end_event(self, is_successful: bool) -> None:
         """AWS設定スレッドが終了した時の処理
 
         Args:
             is_successful (bool): AWSの設定の変更中に中断されてないかどうか
-            check_access_aws_thread (threading.Thread) AWS接続テストを行うスレッド
         """
         # 終了コードをチェック
         # 中断されなかったなら
@@ -127,7 +126,7 @@ class AwsConfigureWin(BaseWin):
 
     @staticmethod  # スタティック(静的)メソッド
     @ErrorLog.decorator  # エラーログを取得するデコレータ
-    def aws_configure_thread():
+    def aws_configure_thread() -> None:
         """AWS設定を行うスレッド"""
         # awsの設定を行うバッチファイルの実行
         result = subprocess.run(

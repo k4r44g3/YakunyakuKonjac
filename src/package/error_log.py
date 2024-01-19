@@ -14,11 +14,11 @@ from package.system_setting import SystemSetting  # ユーザーが変更不可�
 class ErrorLog:
     """エラーログに関するクラス"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """コンストラクタ ロガーの設定を行う"""
         # 基本的な情報のみを出力するロガーの設定
         # ロギングモジュールから 'simple' という名前のロガーインスタンスを取得
-        self.simple_logger = logging.getLogger("simple")
+        self.simple_logger:logging.Logger = logging.getLogger("simple")
 
         # ロガーのログレベルを DEBUG に設定
         self.simple_logger.setLevel(logging.DEBUG)
@@ -41,7 +41,7 @@ class ErrorLog:
         # 詳細な情報を出力するロガーの設定
 
         # ロギングモジュールから 'detailed' という名前のロガーインスタンスを取得
-        self.detailed_logger = logging.getLogger("detailed")
+        self.detailed_logger:logging.Logger = logging.getLogger("detailed")
 
         # ロガーのログレベルを DEBUG に設定
         self.detailed_logger.setLevel(logging.DEBUG)
@@ -63,7 +63,7 @@ class ErrorLog:
         # これにより、このロガーがキャッチしたログは 'error_detailed.log' に書き込まれる
         self.detailed_logger.addHandler(detailed_file_handler)
 
-    def self_output_error_log(self):
+    def self_output_error_log(self) -> None:
         """ログに出力する処理"""
         # 基本的な情報のみを出力
         self.simple_logger.exception("エラー発生")
@@ -98,8 +98,12 @@ class ErrorLog:
                 self.detailed_logger.error("Variable [%s]: %s", var_name, var_value)
 
     @staticmethod  # スタティック(静的)メソッドの定義
-    def create_error_log():
-        """ErrorLogのインスタンス化を行う関数"""
+    def create_error_log() -> "ErrorLog":
+        """ErrorLogのインスタンス化を行う関数
+
+        Returns:
+            ErrorLog: エラーログに関するクラス
+        """
         try:
             return ErrorLog()
         except Exception as e:
@@ -112,11 +116,11 @@ class ErrorLog:
             raise  # 例外を発生させる
 
     @staticmethod  # スタティック(静的)メソッドの定義
-    def output_error_log(error_log_instance, e):
+    def output_error_log(error_log_instance: "ErrorLog", e: Exception) -> None:
         """エラーログの出力を行う関数
 
         Args:
-            error_log_instance (RrrorLog): エラーログに関するクラスのインスタンス
+            error_log_instance (ErrorLog): エラーログに関するクラスのインスタンス
             e (Exception): 例外
         """
         try:
@@ -135,7 +139,7 @@ class ErrorLog:
         raise  # 例外を発生させる
 
     @staticmethod  # スタティック(静的)メソッドの定義
-    def error_popup(e, is_output_error_log):
+    def error_popup(e: Exception, is_output_error_log: bool) -> None:
         """エラー発生ポップアップの作成
 
         Args:
@@ -186,11 +190,13 @@ class ErrorLog:
                     window.write_event_value(key="-thread_error_event-", value=message)
 
     @staticmethod  # スタティック(静的)メソッドの定義
-    def decorator(func):  # デコレータ関数の宣言。
-        """デコレータ関数。このデコレータを使用した関数は、'wrapper'関数に置き換えられる。
+    def decorator(func: callable) -> callable:  # デコレータ関数の宣言。
+        """エラーログを作成するデコレータ関数。
+
+        このデコレータを使用した関数は、'wrapper'関数に置き換えられる。
 
         Args:
-            func (func): デコレートされる関数
+            func (callable): デコレートされる関数
         """
 
         def wrapper(*args, **kwargs):
