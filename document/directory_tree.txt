@@ -116,7 +116,6 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
         │   get_version.bat - バージョンを取得するためのバッチファイル
         │   initialize_software.bat - ソフトウェアを初期化するためのバッチファイル
         │   reset_setting.bat - 設定をリセットするためのバッチファイル
-        │   update.bat - ソフトウェアをアップデートするためのバッチファイル
         │
         └─installer - インストーラーに関連するスクリプトが格納されるディレクトリ
             │   installer_private.bat - 非公開用ソフトウェアのインストールを行うバッチファイル

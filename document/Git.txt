@@ -21,6 +21,28 @@ https://qiita.com/WebEngrChild/items/133484ca79fc90a207d5
 https://www.kagoya.jp/howto/it-glossary/develop/github_ssh/
 
 
+git reset (--hard/--soft) ワーキングツリー、インデックス、HEADを使いこなす方法
+https://qiita.com/shuntaro_tamura/items/db1aef9cf9d78db50ffe
+
+[Git]コミットの取り消し、打ち消し、上書き
+https://qiita.com/shuntaro_tamura/items/06281261d893acf049ed
+
+Github内の過去のバージョンを取得する方法
+https://qiita.com/samurai_runner/items/7812749493554208aeae
+
+【git stash】コミットはせずに変更を退避したいとき
+https://qiita.com/chihiro/items/f373873d5c2dfbd03250
+
+色々な git stash
+https://qiita.com/akasakas/items/768c0b563b96f8a9be9d
+
+リポジトリをミラーする
+https://docs.github.com/ja/repositories/creating-and-managing-repositories/duplicating-a-repository
+
+git tagの使い方まとめ
+https://qiita.com/growsic/items/ed67e03fda5ab7ef9d08
+
+
 clone	リモートリポジトリの内容をカレントディレクトリにリポジトリを複製する
 pull	リモートリポジトリの内容をカレントディレクトリに差異があるファイルのみ上書きする
 fetch   リモートブランチの状態をローカルブランチに反映
@@ -55,7 +77,7 @@ push (ローカルのセーブデータをクラウドにアップロード)
     origin
         リモートサーバー名のデフォルト
 
-    衝突(コンフリクト) 
+    衝突(コンフリクト)
         変更箇所が被ること
         複数人が同じ箇所を変更した場合に、どの記述を優先したらいいか分からない状態
 
@@ -184,21 +206,6 @@ push (ローカルのセーブデータをクラウドにアップロード)
     git push <remote> --delete <branch>
 説明
     リモートブランチの削除
-
-git reset (--hard/--soft) ワーキングツリー、インデックス、HEADを使いこなす方法
-https://qiita.com/shuntaro_tamura/items/db1aef9cf9d78db50ffe
-
-[Git]コミットの取り消し、打ち消し、上書き
-https://qiita.com/shuntaro_tamura/items/06281261d893acf049ed
-
-Github内の過去のバージョンを取得する方法
-https://qiita.com/samurai_runner/items/7812749493554208aeae
-
-【git stash】コミットはせずに変更を退避したいとき
-https://qiita.com/chihiro/items/f373873d5c2dfbd03250
-
-色々な git stash
-https://qiita.com/akasakas/items/768c0b563b96f8a9be9d
 
 
 リセット(戻る)

@@ -11,11 +11,49 @@
     git で .gitkeep は残したいけど、他のファイルは Ignore したい場合（ディレクトリだけ残したい場合）
     https://chidakiyo.hatenablog.com/entry/gitignore-tips1
 
+    .gitignoreに記載したのに反映されない件
+    https://qiita.com/fuwamaki/items/3ed021163e50beab7154
+
+    【Gitエラー解決】warning: LF will be replaced by CRLF
+    https://qiita.com/WebEngrChild/items/133484ca79fc90a207d5
+
+    git reset (--hard/--soft) ワーキングツリー、インデックス、HEADを使いこなす方法
+    https://qiita.com/shuntaro_tamura/items/db1aef9cf9d78db50ffe
+
+    [Git]コミットの取り消し、打ち消し、上書き
+    https://qiita.com/shuntaro_tamura/items/06281261d893acf049ed
+
+    Github内の過去のバージョンを取得する方法
+    https://qiita.com/samurai_runner/items/7812749493554208aeae
+
+    【git stash】コミットはせずに変更を退避したいとき
+    https://qiita.com/chihiro/items/f373873d5c2dfbd03250
+
+    色々な git stash
+    https://qiita.com/akasakas/items/768c0b563b96f8a9be9d
+
+    リポジトリをミラーする
+    https://docs.github.com/ja/repositories/creating-and-managing-repositories/duplicating-a-repository
+
+    リポジトリのリリースを管理する
+    https://docs.github.com/ja/repositories/releasing-projects-on-github/managing-releases-in-a-repository
+
+
+batファイル関連
     バッチファイルの作成
     https://www.javadrive.jp/command/bat/
 
-    .gitignoreに記載したのに反映されない件
-    https://qiita.com/fuwamaki/items/3ed021163e50beab7154
+    Windows/バッチで多重起動防止
+    https://qiita.com/sasaki_hir/items/413127e523dbe2b21c74
+
+    【bat】Windowsのバッチファイル(*.bat)の書き方自分用まとめ
+    https://qiita.com/sksmnagisa/items/8c4c1788af44cc1dc63a
+
+    SetLocal EnableDelayedExpansionの罠とその回避方法
+    https://qiita.com/yz2cm/items/4983be006116c369d08b
+
+    遅延環境変数
+    https://wa3.i-3-i.info/word12518.html
 
 
 GUI関連
@@ -180,8 +218,6 @@ Python関連
         アイコン (設計の基本)
         https://learn.microsoft.com/ja-jp/windows/win32/uxguide/vis-icons
 
-        Windows/バッチで多重起動防止
-        https://qiita.com/sasaki_hir/items/413127e523dbe2b21c74
 
 その他
     GitHubのリリース機能の使い方

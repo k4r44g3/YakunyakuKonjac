@@ -4,8 +4,6 @@ https://office54.net/python/tkinter/tkinter-how-to-use
 【Python GUI】「tkinter」で関数実行中にウィンドウがフリーズしてしまう問題を「threading」を使って回避する方法
 https://karupoimou.hatenablog.com/entry/20200427/1587975580
 
-翻訳画像作成機能の修正
-
 
 現在発生中のバグ
 
@@ -62,6 +60,6 @@ https://karupoimou.hatenablog.com/entry/20200427/1587975580
     https://stackoverflow.com/questions/59282476/error-rpc-failed-curl-92-http-2-stream-0-was-not-closed-cleanly-protocol-erro
 
 
-
-
-
+バグの概要
+    exeファイルがウイルス扱いされる
+バグの問題
