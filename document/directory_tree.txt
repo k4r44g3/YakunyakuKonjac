@@ -1,0 +1,129 @@
+venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
+│   pyvenv.cfg -  仮想環境の設定ファイル
+│   requirements.txt - プロジェクトで必要となるパッケージの情報を示すテキストファイル
+│
+├─.aws - AWSの認証情報や設定ファイルが格納されるディレクトリ
+│       config - AWSの設定を保存するために使用するファイル
+│       credentials - AWSの認証情報を保存するために使用するファイル
+│
+├─.EasyOCR - EasyOCRで使用するモデルが格納されるディレクトリ
+│       user_network - EasyOCRで使用するOCRネットワークモデルのディレクトリ
+│
+├─.vscode - vscodeの設定ファイルが格納されるディレクトリ
+│       settings.json - プロジェクトやフォルダーの一般的な設定を保存するファイル
+│
+├─Include - Python インクルードファイルが格納されるディレクトリ
+├─Lib - Python ライブラリが格納されるディレクトリ
+├─Scripts - 仮想環境に関連するスクリプトが格納されるディレクトリ
+├─share - 仮想環境に関連する共有リソースが格納されるディレクトリ
+└─YakunyakuKonjac - 仮想環境内でのプロジェクトのルートディレクトリ
+    │   .gitignore - Gitの無視設定ファイル
+    │
+    ├─document - ドキュメンテーション関連のファイルを格納するディレクトリ
+    │   │   directory_tree.txt - ディレクトリ構造の詳細を示すテキストファイル
+    │   │   Git.txt - Gitのコマンドの詳細を示すテキストファイル
+    │   │   manual.txt - ソフトウェアの使い方を示すテキストファイル
+    │   │   patch_notes.txt - ソフトウェアの更新情報を示すテキストファイル
+    │   │   readme.txt - ソフトウェアの説明を示すテキストファイル
+    │   │   reference.txt - プロジェクトの参考文献や資料を格納するテキストファイル
+    │   │   todo.txt - プロジェクトに関連するタスクやToDoリストを含むテキストファイル
+    │   │
+    │   └─venv_backup - 仮想環境のバックアップファイルを格納するディレクトリ
+    │       │   requirements.txt - プロジェクトで必要となるパッケージの情報を示すテキストファイル
+    │       │
+    │       └─.vscode_backup - vscodeの設定のバックアップファイルが格納されるディレクトリ
+    │               settings.json - プロジェクトやフォルダーの一般的な設定を保存するファイル
+    │
+    ├─log - 設定情報を含むファイルを格納するディレクトリ
+    │       .gitkeep - Gitが空のディレクトリを保持するためのファイル
+    │       error_detailed.log - エラーの詳細な情報を含むログファイル
+    │       error_simple.log - エラーの基本情報を含むログファイル
+    │
+    ├─src - ソースコードを格納するディレクトリ
+    │   │   app.py - メインのアプリケーションコード
+    │   │
+    │   ├─config - 設定情報を含むファイルを格納するディレクトリ
+    │   │       .gitkeep - Gitが空のディレクトリを保持するためのファイル
+    │   │       setting.json - アプリケーションの設定情報を含むJSONファイル
+    │   │
+    │   ├─debug_history - デバッグ用の履歴データを格納するディレクトリ
+    │   │
+    │   ├─history - 履歴データを格納するディレクトリ
+    │   │   ├─image_after - 翻訳した後の画像データを格納するディレクトリ
+    │   │   │       .gitkeep - Gitが空のディレクトリを保持するためのファイル
+    │   │   │
+    │   │   └─image_before - 翻訳する前の画像データを格納するディレクトリ
+    │   │           .gitkeep - Gitが空のディレクトリを保持するためのファイル
+    │   │
+    │   ├─package - アプリケーションのパッケージとユーティリティ関連のファイルを格納するディレクトリ
+    │   │   │       debug.py - デバッグに関連するコードを提供するPythonファイル
+    │   │   │       error_log.py - エラーログ関連のコードを提供するPythonファイル
+    │   │   │       fn.py - 汎用の関数やユーティリティ関連のコードを提供するPythonファイル
+    │   │   │       global_status.py - グローバル変数を定義するためのコードを提供するPythonファイル
+    │   │   │       system_setting.py - システム設定に関連するコードを提供するPythonファイル
+    │   │   │       user_setting.py - ユーザー設定に関連するコードを提供するPythonファイル
+    │   │   │
+    │   │   ├─thread - スレッドに関連するコードを提供するディレクトリ
+    │   │   │       get_drag_area_thread.py - ドラッグした領域の座標を取得するスレッドクラスを提供するPythonファイル
+    │   │   │       get_key_event_thread.py - キーイベントの取得処理を行うスレッドクラスを提供するPythonファイル
+    │   │   │       translate_thread.py - 翻訳処理を行うスレッドを提供するPythonファイル
+    │   │   │       translate_timing_thread.py - 自動翻訳のタイミングを取得するスレッドを提供するPythonファイル
+    │   │   │       watch_for_key_event_thread.py - キーイベントが発生するか監視するスレッドを提供するPythonファイル
+    │   │   │
+    │   │   ├─translation - テキスト翻訳に関連するコードを提供するディレクトリ
+    │   │   │       character_recognition.py - 文字認識に関連するコードを提供するPythonファイル
+    │   │   │       screenshot_capture.py - スクリーンショットのキャプチャに関連するコードを提供するPythonファイル
+    │   │   │       text_translation.py - テキストの翻訳に関連するコードを提供するPythonファイル
+    │   │   │       translation.py - 翻訳に関連するコードを提供するPythonファイル
+    │   │   │       translation_image.py - 画像翻訳に関連するコードを提供するPythonファイル
+    │   │   │
+    │   │   └─window - ウィンドウ関連のコードを提供するディレクトリ
+    │   │           aws_configure_win.py - AWS設定ウィンドウに関連するコードを提供するPythonファイル
+    │   │           base_win.py - ウィンドウの基本となるコードを提供するPythonファイル
+    │   │           check_access_aws_win.py - AWS接続テストウィンドウに関連するコードを提供するPythonファイル
+    │   │           display_setting_win.py - 撮影設定ウィンドウに関連するコードを提供するPythonファイル
+    │   │           easy_ocr_model_download_win.py - EasyOCRモデルダウンロードウィンドウに関連するコードを提供するPythonファイル
+    │   │           environment_setting_win.py - 環境設定ウィンドウに関連するコードを提供するPythonファイル
+    │   │           key_setting_win.py - キー設定ウィンドウに関連するコードを提供するPythonファイル
+    │   │           language_setting_win.py - 言語設定ウィンドウに関連するコードを提供するPythonファイル
+    │   │           save_setting_win.py - 保存設定ウィンドウに関連するコードを提供するPythonファイル
+    │   │           shooting_setting_win.py - 撮影設定ウィンドウに関連するコードを提供するPythonファイル
+    │   │           theme_setting_win.py - テーマ設定ウィンドウに関連するコードを提供するPythonファイル
+    │   │           translation_win.py - 翻訳ウィンドウに関連するコードを提供するPythonファイル
+    │   │           user_info_win.py - 利用者情報ウィンドウに関連するコードを提供するPythonファイル
+    │   │
+    │   └─test - テスト用コードを格納するディレクトリ
+    │
+    ├─static - 静的ファイルを格納するディレクトリ
+    │   ├─font - フォントファイルを格納するディレクトリ
+    │   │       malgun.ttf - ハングルフォントファイル
+    │   │       msyh.ttc - 簡体字フォントファイル
+    │   │       segoeui.ttf - 欧文フォントファイル
+    │   │       YuGothM.ttc - 和文フォントファイル
+    │   │
+    │   ├─icon - アイコン用画像ファイルを格納するディレクトリ
+    │   │       app.ico - アプリケーションのアイコンの画像ファイル
+    │   │
+    │   └─image - 画像ファイルを格納するディレクトリ
+    │           check_ocr.png - OCRの動作チェックに使用する画像ファイル
+    │           default_image_after.png - デフォルトの翻訳前画像ファイル
+    │           default_image_before.png - - デフォルトの翻訳後画像ファイル
+    │
+    └─tools - プロジェクトに関連するスクリプトが格納されるディレクトリ
+        │   app.bat - アプリケーションの実行バッチファイル
+        │   aws_configure.bat - awsの設定を行うバッチファイル
+        │   delete_history.bat - 履歴を削除するためのバッチファイル
+        │   get_version.bat - バージョンを取得するためのバッチファイル
+        │   initialize_software.bat - ソフトウェアを初期化するためのバッチファイル
+        │   reset_setting.bat - 設定をリセットするためのバッチファイル
+        │   update.bat - ソフトウェアをアップデートするためのバッチファイル
+        │
+        └─installer - インストーラーに関連するスクリプトが格納されるディレクトリ
+            │   installer_private.bat - 非公開用ソフトウェアのインストールを行うバッチファイル
+            │   installer_public.bat - 公開用ソフトウェアのインストールを行うバッチファイル
+            │
+            └─installer_create - インストーラーに関連するスクリプトが格納されるディレクトリ
+                    app.ico - アプリケーションのアイコンの画像ファイル
+                    create_installer.bat - インストーラー作成に必要な環境の構築を行うバッチファイル
+                    installer_private.py - 非公開用ソフトウェアのインストーラー作成に関連するコードを提供するPythonファイル
+                    installer_public.py - 公開用ソフトウェアのインストーラー作成に関連するコードを提供するPythonファイル
