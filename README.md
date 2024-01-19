@@ -1,7 +1,7 @@
 # YakunyakuKonjac（ヤクニャクコンジャック）
 ヤクニャクコンジャックはパソコンの画面をリアルタイムで翻訳するソフトウェアです。
 
-![app](https://github.com/k4r44g3/YakunyakuKonjac/assets/127704026/ebf8543e-6c0b-4f7a-b4c0-b741dfa104b7)
+![app](https://github.com/k4r44g3/YakunyakuKonjac/assets/127704026/9e3e66ed-6701-4e31-b6ff-449135f3e2b2)
 
 ## 要件
 - OS: Windows
@@ -11,7 +11,7 @@
 
 ## インストール方法
 1. 下記のリンクから`installer.bat`をダウンロードしてください。
-   [インストーラーのダウンロード](https://github.com/k4r44g3/YakunyakuKonjac/releases/download/v2.0.0/installer.bat)
+   [インストーラーのダウンロード](https://github.com/k4r44g3/YakunyakuKonjac/releases/download/v2.0.0/v2.0.0_installer.bat)
 
 ## 使用方法
 - 方法 1:
