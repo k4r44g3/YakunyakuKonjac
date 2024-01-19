@@ -18,7 +18,13 @@ if not defined VIRTUAL_ENV (
 @REM プロジェクトのルートディレクトリへ移動
 cd YakunyakuKonjac
 
-@REM 最新のコミットの短縮ハッシュとコミットメッセージのタイトルの出力
-git log --pretty=format:"%%h %%s" -n 1
+@REM 現在のHEADのタグ名を表示
+git describe --tags --exact-match HEAD 2>nul
+
+@REM 現在のHEADにタグがついていないなら
+if %errorlevel% neq 0 (
+    @REM 現在のHEADの短縮ハッシュを表示
+    git rev-parse --short HEAD
+)
 
 pause

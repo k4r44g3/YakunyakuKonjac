@@ -38,6 +38,9 @@
     リポジトリのリリースを管理する
     https://docs.github.com/ja/repositories/releasing-projects-on-github/managing-releases-in-a-repository
 
+    最新のタグを取得するGitコマンド
+    https://qiita.com/SeiuchiAzarashi/items/c6feb968ef7e5efa6ebf
+
 
 batファイル関連
     バッチファイルの作成

@@ -14,18 +14,13 @@
     YakunyakuKonjac.lnkを使用しない場合
         venv_YakunyakuKonjac\YakunyakuKonjac\tools\app.batの実行
 
-更新方法
-    1 . プロジェクトフォルダへの移動
-        cd インストール先\venv_YakunyakuKonjac\YakunyakuKonjac
-    2 . gitからダウンロード
-        git pull origin
-    3 . ログの確認
-        git log
-            githubの最新コミットが存在しているか確認
+ファイル構造
+    venv_YakunyakuKonjac\YakunyakuKonjac\document\directory_tree.txtに記載
 
-
-コンフリクト(競合発生時)
-    以下のコードを実行
-        git reset --hard HEAD
-        最終コミット前まで戻す　ファイル変更内容もすべて戻す
-        変更箇所がある場合は別の場所に保存してください
+venv_YakunyakuKonjac\YakunyakuKonjac\tools
+    app.bat - アプリケーションの実行バッチファイル
+    aws_configure.bat - awsの設定を行うバッチファイル
+    delete_history.bat - 履歴を削除するためのバッチファイル
+    get_version.bat - バージョンを取得するためのバッチファイル
+    initialize_software.bat - ソフトウェアを初期化するためのバッチファイル
+    reset_setting.bat - 設定をリセットするためのバッチファイル

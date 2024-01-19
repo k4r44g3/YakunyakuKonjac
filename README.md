@@ -11,7 +11,7 @@
 
 ## インストール方法
 1. 下記のリンクから`installer.bat`をダウンロードしてください。
-   [インストーラーのダウンロード](https://github.com/k4r44g3/YakunyakuKonjac/releases/download/v0.0.1/installer.bat)
+   [インストーラーのダウンロード](https://github.com/k4r44g3/YakunyakuKonjac/releases/download/v2.0.0/installer.bat)
 
 ## 使用方法
 - 方法 1:
