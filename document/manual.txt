@@ -1,8 +1,5 @@
 1. インストーラーのダウンロード
-    非公開版(テスト用)
-        installer_private.exe
-    公開版
-        installer_public.exe
+    installer.exe
 
     ウイルス対策ソフトに弾かれる場合は
     batファイルをダウンロードしてください。
