@@ -78,6 +78,8 @@ class Translation:
         # ! デバッグ用
         # overlay_translation_image.show()  # 画像表示
 
+        Fn.time_log("翻訳終了")
+
         return file_name  # 保存ファイル名(撮影日時)
 
 

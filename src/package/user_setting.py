@@ -145,7 +145,7 @@ class UserSetting:
         self.setting.update(update_setting)  # 現在の設定を更新
 
         # 設定変更
-        Fn.time_log(f"設定変更:{update_setting}")
+        # Fn.time_log(f"設定変更:{update_setting}")
 
         with open(setting_file_path, "w") as f:  # ファイルを開く(書き込み)
             json.dump(obj=self.setting, fp=f, indent=2)  # ファイルに読み込む

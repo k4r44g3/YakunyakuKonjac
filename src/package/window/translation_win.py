@@ -498,7 +498,7 @@ class TranslationWin(BaseWin):
             if self.thread_count < self.thread_max:
                 # 翻訳スレッド数更新
                 self.thread_count += 1
-                Fn.time_log(f"スレッド開始 : {self.thread_count}")
+                # Fn.time_log(f"スレッド開始 : {self.thread_count}")
 
                 # 翻訳処理を行うスレッド作成
                 self.translate_thread = threading.Thread(
@@ -530,7 +530,7 @@ class TranslationWin(BaseWin):
 
         # スレッド数のカウント
         self.thread_count -= 1
-        Fn.time_log(f"スレッド終了 : {str(self.thread_count)}")
+        # Fn.time_log(f"スレッド終了 : {str(self.thread_count)}")
 
         # 余裕が出来たスレッドで翻訳処理を開始する処理
         # スレッド数がオーバーしていたなら

@@ -138,5 +138,5 @@ class App:
 
 
 if __name__ == "__main__":
-    print(sys.executable)
+    # print(sys.executable)
     app_instance = App()  # メイン処理

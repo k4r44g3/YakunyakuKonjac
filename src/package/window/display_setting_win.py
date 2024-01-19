@@ -91,7 +91,7 @@ class DisplaySettingWin(BaseWin):
             # 実際に画面が表示され、ユーザーの入力待ちになる
             event, values = self.window.read()
 
-            Fn.time_log("event=", event, "values=", values)
+            # Fn.time_log("event=", event, "values=", values)
 
             # 共通イベントの処理が発生したら
             if self.base_event(event, values):
@@ -99,7 +99,6 @@ class DisplaySettingWin(BaseWin):
 
             # 確定ボタン押下イベント
             elif event == "-confirm-":
-                print(values)
                 update_setting = self.get_update_setting(values)  # 更新する設定の取得
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
                 # # 翻訳画面に遷移する処理

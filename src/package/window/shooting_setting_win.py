@@ -144,7 +144,7 @@ class ShootingSettingWin(BaseWin):
 
             # ! デバッグログ
             # if event != "__TIMEOUT__":
-            #     Fn.time_log(event, values)
+            # Fn.time_log(event, values)
 
             # 共通イベントの処理が発生したら
             if self.base_event(event, values):
