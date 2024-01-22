@@ -242,31 +242,13 @@ class TranslationWin(BaseWin):
         # レイアウト指定
         layout = [
             [sg.Menu(menuber, key="-menu-")],  # メニューバー
+            [
+                sg.Push(),  # 中央に寄せる
+                sg.pin(translation_button_layout),  # 翻訳ボタンのレイアウト
+                sg.pin(toggle_auto_translation_layout),  # 自動翻訳用トグルボタンのレイアウト
+                sg.Push(),  # 中央に寄せる
+            ],
         ]
-
-        # 翻訳ボタンまたは、自動翻訳ボタンを表示するなら
-        if (
-            translation_element_visible_dict["translation_button_visible"]
-            or translation_element_visible_dict["toggle_auto_translation_visible"]
-        ):
-            # 追加する行を作成
-            new_row = []
-            new_row.append(sg.Push())  # 中央に寄せる
-
-            # 翻訳ボタンを表示するなら
-            if translation_element_visible_dict["translation_button_visible"]:
-                # 翻訳ボタンのレイアウト
-                new_row.append(translation_button_layout)
-
-            # 自動翻訳ボタンを表示するなら
-            if translation_element_visible_dict["toggle_auto_translation_visible"]:
-                # 自動翻訳用トグルボタンのレイアウト
-                new_row.append(toggle_auto_translation_layout)
-
-            new_row.append(sg.Push())  # 中央に寄せる
-
-            # レイアウトに作成した行を追加する
-            layout.append(new_row)
 
         # 履歴選択フレームを表示するなら
         if translation_element_visible_dict["history_file_time_list_visible"]:
