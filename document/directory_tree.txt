@@ -18,6 +18,12 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
 ├─share - 仮想環境に関連する共有リソースが格納されるディレクトリ
 └─YakunyakuKonjac - 仮想環境内でのプロジェクトのルートディレクトリ
     │   .gitignore - Gitの無視設定ファイル
+    │   README.md - プロジェクトの説明を記述したMarkdownファイル
+    │
+    ├─.github - GitHub関連のファイルを格納するディレクトリ
+    │   └─ISSUE_TEMPLATE - Issueのテンプレートファイルを格納するディレクトリ
+    │           requirements.txt - バグ報告のテンプレートファイル
+    │           requirements.txt - 機能提案のテンプレートファイル
     │
     ├─document - ドキュメンテーション関連のファイルを格納するディレクトリ
     │   │   directory_tree.txt - ディレクトリ構造の詳細を示すテキストファイル
