@@ -22,8 +22,8 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
     │
     ├─.github - GitHub関連のファイルを格納するディレクトリ
     │   └─ISSUE_TEMPLATE - Issueのテンプレートファイルを格納するディレクトリ
-    │           requirements.txt - バグ報告のテンプレートファイル
-    │           requirements.txt - 機能提案のテンプレートファイル
+    │           バグ報告.md - バグ報告テンプレート情報を記述したMarkdownファイル
+    │           機能提案.md - 機能提案テンプレート情報を記述したMarkdownファイル
     │
     ├─document - ドキュメンテーション関連のファイルを格納するディレクトリ
     │   │   directory_tree.txt - ディレクトリ構造の詳細を示すテキストファイル
