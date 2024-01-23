@@ -13,10 +13,9 @@
 - 必要なディスク容量: 約2GB
 
 ## インストール方法
-1. 下記のリンクから`installer.bat`をダウンロードしてください。
-
-   [インストーラーのダウンロード](https://github.com/k4r44g3/YakunyakuKonjac/releases/download/v1.0.0/v1.0.0_installer.bat)
-3. ダウンロード後、`installer.bat`を実行してインストールを開始してください。
+1. 下記のリンクから`installer.bat`をダウンロードしてください。<br>
+[インストーラーのダウンロード](https://github.com/k4r44g3/YakunyakuKonjac/releases/download/v1.0.0/v1.0.0_installer.bat)
+2. ダウンロード後、`installer.bat`を実行してインストールを開始してください。
 
 ### 注意事項
 - インストール時およびソフトウェア起動初回時には、必要なデータのダウンロードが行われます。インターネット接続環境によっては時間がかかる場合がありますので、ご了承ください。
@@ -37,6 +36,5 @@
   3. 翻訳ボタンを押す (ショートカット: F1キー)
 
 ## フィードバック
-ヤクニャクコンジャックに関するご意見やご感想をお聞かせください。以下のリンクからアンケートに回答していただけます。
-
+ヤクニャクコンジャックに関するご意見やご感想をお聞かせください。以下のリンクからアンケートに回答していただけます。<br>
 [アンケートへのリンク](https://docs.google.com/forms/d/1g919qTV0lA9UiCXk3kzTjdvHwbfZypD55XXwBMhORsY/edit)
