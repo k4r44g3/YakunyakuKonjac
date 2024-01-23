@@ -28,7 +28,6 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
     ├─document - ドキュメンテーション関連のファイルを格納するディレクトリ
     │   │   directory_tree.txt - ディレクトリ構造の詳細を示すテキストファイル
     │   │   Git.txt - Gitのコマンドの詳細を示すテキストファイル
-    │   │   manual.txt - ソフトウェアの使い方を示すテキストファイル
     │   │   patch_notes.txt - ソフトウェアの更新情報を示すテキストファイル
     │   │   readme.txt - ソフトウェアの説明を示すテキストファイル
     │   │   reference.txt - プロジェクトの参考文献や資料を格納するテキストファイル

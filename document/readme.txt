@@ -1,15 +1,10 @@
-1. インストーラーのダウンロード
-    installer_public.exeをダウンロードする。
+ファイル構造
+    venv_YakunyakuKonjac\YakunyakuKonjac\document\directory_tree.txtに記載
 
-    ウイルス対策ソフトに弾かれる場合は
-    batファイルをダウンロードしてください。
-
-2. アプリのインストール
-    インストーラーを実行する。
-
-3. アプリの起動
-    YakunyakuKonjac.lnkを実行する。
-
-    YakunyakuKonjac.lnkを使用しない場合、
-    venv_YakunyakuKonjac\YakunyakuKonjac\tools\app.batを実行してください。
-
+venv_YakunyakuKonjac\YakunyakuKonjac\tools
+    app.bat - アプリケーションの実行バッチファイル
+    aws_configure.bat - awsの設定を行うバッチファイル
+    delete_history.bat - 履歴を削除するためのバッチファイル
+    get_version.bat - バージョンを取得するためのバッチファイル
+    initialize_software.bat - ソフトウェアを初期化するためのバッチファイル
+    reset_setting.bat - 設定をリセットするためのバッチファイル
