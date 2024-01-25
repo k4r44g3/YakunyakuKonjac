@@ -559,12 +559,26 @@ class TranslationWin(BaseWin):
             if check_file_limit_dict[file_name]:
                 delete_file_list.append(file_name)
 
+        # # 削除するファイルを取得
+        # for file_name in delete_file_list:
+        #     # 翻訳前画像フォルダから削除
+        #     os.remove(os.path.join(SystemSetting.image_before_directory_path, file_name))
+        #     # 翻訳後画像フォルダから削除
+        #     os.remove(os.path.join(SystemSetting.image_after_directory_path, file_name))
+
         # 削除するファイルを取得
         for file_name in delete_file_list:
-            # 翻訳前画像フォルダから削除
-            os.remove(os.path.join(SystemSetting.image_before_directory_path, file_name))
-            # 翻訳後画像フォルダから削除
-            os.remove(os.path.join(SystemSetting.image_after_directory_path, file_name))
+            # 画像ディレクトリパスで走査
+            for dir_path in [
+                    SystemSetting.image_before_directory_path,  # 翻訳前履歴画像フォルダパス
+                    SystemSetting.image_after_directory_path,  # 翻訳後履歴画像フォルダパス
+                ]:
+                    # ファイルパス
+                    file_path = os.path.join(dir_path, file_name)
+                    # ファイルが存在するかチェック
+                    if os.path.exists(file_path):
+                        # ファイルを削除
+                        os.remove(file_path)
 
         # 履歴ファイル名のリスト取得
         self.history_file_name_list = Fn.get_history_file_name_list()

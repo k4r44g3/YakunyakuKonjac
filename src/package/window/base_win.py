@@ -113,6 +113,12 @@ class BaseWin:
             self.window_close()  # プログラム終了イベント処理
             return True  # 共通のイベントが発生したかどうか
 
+        # サブスレッドからポップアップ表示イベントが発生したなら
+        elif event == "-thread_popup_event-":
+            # ポップアップの表示
+            sg.popup("\n".join(values["-thread_popup_event-"]))
+            return True  # 共通のイベントが発生したかどうか
+
         # それ以外のイベントが発生したなら
         else:
             return False  # 共通のイベントが発生したかどうか

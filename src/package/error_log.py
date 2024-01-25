@@ -18,7 +18,7 @@ class ErrorLog:
         """コンストラクタ ロガーの設定を行う"""
         # 基本的な情報のみを出力するロガーの設定
         # ロギングモジュールから 'simple' という名前のロガーインスタンスを取得
-        self.simple_logger:logging.Logger = logging.getLogger("simple")
+        self.simple_logger: logging.Logger = logging.getLogger("simple")
 
         # ロガーのログレベルを DEBUG に設定
         self.simple_logger.setLevel(logging.DEBUG)
@@ -41,7 +41,7 @@ class ErrorLog:
         # 詳細な情報を出力するロガーの設定
 
         # ロギングモジュールから 'detailed' という名前のロガーインスタンスを取得
-        self.detailed_logger:logging.Logger = logging.getLogger("detailed")
+        self.detailed_logger: logging.Logger = logging.getLogger("detailed")
 
         # ロガーのログレベルを DEBUG に設定
         self.detailed_logger.setLevel(logging.DEBUG)
@@ -116,27 +116,32 @@ class ErrorLog:
             raise  # 例外を発生させる
 
     @staticmethod  # スタティック(静的)メソッドの定義
-    def output_error_log(error_log_instance: "ErrorLog", e: Exception) -> None:
+    def output_error_log(error_log_instance: "ErrorLog", e: Exception, is_popup: bool = True) -> None:
         """エラーログの出力を行う関数
 
         Args:
             error_log_instance (ErrorLog): エラーログに関するクラスのインスタンス
             e (Exception): 例外
+            is_popup (bool): エラー発生ポップアップを表示するかどうか デフォルトではTrue
         """
         try:
             # エラーログの出力
             error_log_instance.self_output_error_log()
-            # エラー発生ポップアップの作成
-            ErrorLog.error_popup(
-                e,
-                is_output_error_log=True,
-            )
+            # エラー発生ポップアップを表示するなら
+            if is_popup:
+                # エラー発生ポップアップの作成
+                ErrorLog.error_popup(
+                    e,
+                    is_output_error_log=True,
+                )
+                raise  # 例外を発生させる
+
         # エラーログの出力に失敗したなら
         except Exception as e:
             print("Failed to output ErrorLog:", e)
             # エラー発生ポップアップの作成
             ErrorLog.error_popup(e, is_output_error_log=False)
-        raise  # 例外を発生させる
+            raise  # 例外を発生させる
 
     @staticmethod  # スタティック(静的)メソッドの定義
     def error_popup(e: Exception, is_output_error_log: bool) -> None:
@@ -150,7 +155,7 @@ class ErrorLog:
         # エラーログファイルの出力に成功したなら
         if is_output_error_log:
             message = [
-                "申し訳ありません、エラーが発生しました。",
+                "申し訳ありません、不明なエラーが発生しました。",
                 "エラーログファイルが作成されました。",
                 "管理者にこのファイルを提供していただけると幸いです。",
                 "エラーメッセージ:",
@@ -159,7 +164,7 @@ class ErrorLog:
         # エラーログファイルの出力に失敗したなら
         else:
             message = [
-                "申し訳ありません、エラーが発生しました。",
+                "申し訳ありません、不明なエラーが発生しました。",
                 "エラーログファイルの作成に失敗しました。",
                 "管理者に問題を報告していただけると幸いです。",
                 "エラーメッセージ:",

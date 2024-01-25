@@ -1,5 +1,6 @@
 import os  # ディレクトリ関連
 import sys  # システム関連
+from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
 #! デバッグ用
 if __name__ == "__main__":
@@ -7,6 +8,7 @@ if __name__ == "__main__":
     sys.path.append(src_path)  # モジュール検索パスを追加
 
 from package.debug import Debug  # デバッグ用クラス
+from package.error_log import ErrorLog  # エラーログに関するクラス
 from package.fn import Fn  # 自作関数クラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.translation.character_recognition import CharacterRecognition  # 文字認識機能関連のクラス
@@ -19,11 +21,14 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 class Translation:
     """翻訳機能関連のクラス"""
 
-    def save_history() -> str:
-        """翻訳前,結果を履歴に保存する
+    def save_history() -> Dict[str, Union[bool, Optional[str]]]:
+        """翻訳前, 結果を履歴に保存する
 
         Returns:
-            file_name(str): 保存ファイル名(撮影日時)
+            result(dict[file_name, is_error, error_name, error_text]) : 保存ファイル名とエラー情報の辞書
+                - file_name(str): 保存ファイル名(撮影日時)
+                - is_error(bool) : エラーが発生したかどうか
+                - exception(Optional[Exception]): 発生した例外オブジェクト
         """
         Fn.time_log("翻訳開始")
 
@@ -58,7 +63,21 @@ class Translation:
         # text_region_list = Debug.text_region_list  # テキスト範囲のリスト
 
         # 翻訳機能
-        text_after_list = TextTranslation.get_text_after_list(user_setting, text_before_list)  # 翻訳後テキストリストの取得
+        # 翻訳後テキストリストとエラー情報の取得
+        text_translation_result = TextTranslation.get_text_after_list(user_setting, text_before_list)
+
+        # 翻訳処理でエラーが発生していないなら
+        if not text_translation_result["is_error"]:
+            text_after_list = text_translation_result["text_after_list"]
+
+        # 翻訳処理でエラーが発生したなら
+        else:
+            return {
+                "file_name": file_name,  # 保存ファイル名(撮影日時)
+                "is_error": True,  # エラーが発生したかどうか
+                "exception": text_translation_result["exception"],  # エラークラス
+            }
+
         # Fn.time_log("翻訳")
 
         # ! デバック用
@@ -80,7 +99,11 @@ class Translation:
 
         Fn.time_log("翻訳終了")
 
-        return file_name  # 保存ファイル名(撮影日時)
+        return {
+            "file_name": file_name,  # 保存ファイル名(撮影日時)
+            "is_error": False,  # エラーが発生したかどうか
+            "exception": None,  # エラークラス
+        }
 
 
 # ! デバッグ用
