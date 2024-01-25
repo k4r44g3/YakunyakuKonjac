@@ -1,24 +1,22 @@
-import psutil
-import os
-import sys
+import PySimpleGUI as sg
+import webbrowser
 
-def check_if_process_is_running(process_name):
-    """
-    システム上で指定された名前のプロセスが実行中かどうかをチェックする。
-    """
-    for proc in psutil.process_iter(['pid', 'name']):
-        try:
-            if process_name.lower() in proc.info['name'].lower():
-                return True
-        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-            pass
-    return False
+def open_url(url):
+    webbrowser.open(url, new=2)  # 新しいタブでURLを開く
 
-if __name__ == "__main__":
-    # 実行中の同名プロセスがあるかどうかをチェック
-    if check_if_process_is_running(os.path.basename(__file__)):
-        print(f"{__file__} はすでに実行中です。")
-        sys.exit(1)
+layout = [
+    [sg.Text('Webページを開くボタン')],
+    [sg.Button('Googleを開く', key='Open_Google')],
+    [sg.Button('終了')]
+]
 
-    print("実行開始")
-    app_instance = App()  # メイン処理
+window = sg.Window('Webページオープナー', layout)
+
+while True:
+    event, values = window.read()
+    if event == sg.WIN_CLOSED or event == '終了':
+        break
+    elif event == 'Open_Google':
+        open_url('https://www.google.com')
+
+window.close()

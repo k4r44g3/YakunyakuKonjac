@@ -29,4 +29,4 @@ set AWS_SHARED_CREDENTIALS_FILE=.aws\credentials
 set AWS_CONFIG_FILE=.aws\config
 
 @REM アプリケーションの実行
-Scripts\python.exe YakunyakuKonjac\src\app.py
+start /MIN Scripts\python.exe YakunyakuKonjac\src\app.py
