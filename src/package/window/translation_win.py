@@ -3,6 +3,7 @@ import os  # ディレクトリ関連
 import sys  # システム関連
 import threading  # スレッド関連
 import time  # 時間関係
+import webbrowser  # ウェブブラウザ関連
 from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
 import PySimpleGUI as sg  # GUI
@@ -237,6 +238,14 @@ class TranslationWin(BaseWin):
                     # "利用者情報 (&I)::transition_UserInfoWin::",
                 ],
             ],
+            [
+                "ヘルプ (&H)",
+                [
+                    "GitHubを開く (&A)::open_github::",
+                    # "マニュアルを開く (&S)::open_manual::",
+                    # "紹介動画を開く (&D)::open_movie::",
+                ],
+            ],
         ]
 
         # レイアウト指定
@@ -328,6 +337,14 @@ class TranslationWin(BaseWin):
         """
 
         # todo ウィンドウ初期設定
+
+        # サイトのリンクの辞書
+        site_url_dict = {
+            "github": "https://github.com/k4r44g3/YakunyakuKonjac",
+            # "manual": "#",
+            # "movie": "https://github.com/k4r44g3/YakunyakuKonjac/assets/127704026/52825618-682b-44cc-8bc1-b8450196c422",
+        }
+
         # 履歴ファイル選択リストの最初に表示される要素番号の取得
         self.window["-history_file_time_list-"].update(scroll_to_index=len(self.history_file_time_list) - 1)
 
@@ -372,8 +389,13 @@ class TranslationWin(BaseWin):
                 # 画面遷移を行うかどうか
                 if menu_key.startswith("transition_"):  # menu_keyにtransitionが含まれるなら
                     self.transition_target_win = menu_key.split("_")[1]  # 遷移先ウィンドウ名
-                    # Fn.time_log(self.transition_target_win, "に画面遷移")
                     self.window_close()  # プログラム終了イベント処理
+
+                # ブラウザを開くかどうか
+                if menu_key.startswith("open_"):  # menu_keyにopenが含まれるなら
+                    site_name = menu_key.split("_")[1]  # 遷移先サイト名
+                    site_url = site_url_dict[site_name] # サイトURLの取得
+                    webbrowser.open(site_url, new=2)  # 新しいタブでURLを開く
 
             # 翻訳ボタン押下イベント
             elif event == "-translation_button-":
@@ -570,15 +592,15 @@ class TranslationWin(BaseWin):
         for file_name in delete_file_list:
             # 画像ディレクトリパスで走査
             for dir_path in [
-                    SystemSetting.image_before_directory_path,  # 翻訳前履歴画像フォルダパス
-                    SystemSetting.image_after_directory_path,  # 翻訳後履歴画像フォルダパス
-                ]:
-                    # ファイルパス
-                    file_path = os.path.join(dir_path, file_name)
-                    # ファイルが存在するかチェック
-                    if os.path.exists(file_path):
-                        # ファイルを削除
-                        os.remove(file_path)
+                SystemSetting.image_before_directory_path,  # 翻訳前履歴画像フォルダパス
+                SystemSetting.image_after_directory_path,  # 翻訳後履歴画像フォルダパス
+            ]:
+                # ファイルパス
+                file_path = os.path.join(dir_path, file_name)
+                # ファイルが存在するかチェック
+                if os.path.exists(file_path):
+                    # ファイルを削除
+                    os.remove(file_path)
 
         # 履歴ファイル名のリスト取得
         self.history_file_name_list = Fn.get_history_file_name_list()

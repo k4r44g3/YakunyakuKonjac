@@ -28,5 +28,5 @@ set AWS_SHARED_CREDENTIALS_FILE=.aws\credentials
 @REM AWSの認証情報の保存先の指定
 set AWS_CONFIG_FILE=.aws\config
 
-@REM アプリケーションの実行
+@REM アプリケーションの実行(コンソールを最小化)
 start /MIN Scripts\python.exe YakunyakuKonjac\src\app.py
