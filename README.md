@@ -4,7 +4,7 @@
 ![アイコン画像](https://github.com/k4r44g3/YakunyakuKonjac/assets/127704026/9e3e66ed-6701-4e31-b6ff-449135f3e2b2)
 
 ## 紹介動画
-<div><video controls src="https://github.com/k4r44g3/YakunyakuKonjac/assets/127704026/52825618-682b-44cc-8bc1-b8450196c422" muted="false"></video></div>
+<div><video controls src="https://github.com/k4r44g3/YakunyakuKonjac/assets/127704026/10f80d50-2478-43b5-af46-8d524718c784" muted="false"></video></div>
 
 ## 要件
 - OS: Windows
