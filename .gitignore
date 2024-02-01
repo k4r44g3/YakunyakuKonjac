@@ -19,3 +19,6 @@ src/package/__pycache__/*
 src/package/translation/__pycache__/*
 src/package/window/__pycache__/*
 src/package/thread/__pycache__/*
+
+# テストフォルダ
+src/test/*
