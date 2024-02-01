@@ -114,11 +114,12 @@ class TextTranslation:
                 # 英語から日本語に翻訳
                 result = google_translator.translate(text=text_before)
                 text_after_list.append(result)  # 翻訳後テキストのリスト作成
-                return {
-                    "text_after_list": text_after_list,  # 翻訳後テキストのリスト
-                    "is_error": False,  # エラーが発生したかどうか
-                    "exception": None,  # エラークラス
-                }
+
+            return {
+                "text_after_list": text_after_list,  # 翻訳後テキストのリスト
+                "is_error": False,  # エラーが発生したかどうか
+                "exception": None,  # エラークラス
+            }
 
         # サーバーへのリクエスト超過エラーが発生したなら
         except TooManyRequests as e:
