@@ -60,44 +60,42 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
     │   │   └─image_before - 翻訳する前の画像データを格納するディレクトリ
     │   │           .gitkeep - Gitが空のディレクトリを保持するためのファイル
     │   │
-    │   ├─package - アプリケーションのパッケージとユーティリティ関連のファイルを格納するディレクトリ
-    │   │   │       debug.py - デバッグに関連するコードを提供するPythonファイル
-    │   │   │       error_log.py - エラーログ関連のコードを提供するPythonファイル
-    │   │   │       fn.py - 汎用の関数やユーティリティ関連のコードを提供するPythonファイル
-    │   │   │       global_status.py - グローバル変数を定義するためのコードを提供するPythonファイル
-    │   │   │       system_setting.py - システム設定に関連するコードを提供するPythonファイル
-    │   │   │       user_setting.py - ユーザー設定に関連するコードを提供するPythonファイル
-    │   │   │
-    │   │   ├─thread - スレッドに関連するコードを提供するディレクトリ
-    │   │   │       get_drag_area_thread.py - ドラッグした領域の座標を取得するスレッドクラスを提供するPythonファイル
-    │   │   │       get_key_event_thread.py - キーイベントの取得処理を行うスレッドクラスを提供するPythonファイル
-    │   │   │       translate_thread.py - 翻訳処理を行うスレッドを提供するPythonファイル
-    │   │   │       translate_timing_thread.py - 自動翻訳のタイミングを取得するスレッドを提供するPythonファイル
-    │   │   │       watch_for_key_event_thread.py - キーイベントが発生するか監視するスレッドを提供するPythonファイル
-    │   │   │
-    │   │   ├─translation - テキスト翻訳に関連するコードを提供するディレクトリ
-    │   │   │       character_recognition.py - 文字認識に関連するコードを提供するPythonファイル
-    │   │   │       screenshot_capture.py - スクリーンショットのキャプチャに関連するコードを提供するPythonファイル
-    │   │   │       text_translation.py - テキストの翻訳に関連するコードを提供するPythonファイル
-    │   │   │       translation.py - 翻訳に関連するコードを提供するPythonファイル
-    │   │   │       translation_image.py - 画像翻訳に関連するコードを提供するPythonファイル
-    │   │   │
-    │   │   └─window - ウィンドウ関連のコードを提供するディレクトリ
-    │   │           aws_configure_win.py - AWS設定ウィンドウに関連するコードを提供するPythonファイル
-    │   │           base_win.py - ウィンドウの基本となるコードを提供するPythonファイル
-    │   │           check_access_aws_win.py - AWS接続テストウィンドウに関連するコードを提供するPythonファイル
-    │   │           display_setting_win.py - 撮影設定ウィンドウに関連するコードを提供するPythonファイル
-    │   │           easy_ocr_model_download_win.py - EasyOCRモデルダウンロードウィンドウに関連するコードを提供するPythonファイル
-    │   │           environment_setting_win.py - 環境設定ウィンドウに関連するコードを提供するPythonファイル
-    │   │           key_setting_win.py - キー設定ウィンドウに関連するコードを提供するPythonファイル
-    │   │           language_setting_win.py - 言語設定ウィンドウに関連するコードを提供するPythonファイル
-    │   │           save_setting_win.py - 保存設定ウィンドウに関連するコードを提供するPythonファイル
-    │   │           shooting_setting_win.py - 撮影設定ウィンドウに関連するコードを提供するPythonファイル
-    │   │           theme_setting_win.py - テーマ設定ウィンドウに関連するコードを提供するPythonファイル
-    │   │           translation_win.py - 翻訳ウィンドウに関連するコードを提供するPythonファイル
-    │   │           user_info_win.py - 利用者情報ウィンドウに関連するコードを提供するPythonファイル
-    │   │
-    │   └─test - テスト用コードを格納するディレクトリ
+    │   └─package - アプリケーションのパッケージとユーティリティ関連のファイルを格納するディレクトリ
+    │       │       debug.py - デバッグに関連するコードを提供するPythonファイル
+    │       │       error_log.py - エラーログ関連のコードを提供するPythonファイル
+    │       │       fn.py - 汎用の関数やユーティリティ関連のコードを提供するPythonファイル
+    │       │       global_status.py - グローバル変数を定義するためのコードを提供するPythonファイル
+    │       │       system_setting.py - システム設定に関連するコードを提供するPythonファイル
+    │       │       user_setting.py - ユーザー設定に関連するコードを提供するPythonファイル
+    │       │
+    │       ├─thread - スレッドに関連するコードを提供するディレクトリ
+    │       │       get_drag_area_thread.py - ドラッグした領域の座標を取得するスレッドクラスを提供するPythonファイル
+    │       │       get_key_event_thread.py - キーイベントの取得処理を行うスレッドクラスを提供するPythonファイル
+    │       │       translate_thread.py - 翻訳処理を行うスレッドを提供するPythonファイル
+    │       │       translate_timing_thread.py - 自動翻訳のタイミングを取得するスレッドを提供するPythonファイル
+    │       │       watch_for_key_event_thread.py - キーイベントが発生するか監視するスレッドを提供するPythonファイル
+    │       │
+    │       ├─translation - テキスト翻訳に関連するコードを提供するディレクトリ
+    │       │       character_recognition.py - 文字認識に関連するコードを提供するPythonファイル
+    │       │       screenshot_capture.py - スクリーンショットのキャプチャに関連するコードを提供するPythonファイル
+    │       │       text_translation.py - テキストの翻訳に関連するコードを提供するPythonファイル
+    │       │       translation.py - 翻訳に関連するコードを提供するPythonファイル
+    │       │       translation_image.py - 画像翻訳に関連するコードを提供するPythonファイル
+    │       │
+    │       └─window - ウィンドウ関連のコードを提供するディレクトリ
+    │               aws_configure_win.py - AWS設定ウィンドウに関連するコードを提供するPythonファイル
+    │               base_win.py - ウィンドウの基本となるコードを提供するPythonファイル
+    │               check_access_aws_win.py - AWS接続テストウィンドウに関連するコードを提供するPythonファイル
+    │               display_setting_win.py - 撮影設定ウィンドウに関連するコードを提供するPythonファイル
+    │               easy_ocr_model_download_win.py - EasyOCRモデルダウンロードウィンドウに関連するコードを提供するPythonファイル
+    │               environment_setting_win.py - 環境設定ウィンドウに関連するコードを提供するPythonファイル
+    │               key_setting_win.py - キー設定ウィンドウに関連するコードを提供するPythonファイル
+    │               language_setting_win.py - 言語設定ウィンドウに関連するコードを提供するPythonファイル
+    │               save_setting_win.py - 保存設定ウィンドウに関連するコードを提供するPythonファイル
+    │               shooting_setting_win.py - 撮影設定ウィンドウに関連するコードを提供するPythonファイル
+    │               theme_setting_win.py - テーマ設定ウィンドウに関連するコードを提供するPythonファイル
+    │               translation_win.py - 翻訳ウィンドウに関連するコードを提供するPythonファイル
+    │               user_info_win.py - 利用者情報ウィンドウに関連するコードを提供するPythonファイル
     │
     ├─static - 静的ファイルを格納するディレクトリ
     │   ├─font - フォントファイルを格納するディレクトリ

@@ -110,6 +110,11 @@ class TranslationWin(BaseWin):
             key="-translation_button-",  # 識別子
             size=(12, 3),  # サイズ(フォントサイズ)(w,h)
             visible=translation_element_visible_dict["translation_button_visible"],  # 表示するかどうか
+            metadata={
+                "message": "翻訳中",  # 表示メッセージ
+                "progress_indicator_dot_count": 0,  # 進捗インジケーターの点の数
+                "disabled": False,  # ボタンを無効化するかどうか
+            },
         )
 
         # 自動翻訳用トグルボタンのレイアウト
@@ -373,7 +378,10 @@ class TranslationWin(BaseWin):
         while not self.window.metadata["is_exit"]:
             # 実際に画面が表示され、ユーザーの入力待ちになる
             # ! タイムアウト処理の削除
-            event, values = self.window.read()
+            event, values = self.window.read(
+                timeout=500,  # タイムアウトする間隔(ms)
+                timeout_key="-timeout-",  # タイムアウトイベント名
+            )
 
             # ! デバッグログ
             # Fn.time_log(event,values)
@@ -394,7 +402,7 @@ class TranslationWin(BaseWin):
                 # ブラウザを開くかどうか
                 if menu_key.startswith("open_"):  # menu_keyにopenが含まれるなら
                     site_name = menu_key.split("_")[1]  # 遷移先サイト名
-                    site_url = site_url_dict[site_name] # サイトURLの取得
+                    site_url = site_url_dict[site_name]  # サイトURLの取得
                     webbrowser.open(site_url, new=2)  # 新しいタブでURLを開く
 
             # 翻訳ボタン押下イベント
@@ -449,7 +457,7 @@ class TranslationWin(BaseWin):
                     self.window_close()  # プログラム終了イベント処理
 
             # ウィジェットのサイズ変更イベント
-            elif "-window_resize-":
+            elif event == "-window_resize-":
                 # ウィンドウサイズが変更されているなら画像サイズを更新する
                 # 現在のウィンドウサイズの取得
                 current_window_size = self.window.current_size_accurate()
@@ -459,6 +467,11 @@ class TranslationWin(BaseWin):
                     previous_window_size = current_window_size
                     # 画像のサイズを変更してウィンドウを更新する処理
                     self.resize_and_refresh_gui()
+
+            # タイムアウトイベントが発生したら
+            elif event == "-timeout-":
+                # 翻訳プロセスの進捗インジケーターの点の数を更新する処理
+                self.transition_progress_dot_count_update()
 
     # todo イベント処理記述
 
@@ -502,6 +515,14 @@ class TranslationWin(BaseWin):
             if self.thread_count < self.thread_max:
                 # 翻訳スレッド数更新
                 self.thread_count += 1
+                # 翻訳進捗インジケーターの点の数の更新
+                self.window["-translation_button-"].metadata["progress_indicator_dot_count"] = 0
+                # 翻訳ボタンを無効化する
+                self.window["-translation_button-"].metadata["disabled"] = True
+                # 翻訳ボタンを設定を変更する
+                self.window["-translation_button-"].update(
+                    text=f"翻訳中" + " " * 3, disabled=self.window["-translation_button-"].metadata["disabled"]
+                )
                 # Fn.time_log(f"スレッド開始 : {self.thread_count}")
 
                 # 翻訳処理を行うスレッド作成
@@ -534,6 +555,12 @@ class TranslationWin(BaseWin):
 
         # スレッド数のカウント
         self.thread_count -= 1
+        # 翻訳ボタンを有効化する
+        self.window["-translation_button-"].metadata["disabled"] = False
+        # 翻訳ボタンを設定を変更する
+        self.window["-translation_button-"].update(
+            text="翻訳", disabled=self.window["-translation_button-"].metadata["disabled"]
+        )
         # Fn.time_log(f"スレッド終了 : {str(self.thread_count)}")
 
         # 余裕が出来たスレッドで翻訳処理を開始する処理
@@ -860,6 +887,26 @@ class TranslationWin(BaseWin):
                 update_setting["ss_bottom_y"] = GetDragAreaThread.region["bottom"]
 
                 self.user_setting.save_setting_file(update_setting)  # 設定をjsonファイルに保存
+
+    def transition_progress_dot_count_update(self) -> None:
+        """翻訳プロセスの進捗インジケーターの点の数を更新する処理"""
+
+        # 翻訳ボタンが無効化されているなら
+        if self.window["-translation_button-"].metadata["disabled"]:
+            # 進捗インジケーターの点の数の取得
+            dot_count = self.window["-translation_button-"].metadata["progress_indicator_dot_count"]
+            # 進捗インジケーターの点の数の更新
+            now_dot_count = (dot_count + 1) % 4
+            # 進捗インジケーターの点の数の保存
+            self.window["-translation_button-"].metadata["progress_indicator_dot_count"] = now_dot_count
+
+            # 表示メッセージの取得
+            message = self.window["-translation_button-"].metadata["message"]
+            # 進捗インジケーターの更新
+            self.window["-translation_button-"].update(
+                # メッセージ + 点 + 空白
+                text=f"{message}{'.' * now_dot_count}{' ' * (3-now_dot_count)}"
+            )
 
 
 # ! デバッグ用
