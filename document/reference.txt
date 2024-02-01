@@ -58,6 +58,9 @@ batファイル関連
     遅延環境変数
     https://wa3.i-3-i.info/word12518.html
 
+    テキストファイルの内容を区切り文字でトークンに分解し繰り返し処理を使う(FOR)
+    https://www.javadrive.jp/command/bat/index10.html
+
 
 GUI関連
     PySimpleGUI関連
