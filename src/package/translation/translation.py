@@ -82,6 +82,7 @@ class Translation:
 
         # ! デバック用
         # text_after_list = Debug.text_after_list  # 翻訳後テキストリスト
+        # text_after_list = text_before_list  # 翻訳後テキストリスト
 
         # 翻訳画像作成機能
         overlay_translation_image = TranslationImage.get_overlay_translation_image(

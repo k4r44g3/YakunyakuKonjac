@@ -61,8 +61,10 @@ class CharacterRecognition:
 
         for block in result["Blocks"]:  # 検出されたブロックを順番に処理
             if block["BlockType"] == "LINE":  # ブロックタイプが行かどうかを調べる
+                # print(f"{block['Text']},  {block['Confidence']}")
                 text = block["Text"]  # テキスト内容取得
                 box = block["Geometry"]["BoundingBox"]  # バウンディングボックスを取得
+                confidence = block["Confidence"] / 100  # テキスト検出精度
                 # テキスト範囲の取得
                 text_region = {
                     "left": int(box["Left"] * w),  # テキスト範囲の左側x座標
@@ -71,8 +73,8 @@ class CharacterRecognition:
                     "height": int(box["Height"] * h),  # テキスト範囲の縦幅
                 }
 
-                if text is not None:
-                    # テキストが存在するなら
+                # テキストが存在するかつ、信頼度がテキスト検出精度の最小許容値以上なら
+                if text is not None and confidence >= SystemSetting.ocr_min_confidence_score:
                     text_list.append(text)  # テキスト内容のリスト
                     text_region_list.append(text_region)  # テキスト範囲のリスト
 
@@ -96,6 +98,7 @@ class CharacterRecognition:
                     - text_region(dict{Left:int, Top:int, Width:int, Height:int}): テキスト範囲
         """
 
+        # 翻訳元言語の取得
         language_code = user_setting.get_setting("source_language_code")
 
         # EasyOCR用言語コードのリスト
@@ -130,6 +133,7 @@ class CharacterRecognition:
 
         # 段落ごとに走査
         for text_box in result:
+            # print(f"{text_box[1]},{text_box[2]}")
             # テキスト範囲の取得
             text_region = {
                 "left": min(int(text_box[0][0][0]), int(text_box[0][2][0])),  # テキスト範囲の左側x座標
@@ -138,10 +142,10 @@ class CharacterRecognition:
                 "height": abs(int(text_box[0][2][1]) - int(text_box[0][0][1])),  # テキスト範囲の縦幅
             }
             text = text_box[1]  # テキスト内容の取得
-            # confidence = text_box[2] # 信頼度の取得
+            confidence = text_box[2]  # 信頼度の取得
 
-            if text is not None:
-                # テキストが存在するなら
+            # テキストが存在するかつ、信頼度がテキスト検出精度の最小許容値以上なら
+            if text is not None and confidence >= SystemSetting.ocr_min_confidence_score:
                 text_list.append(text)  # テキスト内容のリスト
                 text_region_list.append(text_region)  # テキスト範囲のリスト
 

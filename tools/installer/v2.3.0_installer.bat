@@ -12,7 +12,7 @@ setlocal enabledelayedexpansion
 @REM GitのリポジトリのURL
 set GitRepositoryUrl="https://github.com/k4r44g3/YakunyakuKonjac.git"
 @REM Gitのタグ名
-@REM set TagName="beta"
+set TagName="v2.3.0"
 
 @REM Pythonがインストールされているか確認
 py --version >nul 2>&1
@@ -68,7 +68,7 @@ if %errorlevel% neq 0 (
 @echo on
 
 @REM 仮想環境作成
-py -3.8 -m venv venv_YakunyakuKonjac
+py -m venv venv_YakunyakuKonjac
 cd venv_YakunyakuKonjac
 call Scripts\activate.bat
 
@@ -90,8 +90,7 @@ pip --default-timeout=100 install PySimpleGUI
 pip freeze > requirements.txt
 
 @REM gitからクローン(最新のコミットのみ)
-git clone --depth 1 !GitRepositoryUrl!
-@REM git clone -b !TagName! --depth 1 !GitRepositoryUrl!
+git clone -b !TagName! --depth 1 !GitRepositoryUrl!
 
 @REM エラーが発生したなら(終了コードが0以外なら)
 if %errorlevel% neq 0 (

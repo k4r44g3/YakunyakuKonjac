@@ -100,6 +100,9 @@ class SystemSetting:
     # 翻訳スレッドの最大数
     translation_thread_max: int = 4
 
+    # テキスト検出精度の最小許容値
+    ocr_min_confidence_score = 0.2
+
     # 言語情報一覧リスト{日本語表記、英語表記、言語コード(ISO 639-1),フォントパス}
     language_list: List[Dict[str, str]] = [
         {"ja_text": "アラビア語", "en_text": "Arabic", "code": "ar", "font_path": font_Segoe_path},

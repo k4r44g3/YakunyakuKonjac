@@ -12,16 +12,44 @@ setlocal enabledelayedexpansion
 @REM GitのリポジトリのURL
 set GitRepositoryUrl="https://github.com/k4r44g3/YakunyakuKonjac.git"
 
-REM Pythonのバージョンを確認
-py -3.8 --version >nul 2>&1
-
-REM Python 3.8がインストールされているか確認
+@REM Pythonがインストールされているか確認
+py --version >nul 2>&1
 if %errorlevel% neq 0 (
-  msg * "このアプリケーションを実行するにはPython 3.8が必要です。"^
+  msg * "このアプリケーションを実行するにはPythonが必要です。"^
 
-  "Python 3.8をインストールしてから再度実行してください。"
+  "Pythonをインストールしてから再度実行してください。"
   pause
   exit
+)
+
+@REM Pythonのバージョンを取得
+for /f "delims=" %%i in ('py --version') do set "PythonVersion=%%i"
+
+@REM バージョン番号のみを抽出（"Python X.Y.Z"の形式を想定）
+for /f "tokens=2" %%s in ("%PythonVersion%") do set "PythonVersionNumber=%%s"
+
+@REM メジャーバージョンとマイナーバージョンを分離
+for /f "tokens=1,2 delims=." %%x in ("%PythonVersionNumber%") do (
+    set "PythonMajorVersion=%%x"
+    set "PythonMinorVersion=%%y"
+)
+
+@REM メジャーバージョンが3以外なら
+if %PythonMajorVersion% neq 3 (
+    msg * "このアプリケーションを実行するにはPython 3.8以上が必要です。"^
+
+    "Python 3.8以上をインストールしてから再度実行してください。"
+    pause
+    exit
+)
+
+@REM マイナーバージョンが8未満なら
+if %PythonMinorVersion% lss 8 (
+    msg * "このアプリケーションを実行するにはPython 3.8以上が必要です。"^
+
+    "Python 3.8以上をインストールしてから再度実行してください。"
+    pause
+    exit
 )
 
 @REM Gitがインストールされているか確認
