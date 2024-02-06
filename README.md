@@ -38,9 +38,9 @@
   操作方法の詳細については、上記に掲載されている紹介動画をご覧ください。
 
 ## 構成
-- [フォルダ構成](#)
-- [クラス図(簡略版)](#)
-- [クラス図(詳細版)](#)
+- [フォルダ構成](https://raw.githubusercontent.com/k4r44g3/YakunyakuKonjac/main/document/directory_tree.txt)
+- [クラス図(簡略版)](https://github.com/k4r44g3/YakunyakuKonjac/assets/127704026/b8c64d6c-0fdd-49b3-9f89-b5366e421151)
+- [クラス図(詳細版)](https://github.com/k4r44g3/YakunyakuKonjac/assets/127704026/2eb1989c-3a70-413e-9677-14c631e1ab4f)
 
 ## フィードバック
 ヤクニャクコンジャックに関するご意見やご感想をお聞かせください。以下のリンクからアンケートに回答していただけます。<br>
