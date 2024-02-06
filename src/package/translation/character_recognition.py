@@ -53,8 +53,9 @@ class CharacterRecognition:
         text_list = []  # テキスト内容のリスト
         text_region_list = []  # テキスト範囲のリスト
 
-        image_in = Image.open(ss_file_path)  # 入力画像のファイルを読み込む
-        w, h = image_in.size  # 画像サイズを取得
+        # 入力画像のファイルを読み込む
+        with Image.open(ss_file_path) as image_in:
+            w, h = image_in.size  # 画像サイズを取得
 
         with open(ss_file_path, "rb") as file:  # 画像ファイルを開く
             result = textract.detect_document_text(Document={"Bytes": file.read()})  # 文字列を検出

@@ -99,10 +99,10 @@ class TranslationWin(BaseWin):
             now_image_after_path = SystemSetting.default_image_after_path  # 翻訳後画像の保存先パス
             now_file_time = None  # ファイル日時
 
-        # 画像オブジェクトの保存
-        self.image_obj_list = {
-            "image_before": Image.open(now_image_before_path),  # 翻訳前画像
-            "image_after": Image.open(now_image_after_path),  # 翻訳後画像
+        # 画像ファイルパスの保存
+        self.image_path_list = {
+            "image_before": now_image_before_path,  # 翻訳前画像
+            "image_after": now_image_after_path,  # 翻訳後画像
         }
 
         # 翻訳画面の要素を表示するかどうかの辞書の取得
@@ -710,24 +710,10 @@ class TranslationWin(BaseWin):
         # 翻訳後画像パスの取得
         image_after_path = os.path.join(SystemSetting.image_after_directory_path, file_name)
 
-        try:
-            Image.open(image_before_path)  # 翻訳前画像
-            Image.open(image_after_path)  # 翻訳後画像
-
-        # 画像を開く処理に失敗したら
-        except Exception as e:
-            print("-" * 100)
-            print("翻訳前、後画像の変更処理中エラー")
-            print(f"翻訳前画像が存在するか : {os.path.exists(image_before_path)}")
-            print(f"翻訳後画像が存在するか : {os.path.exists(image_after_path)}")
-            # エラーログの出力処理
-            print(e)
-            raise
-
-        # 画像オブジェクトの保存
-        self.image_obj_list = {
-            "image_before": Image.open(image_before_path),  # 翻訳前画像
-            "image_after": Image.open(image_after_path),  # 翻訳後画像
+        # 画像ファイルパスの保存
+        self.image_path_list = {
+            "image_before": image_before_path,  # 翻訳前画像
+            "image_after": image_after_path,  # 翻訳後画像
         }
 
         # 画像のサイズを変更してウィンドウを更新する処理
@@ -770,35 +756,35 @@ class TranslationWin(BaseWin):
             # 画像のGUI用キーの取得
             image_gui_key = key_info_dict[image_key]["image_gui_key"]
 
-            # 画像オブジェクトの取得
-            image = self.image_obj_list[image_key]
+            # 画像オブジェクトの取得(処理終了時に画像を閉じる)
+            with Image.open(self.image_path_list[image_key]) as image:
+                # スクロールバーの幅を含まないカラムサイズの計算
+                no_scrollbar_column_size = [
+                    # 全体のカラムサイズからスクロールバーの幅を引く
+                    value - self.window[column_key].metadata["scrollbar_width"]
+                    # 全体のカラムサイズを取得してその値で走査
+                    for value in self.window[column_key].get_size()
+                ]
 
-            # スクロールバーの幅を含まないカラムサイズの計算
-            no_scrollbar_column_size = [
-                # 全体のカラムサイズからスクロールバーの幅を引く
-                value - self.window[column_key].metadata["scrollbar_width"]
-                # 全体のカラムサイズを取得してその値で走査
-                for value in self.window[column_key].get_size()
-            ]
+                # 画像を与えられた範囲に収まるようにするための拡大率
+                fit_zoom_scale = self.get_fit_zoom_scale(image, max_size=no_scrollbar_column_size)
 
-            # 画像を与えられた範囲に収まるようにするための拡大率
-            fit_zoom_scale = self.get_fit_zoom_scale(image, max_size=no_scrollbar_column_size)
+                # 拡大率の計算
+                # 範囲に収まるようにするための拡大率 * 利用者が変更できる拡大率
+                zoom_scale = fit_zoom_scale * self.user_zoom_scale
 
-            # 拡大率の計算
-            # 範囲に収まるようにするための拡大率 * 利用者が変更できる拡大率
-            zoom_scale = fit_zoom_scale * self.user_zoom_scale
+                # 新しいサイズを計算
+                new_size = (int(image.size[0] * zoom_scale), int(image.size[1] * zoom_scale))
 
-            # 新しいサイズを計算
-            new_size = (int(image.size[0] * zoom_scale), int(image.size[1] * zoom_scale))
+                # 画像表示サイズが1px以上なら
+                if new_size[0] > 0 and new_size[1] > 0:
+                    # 画像をリサイズ
+                    resized_img = image.resize(new_size, Image.LANCZOS)
+                    # GUIの画像要素を更新
+                    self.window[image_gui_key].update(data=ImageTk.PhotoImage(resized_img))
+                    # Columnのスクロール可能領域の更新
+                    self.window[column_key].Widget.canvas.config(scrollregion=(0, 0, new_size[0], new_size[1]))
 
-            # 画像表示サイズが1px以上なら
-            if new_size[0] > 0 and new_size[1] > 0:
-                # 画像をリサイズ
-                resized_img = image.resize(new_size, Image.LANCZOS)
-                # GUIの画像要素を更新
-                self.window[image_gui_key].update(data=ImageTk.PhotoImage(resized_img))
-                # Columnのスクロール可能領域の更新
-                self.window[column_key].Widget.canvas.config(scrollregion=(0, 0, new_size[0], new_size[1]))
         # ウィンドウを強制的に更新
         self.window.refresh()
 
