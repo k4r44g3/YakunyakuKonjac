@@ -78,13 +78,11 @@ class Fn:
             text_list(list[text:str]): テキストリスト
             filepath(str): ファイルパス
         """
-        file = open(file_path, "w", encoding="utf-8")  # 新規書き込みでテキストファイルを開く
-        # file = open(text_filepath, "w",)  # 新規書き込みでテキストファイルを開く
-        for text_before in text_list:  # テキストで走査
-            if text_before is not None:
-                # テキストが存在するなら
-                file.write(text_before + "\n")  # ファイルに書き込む
-        file.close()  # ファイルを閉じる
+        with open(file_path, "w", encoding="utf-8") as f:  # 新規書き込みでテキストファイルを開く
+            for text_before in text_list:  # テキストで走査
+                if text_before is not None:
+                    # テキストが存在するなら
+                    f.write(text_before + "\n")  # ファイルに書き込む
 
     def get_max_file_name(dir_path: str) -> str:
         """辞書順で最大のファイル名を取得
@@ -102,7 +100,6 @@ class Fn:
         """履歴ファイル名のリストを取得
 
         翻訳前、後画像の両方が存在する履歴ファイル名を取得
-        存在しない、もしくは、ファイル名の形式が正しくない場合、該当ファイルを削除
 
         Returns:
             history_file_name_list(list[file_name:str]): 履歴ファイル名のリスト
@@ -190,10 +187,29 @@ class Fn:
 
         # 翻訳前画像のみのファイルの削除
         for before_file_name in before_only_file_name_set:
-            os.remove(os.path.join(image_before_directory_path, before_file_name))
+            try:
+                # Fn.time_log(
+                #     f"翻訳前画像のみのファイルの削除 : {os.path.join(image_before_directory_path, before_file_name)}"
+                # )
+                os.remove(os.path.join(image_before_directory_path, before_file_name))
+
+            # 別のプロセスがファイルを使用中なら
+            except PermissionError as e:
+                print(f"ファイル削除中にエラーが発生しました: {e}")
+                raise
+
         # 翻訳後画像のみのファイルの削除
         for after_file_name in after_only_file_name_set:
-            os.remove(os.path.join(image_after_directory_path, after_file_name))
+            try:
+                # Fn.time_log(
+                #     f"翻訳後画像のみのファイルの削除 : {os.path.join(image_after_directory_path, after_file_name)}"
+                # )
+                os.remove(os.path.join(image_after_directory_path, after_file_name))
+
+            # 別のプロセスがファイルを使用中なら
+            except PermissionError as e:
+                print(f"ファイル削除中にエラーが発生しました: {e}")
+                raise
 
         # ファイル名の形式が正しくないファイル名のリスト
         invalid_file_name_list = []
@@ -220,10 +236,24 @@ class Fn:
 
         # ファイル名の形式が正しくないファイルの削除
         for file_name in invalid_file_name_list:
-            # 翻訳前画像フォルダから削除
-            os.remove(os.path.join(image_before_directory_path, file_name))
-            # 翻訳後画像フォルダから削除
-            os.remove(os.path.join(image_after_directory_path, file_name))
+            # 画像フォルダで走査
+            for dir_path in [
+                SystemSetting.image_before_directory_path,  # 翻訳前履歴画像フォルダパス
+                SystemSetting.image_after_directory_path,  # 翻訳後履歴画像フォルダパス
+            ]:
+                # ファイルパス
+                file_path = os.path.join(dir_path, file_name)
+                # ファイルが存在するかチェック
+                if os.path.exists(file_path):
+                    try:
+                        # Fn.time_log(f"ファイル名の形式が正しくないファイルの削除 : {file_path}")
+                        # ファイルを削除
+                        os.remove(file_path)
+
+                    # 別のプロセスがファイルを使用中なら
+                    except PermissionError as e:
+                        print(f"ファイル削除中にエラーが発生しました: {e}")
+                        raise
 
     def search_dict_in_list(lst: List[Dict], key_name: str, value: Any) -> Dict:
         """与えられたリスト内の辞書から指定したキーと値に一致する辞書を取得

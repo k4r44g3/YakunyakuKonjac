@@ -7,6 +7,7 @@ import threading  # スレッド関連
 import traceback  # 例外情報の取得と表示
 
 import PySimpleGUI as sg  # GUI
+from package.fn import Fn  # 自作関数クラス
 from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 
@@ -134,6 +135,7 @@ class ErrorLog:
                     e,
                     is_output_error_log=True,
                 )
+                # Fn.sleep(1000 * 60 * 60)
                 raise  # 例外を発生させる
 
         # エラーログの出力に失敗したなら

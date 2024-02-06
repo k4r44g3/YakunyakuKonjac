@@ -1,5 +1,7 @@
 import os  # ディレクトリ関連
 import sys  # システム関連
+
+# import random
 from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
 #! デバッグ用
@@ -30,7 +32,7 @@ class Translation:
                 - is_error(bool) : エラーが発生したかどうか
                 - exception(Optional[Exception]): 発生した例外オブジェクト
         """
-        Fn.time_log("翻訳開始")
+        # Fn.time_log("翻訳開始")
 
         user_setting = UserSetting()  # ユーザ設定のインスタンス化
 
@@ -50,10 +52,13 @@ class Translation:
 
         # ! デバック用
         # ss_file_path = Debug.ss_file_path  # スクショ画像パス
+        # ss_file_path = ScreenshotCapture.save_screenshot(ss_file_path, file_name)  # スクショ保存
         # ss_file_path = os.path.join(Debug.debug_directory_path, "test.png")  # スクショ画像パス
 
         # 文字認識機能
-        text_data_dict = CharacterRecognition.get_text_data_dict(user_setting, ss_file_path)  # 画像からテキスト情報を取得
+        text_data_dict = CharacterRecognition.get_text_data_dict(
+            user_setting, ss_file_path
+        )  # 画像からテキスト情報を取得
         text_before_list = text_data_dict["text_list"]  # 翻訳前テキストリストの取得
         text_region_list = text_data_dict["text_region_list"]  # テキスト範囲のリストの取得
         # Fn.time_log("文字取得")
@@ -81,6 +86,10 @@ class Translation:
         # Fn.time_log("翻訳")
 
         # ! デバック用
+        # test_int = random.randint(100, 1000 * 10)
+        # Fn.time_log(f"{file_name}, sleep:{test_int}, start:{os.path.exists(ss_file_path)}")
+        # Fn.sleep(test_int)
+        # Fn.time_log(f"{file_name}, sleep:{test_int}, end:{os.path.exists(ss_file_path)}")
         # text_after_list = Debug.text_after_list  # 翻訳後テキストリスト
         # text_after_list = text_before_list  # 翻訳後テキストリスト
 
@@ -98,7 +107,7 @@ class Translation:
         # ! デバッグ用
         # overlay_translation_image.show()  # 画像表示
 
-        Fn.time_log("翻訳終了")
+        # Fn.time_log("翻訳終了")
 
         return {
             "file_name": file_name,  # 保存ファイル名(撮影日時)

@@ -1,6 +1,7 @@
 import os  # ディレクトリ関連
 
 from package.error_log import ErrorLog  # エラーログに関するクラス
+from package.fn import Fn  # 自作関数クラス
 from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.translation.translation import Translation  # 翻訳機能関連のクラス
@@ -17,14 +18,20 @@ class TranslateThread:
         # ウィンドウオブジェクトの取得
         window = GlobalStatus.win_instance.window
 
+        Fn.time_log("翻訳開始")
+
         # 翻訳前,結果を履歴に保存する処理
         save_history_result = Translation.save_history()
+
+        # ファイル生成後に読み込むまでの時間の遅延
+        Fn.sleep(50)
 
         # 保存ファイル名の取得
         file_name = save_history_result["file_name"]
 
         # 保存処理でエラーが発生していないかつ、ウィンドウが開いているなら
         if not save_history_result["is_error"] and not (window.was_closed()):
+            Fn.time_log("翻訳終了")
             key = "-translate_thread_end-"
             value = file_name
             # スレッドから、翻訳イベントを送信
@@ -40,8 +47,15 @@ class TranslateThread:
                 file_path = os.path.join(dir_path, file_name)
                 # ファイルが存在するかチェック
                 if os.path.exists(file_path):
-                    # ファイルを削除
-                    os.remove(file_path)
+                    try:
+                        # Fn.time_log(f"保存処理でエラーが発生したもしくは、ウィンドウが閉じてあるなら : {file_path}")
+                        # ファイルを削除
+                        os.remove(file_path)
+
+                    # 別のプロセスがファイルを使用中なら
+                    except PermissionError as e:
+                        print(f"ファイル削除中にエラーが発生しました: {e}")
+                        raise
 
             # 保存処理でエラーが発生したなら
             if save_history_result["is_error"]:

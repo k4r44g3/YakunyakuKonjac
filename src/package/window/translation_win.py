@@ -21,8 +21,12 @@ from package.global_status import GlobalStatus  # グローバル変数保存用
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.thread.get_drag_area_thread import GetDragAreaThread  # ドラッグした領域の座標を取得するスレッド
 from package.thread.translate_thread import TranslateThread  # 翻訳処理を行うスレッドクラス
-from package.thread.translate_timing_thread import TranslateTimingThread  # 自動翻訳のタイミングを取得するスレッドクラス
-from package.thread.watch_for_key_event_thread import WatchForKeyEventThread  # 指定したキーイベントが発生するかどうか監視するスレッドクラス
+from package.thread.translate_timing_thread import (
+    TranslateTimingThread,
+)  # 自動翻訳のタイミングを取得するスレッドクラス
+from package.thread.watch_for_key_event_thread import (
+    WatchForKeyEventThread,
+)  # 指定したキーイベントが発生するかどうか監視するスレッドクラス
 from package.window.base_win import BaseWin  # ウィンドウの基本クラス
 
 
@@ -508,11 +512,11 @@ class TranslationWin(BaseWin):
 
         # 最後に翻訳処理を行った時間が設定されていないか、1秒以上経過しているなら
         if self.last_translation_time is None or current_time - self.last_translation_time >= 1:
-            # 最後に処理した時間を更新
-            self.last_translation_time = current_time
 
             # 翻訳スレッド最大数を超えていないなら
             if self.thread_count < self.thread_max:
+                # 最後に翻訳処理した時間を更新
+                self.last_translation_time = current_time
                 # 翻訳スレッド数更新
                 self.thread_count += 1
                 # 翻訳進捗インジケーターの点の数の更新
@@ -543,8 +547,8 @@ class TranslationWin(BaseWin):
                 self.is_thread_over = True  # スレッド数がオーバーするかどうか
 
         # 最後に翻訳処理を行った時間から、1秒以上経過していないなら
-        else:
-            Fn.time_log("前回の翻訳からの経過時間が短すぎます。1秒以上の待機が必要です。")
+        # else:
+            # Fn.time_log("前回の翻訳からの経過時間が短すぎます。1秒以上の待機が必要です。")
 
     def translate_thread_end(self, values: dict) -> None:
         """翻訳処理のスレッド終了イベント処理
@@ -626,8 +630,15 @@ class TranslationWin(BaseWin):
                 file_path = os.path.join(dir_path, file_name)
                 # ファイルが存在するかチェック
                 if os.path.exists(file_path):
-                    # ファイルを削除
-                    os.remove(file_path)
+                    try:
+                        # Fn.time_log(f"指定された制限を超えているなら : {file_path}")
+                        # ファイルを削除
+                        os.remove(file_path)
+
+                    # 別のプロセスがファイルを使用中なら
+                    except PermissionError as e:
+                        print(f"ファイル削除中にエラーが発生しました: {e}")
+                        raise
 
         # 履歴ファイル名のリスト取得
         self.history_file_name_list = Fn.get_history_file_name_list()
@@ -698,6 +709,20 @@ class TranslationWin(BaseWin):
         image_before_path = os.path.join(SystemSetting.image_before_directory_path, file_name)
         # 翻訳後画像パスの取得
         image_after_path = os.path.join(SystemSetting.image_after_directory_path, file_name)
+
+        try:
+            Image.open(image_before_path)  # 翻訳前画像
+            Image.open(image_after_path)  # 翻訳後画像
+
+        # 画像を開く処理に失敗したら
+        except Exception as e:
+            print("-" * 100)
+            print("翻訳前、後画像の変更処理中エラー")
+            print(f"翻訳前画像が存在するか : {os.path.exists(image_before_path)}")
+            print(f"翻訳後画像が存在するか : {os.path.exists(image_after_path)}")
+            # エラーログの出力処理
+            print(e)
+            raise
 
         # 画像オブジェクトの保存
         self.image_obj_list = {

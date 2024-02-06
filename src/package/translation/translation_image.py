@@ -35,6 +35,17 @@ class TranslationImage:
             overlay_translation_image(Image): オーバーレイ翻訳画像
         """
 
+        try:
+            Image.open(ss_file_path)  # 出力画像を作成
+
+        # 画像を開く処理に失敗したら
+        except Exception as e:
+            print("-" * 100)
+            print("オーバーレイ翻訳画像中エラー")
+            print(f"翻訳前画像が存在するか : {os.path.exists(ss_file_path)}")
+            print(e)
+            raise
+
         image_out = Image.open(ss_file_path)  # 出力画像を作成
 
         draw = ImageDraw.Draw(image_out)  # 画像に図形やテキストを描画するオブジェクトの作成
