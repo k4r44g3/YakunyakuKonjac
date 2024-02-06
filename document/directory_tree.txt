@@ -33,6 +33,11 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
     │   │   reference.txt - プロジェクトの参考文献や資料を格納するテキストファイル
     │   │   todo.txt - プロジェクトに関連するタスクやToDoリストを含むテキストファイル
     │   │
+    │   ├─class_diagram - クラス図関連のファイルを格納するディレクトリ
+    │   │       class_simple.png - 省略版クラス図の画像ファイル
+    │   │       class.png - 詳細版クラス図の画像ファイル
+    │   │       class.wsd - クラス図を記述するPlantUMLファイル
+    │   │
     │   └─venv_backup - 仮想環境のバックアップファイルを格納するディレクトリ
     │       │   requirements.txt - プロジェクトで必要となるパッケージの情報を示すテキストファイル
     │       │
