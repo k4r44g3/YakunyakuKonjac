@@ -6,13 +6,19 @@
 @REM 文字コードを"Shift-JIS"に設定 メッセージは非表示
 chcp 932 >nul
 
+@REM 仮想環境が有効なら
+if defined VIRTUAL_ENV (
+    @REM 仮想環境のルートディレクトリへ移動
+    cd %VIRTUAL_ENV%
+
 @REM 仮想環境が有効でないなら
-if not defined VIRTUAL_ENV (
+) else (
     @REM 仮想環境のルートディレクトリへ移動
     cd ../..
     @REM 仮想環境の有効化
     call Scripts\activate.bat
 )
+
 
 @REM AWSの設定の保存先の指定
 set AWS_SHARED_CREDENTIALS_FILE=.aws\credentials

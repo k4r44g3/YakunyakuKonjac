@@ -11,8 +11,14 @@ call :main %* 4>>%0
 goto :eof
 :main
 
+
+@REM 仮想環境が有効なら
+if defined VIRTUAL_ENV (
+    @REM 仮想環境のルートディレクトリへ移動
+    cd %VIRTUAL_ENV%
+
 @REM 仮想環境が有効でないなら
-if not defined VIRTUAL_ENV (
+) else (
     @REM 仮想環境のルートディレクトリへ移動
     cd ../..
     @REM 仮想環境の有効化
