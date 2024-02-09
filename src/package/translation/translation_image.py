@@ -208,15 +208,15 @@ class TranslationImage:
                 )
 
     def save_overlay_translation_image(overlay_translation_image: Image, file_name: str) -> str:
-        """オーバーレイ翻訳画像の保存
+        """オーバーレイ翻訳画像の一時保存
         Args:
             overlay_translation_image(Image): オーバーレイ翻訳画像
             file_name(str): ファイル名(撮影日時)
         Returns:
             overlay_translation_image_path(str): オーバーレイ翻訳画像のファイルパス
         """
-        directory_path = SystemSetting.image_after_directory_path  # 翻訳後画像のディレクトリパス
-        overlay_translation_image_path = os.path.join(directory_path, file_name)  # ファイルパス(絶対参照)
+        directory_path = SystemSetting.image_tmp_directory_path  # 翻訳中一時保存画像のディレクトリパ
+        overlay_translation_image_path = os.path.join(directory_path, f"after_{file_name}")  # ファイルパス(絶対参照)
 
         overlay_translation_image.save(overlay_translation_image_path)  # 翻訳後画像保存
 

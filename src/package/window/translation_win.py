@@ -548,7 +548,7 @@ class TranslationWin(BaseWin):
 
         # 最後に翻訳処理を行った時間から、1秒以上経過していないなら
         # else:
-            # Fn.time_log("前回の翻訳からの経過時間が短すぎます。1秒以上の待機が必要です。")
+        # Fn.time_log("前回の翻訳からの経過時間が短すぎます。1秒以上の待機が必要です。")
 
     def translate_thread_end(self, values: dict) -> None:
         """翻訳処理のスレッド終了イベント処理
@@ -556,6 +556,14 @@ class TranslationWin(BaseWin):
         Args:
             values (dict): 各要素の値の辞書
         """
+        # 履歴ファイル名取得
+        file_name = values["-translate_thread_end-"]
+
+        # 一時保存ファイルを履歴ファイルに保存する処理
+        self.move_history_tmp_file(file_name)
+
+        # ファイル生成後に読み込むまでの時間の遅延
+        # Fn.sleep(50)
 
         # スレッド数のカウント
         self.thread_count -= 1
@@ -577,9 +585,6 @@ class TranslationWin(BaseWin):
 
             # スレッド数がオーバーするかどうか
             self.is_thread_over = False
-
-        # 履歴ファイル名取得
-        file_name = values["-translate_thread_end-"]
 
         # 履歴ファイル日時取得
         file_time = Fn.convert_time_from_filename(file_name)
@@ -612,13 +617,6 @@ class TranslationWin(BaseWin):
             if check_file_limit_dict[file_name]:
                 delete_file_list.append(file_name)
 
-        # # 削除するファイルを取得
-        # for file_name in delete_file_list:
-        #     # 翻訳前画像フォルダから削除
-        #     os.remove(os.path.join(SystemSetting.image_before_directory_path, file_name))
-        #     # 翻訳後画像フォルダから削除
-        #     os.remove(os.path.join(SystemSetting.image_after_directory_path, file_name))
-
         # 削除するファイルを取得
         for file_name in delete_file_list:
             # 画像ディレクトリパスで走査
@@ -628,17 +626,8 @@ class TranslationWin(BaseWin):
             ]:
                 # ファイルパス
                 file_path = os.path.join(dir_path, file_name)
-                # ファイルが存在するかチェック
-                if os.path.exists(file_path):
-                    try:
-                        # Fn.time_log(f"指定された制限を超えているなら : {file_path}")
-                        # ファイルを削除
-                        os.remove(file_path)
-
-                    # 別のプロセスがファイルを使用中なら
-                    except PermissionError as e:
-                        print(f"ファイル削除中にエラーが発生しました: {e}")
-                        raise
+                # ファイルの削除
+                Fn.delete_file(file_path)
 
         # 履歴ファイル名のリスト取得
         self.history_file_name_list = Fn.get_history_file_name_list()
@@ -656,6 +645,37 @@ class TranslationWin(BaseWin):
 
         # 翻訳前、後画像の変更処理
         self.image_change(max(self.history_file_name_list))
+
+    def move_history_tmp_file(self, file_name: str) -> bool:
+        """一時保存ファイルを履歴ファイルに保存する処理
+
+        Args:
+            file_name (str): ファイル名(撮影日時)
+
+        Returns:
+            bool: 処理に成功したかどうか
+        """
+        image_before_directory_path = SystemSetting.image_before_directory_path  # 翻訳前履歴画像フォルダパス
+        image_after_directory_path = SystemSetting.image_after_directory_path  # 翻訳後履歴画像フォルダパス
+        image_tmp_directory_path = SystemSetting.image_tmp_directory_path  # 翻訳中一時保存画像のディレクトリパス
+
+        # 翻訳前一時保存画像ファイルパス
+        tmp_before_file_path = os.path.join(image_tmp_directory_path, f"before_{file_name}")
+        # 翻訳後一時保存画像ファイルパス
+        tmp_after_file_path = os.path.join(image_tmp_directory_path, f"after_{file_name}")
+
+        # 一時保存画像ファイルが存在するなら
+        if os.path.isfile(tmp_before_file_path) and os.path.isfile(tmp_after_file_path):
+            # 翻訳前ファイル移動
+            Fn.move_file(
+                source_file_path=tmp_before_file_path,  # 移動元ファイルパス
+                target_file_path=os.path.join(image_before_directory_path, file_name),  # 移動先ファイルパス
+            )
+            # 翻訳後ファイル移動
+            Fn.move_file(
+                source_file_path=tmp_after_file_path,  # 移動元ファイルパス
+                target_file_path=os.path.join(image_after_directory_path, file_name),  # 移動先ファイルパス
+            )
 
     def toggle_auto_translation_event(self) -> None:
         """自動翻訳トグルボタン押下イベント処理"""

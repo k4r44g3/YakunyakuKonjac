@@ -30,15 +30,15 @@ class ScreenshotCapture:
         return screenshot_image  # スクショ画像
 
     def save_screenshot(screenshot_image: "Image", file_name: str) -> str:
-        """スクリーンショットの保存
+        """スクリーンショット画像の一時保存
         Args:
             screenshot_image(Image): スクショ画像
             file_name(str): ファイル名(撮影日時)
         Returns:
             ss_file_path(str): スクショ画像のファイルパス
         """
-        directory_path = SystemSetting.image_before_directory_path  # 翻訳前画像のディレクトリパス
-        ss_file_path = os.path.join(directory_path, file_name)  # ファイルパス(絶対参照)
+        directory_path = SystemSetting.image_tmp_directory_path  # 翻訳中一時保存画像のディレクトリパス
+        ss_file_path = os.path.join(directory_path, f"before_{file_name}")  # ファイルパス(絶対参照)
         screenshot_image.save(ss_file_path)  # 翻訳前画像保存
 
         return ss_file_path  # 翻訳前画像ファイルパス

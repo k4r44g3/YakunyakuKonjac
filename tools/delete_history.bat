@@ -17,3 +17,4 @@ if not defined VIRTUAL_ENV (
 @REM —š—ð‚Ìíœ
 del /Q YakunyakuKonjac\src\history\image_after\*.png 2>nul
 del /Q YakunyakuKonjac\src\history\image_before\*.png 2>nul
+del /Q YakunyakuKonjac\src\history\image_tmp\*.png 2>nul

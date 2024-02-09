@@ -63,6 +63,37 @@ class Fn:
         # 文字列が数字のみで構成され、かつ少なくとも1文字以上の数字を含むかどうかを返す
         return bool(re.match(r"^[0-9]+$", value))
 
+    def delete_file(file_path: str) -> None:
+        """ファイルを削除
+
+        Args:
+            file_path (str): ファイルパス
+        """
+        # ファイルが存在するかチェック
+        if os.path.exists(file_path):
+            try:
+                # ファイルを削除
+                os.remove(file_path)
+            # 別のプロセスがファイルを使用中なら
+            except PermissionError as e:
+                print(f"ファイル削除中にエラーが発生しました\n別のプロセスがファイルを使用中です。\n{e}")
+
+    def move_file(source_file_path: str, target_file_path: str) -> None:
+        """ファイルを移動
+
+        Args:
+            source_file_path (str): 移動元ファイルパス
+            target_file_path (str): 移動先ファイルパス
+        """
+        # 移動元ファイルが存在するかつ、移動先ディレクトリが存在するなら
+        if os.path.isfile(source_file_path) and os.path.isdir(os.path.dirname(target_file_path)):
+            try:
+                # ファイルを移動
+                os.replace(src=source_file_path, dst=target_file_path)
+            # 別のプロセスがファイルを使用中なら
+            except PermissionError as e:
+                print(f"ファイル移動中にエラーが発生しました\n別のプロセスがファイルを使用中です。\n{e}")
+
     def get_now_file_base_name() -> str:
         """ファイルのベース名用現在時刻の取得
         Returns:
@@ -187,29 +218,17 @@ class Fn:
 
         # 翻訳前画像のみのファイルの削除
         for before_file_name in before_only_file_name_set:
-            try:
-                # Fn.time_log(
-                #     f"翻訳前画像のみのファイルの削除 : {os.path.join(image_before_directory_path, before_file_name)}"
-                # )
-                os.remove(os.path.join(image_before_directory_path, before_file_name))
-
-            # 別のプロセスがファイルを使用中なら
-            except PermissionError as e:
-                print(f"ファイル削除中にエラーが発生しました: {e}")
-                raise
+            # ファイルパス
+            file_path = os.path.join(image_before_directory_path, before_file_name)
+            # ファイルの削除
+            Fn.delete_file(file_path)
 
         # 翻訳後画像のみのファイルの削除
         for after_file_name in after_only_file_name_set:
-            try:
-                # Fn.time_log(
-                #     f"翻訳後画像のみのファイルの削除 : {os.path.join(image_after_directory_path, after_file_name)}"
-                # )
-                os.remove(os.path.join(image_after_directory_path, after_file_name))
-
-            # 別のプロセスがファイルを使用中なら
-            except PermissionError as e:
-                print(f"ファイル削除中にエラーが発生しました: {e}")
-                raise
+            # ファイルパス
+            file_path = os.path.join(image_after_directory_path, after_file_name)
+            # ファイルの削除
+            Fn.delete_file(file_path)
 
         # ファイル名の形式が正しくないファイル名のリスト
         invalid_file_name_list = []
@@ -243,17 +262,27 @@ class Fn:
             ]:
                 # ファイルパス
                 file_path = os.path.join(dir_path, file_name)
-                # ファイルが存在するかチェック
-                if os.path.exists(file_path):
-                    try:
-                        # Fn.time_log(f"ファイル名の形式が正しくないファイルの削除 : {file_path}")
-                        # ファイルを削除
-                        os.remove(file_path)
+                # ファイルを削除する
+                Fn.delete_file(file_path)
 
-                    # 別のプロセスがファイルを使用中なら
-                    except PermissionError as e:
-                        print(f"ファイル削除中にエラーが発生しました: {e}")
-                        raise
+    def delete_tmp_history_file() -> None:
+        """翻訳処理中に一時保存する画像ファイルを削除"""
+        # 翻訳中一時保存画像保存先設定
+        image_tmp_directory_path = SystemSetting.image_tmp_directory_path  # ディレクトリパス
+
+        # 翻訳中一時保存画像ファイルのリスト
+        tmp_file_name_list = os.listdir(image_tmp_directory_path)
+
+        # .gitkeepが存在する場合、ファイル名のリストから削除する
+        if ".gitkeep" in tmp_file_name_list:
+            tmp_file_name_list.remove(".gitkeep")
+
+        # ファイルパスを取り出す
+        for file_name in tmp_file_name_list:
+            # ファイルパス
+            file_path = os.path.join(image_tmp_directory_path, file_name)
+            # ファイルを削除する
+            Fn.delete_file(file_path)
 
     def search_dict_in_list(lst: List[Dict], key_name: str, value: Any) -> Dict:
         """与えられたリスト内の辞書から指定したキーと値に一致する辞書を取得

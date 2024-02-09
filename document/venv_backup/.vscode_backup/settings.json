@@ -29,5 +29,15 @@
     "[bat]": {
         // デフォルトエンコードをShift-JISに変更
         "files.encoding": "shiftjis"
-    }
+    },
+
+    // PlantUMLの引数設定
+    "plantuml.commandArgs": [
+        // 生成される図の最大のピクセル数
+        "-DPLANTUML_LIMIT_SIZE=8192"
+    ],
+    // PlantUMLの図のソースファイルが格納されているディレクトリのパス
+    "plantuml.diagramsRoot": "YakunyakuKonjac\\document\\class_diagram",
+    // PlantUMLによって生成される図の出力先ディレクトリのパス
+    "plantuml.exportOutDir": "YakunyakuKonjac\\document\\class_diagram"
 }

@@ -8,10 +8,12 @@ log/error_simple.log
 # 履歴フォルダ
 src/history/image_after/*
 src/history/image_before/*
+src/history/image_tmp/*
 
 # 履歴ディレクトリのみ表示
 !src/history/image_after/.gitkeep
 !src/history/image_before/.gitkeep
+!src/history/image_tmp/.gitkeep
 
 # モジュールキャッシュフォルダ
 src/__pycache__/*

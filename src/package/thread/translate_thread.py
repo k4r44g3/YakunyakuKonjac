@@ -20,11 +20,8 @@ class TranslateThread:
 
         Fn.time_log("翻訳開始")
 
-        # 翻訳前,結果を履歴に保存する処理
-        save_history_result = Translation.save_history()
-
-        # ファイル生成後に読み込むまでの時間の遅延
-        Fn.sleep(50)
+        # 翻訳前, 結果画像を一時保存する
+        save_history_result = Translation.save_tmp_history()
 
         # 保存ファイル名の取得
         file_name = save_history_result["file_name"]
@@ -39,23 +36,14 @@ class TranslateThread:
 
         # 保存処理でエラーが発生したもしくは、ウィンドウが閉じてあるなら
         else:
-            for dir_path in [
-                SystemSetting.image_before_directory_path,  # 翻訳前履歴画像フォルダパス
-                SystemSetting.image_after_directory_path,  # 翻訳後履歴画像フォルダパス
-            ]:
-                # ファイルパス
-                file_path = os.path.join(dir_path, file_name)
-                # ファイルが存在するかチェック
-                if os.path.exists(file_path):
-                    try:
-                        # Fn.time_log(f"保存処理でエラーが発生したもしくは、ウィンドウが閉じてあるなら : {file_path}")
-                        # ファイルを削除
-                        os.remove(file_path)
-
-                    # 別のプロセスがファイルを使用中なら
-                    except PermissionError as e:
-                        print(f"ファイル削除中にエラーが発生しました: {e}")
-                        raise
+            # 一時保存画像を削除する
+            directory_path = SystemSetting.image_tmp_directory_path  # 翻訳中一時保存画像のディレクトリパス
+            # 翻訳前の一時保存画像のパス
+            ss_file_path = os.path.join(directory_path, f"before_{file_name}")
+            Fn.delete_file(ss_file_path)  # 翻訳前の一時保存画像ファイルの削除
+            # 翻訳後の一時保存画像のパス
+            overlay_translation_image_path = os.path.join(directory_path, f"after_{file_name}")
+            Fn.delete_file(overlay_translation_image_path)  # 翻訳後の一時保存画像ファイルの削除
 
             # 保存処理でエラーが発生したなら
             if save_history_result["is_error"]:

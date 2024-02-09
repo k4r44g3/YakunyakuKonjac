@@ -23,12 +23,15 @@ package "全体に影響を与えるクラス" as GlobalPackage{
         log(*text: str) -> None\nログの表示
         time_log(*text: str) -> None\nログと現在時刻の表示
         check_number_string(value: str) -> bool\n数字文字列かどうかを判定する
+        delete_file(file_path: str) -> None\nファイルを削除する
+        move_file(source_file_path: str, target_file_path: str) -> None\nファイルを移動する
         get_now_file_base_name() -> str\nファイルのベース名用現在時刻の取得
         save_text_file(text_list: List[str], file_path:str) -> None\nテキストファイルへの保存
         get_max_file_name(dir_path: str) -> str\n辞書順で最大のファイル名を取得
         get_history_file_name_list() -> List[str]\n履歴ファイル名のリストを取得
         get_history_file_time_list(history_file_name_list:List[str]) -> List[str]\n履歴ファイル日時のリストを取得
         delete_unique_history_file() -> None\n翻訳前、後画像の両方が存在しない履歴ファイルを削除
+        delete_tmp_history_file() -> None\n翻訳処理中に一時保存する画像ファイルを削除
         search_dict_in_list(lst: List[Dict], key_name: str, value: Any) -> Dict\n与えられたリスト内の辞書から指定したキーと値に一致する辞書を取得
         check_file_limits(directory_path: str, max_file_size_mb: int, max_file_count: int, max_file_retention_days: int) -> Dict[str, bool]\n指定された制限を超えているかどうかをチェックして結果を返すメソッド
         convert_time_from_filename(file_name:str) -> str\nファイル名から日時を取得
@@ -51,6 +54,7 @@ package "全体に影響を与えるクラス" as GlobalPackage{
         package_path: str\nパッケージディレクトリパス
         app_name: str = "ヤクミャクコンジャック"\nアプリ名
         translation_thread_max: int = 4\n翻訳スレッドの最大数
+        ocr_min_confidence_score = 0.2\nテキスト検出精度の最小許容値
         language_list: List[Dict[str,str]]\n言語情報一覧リスト
         easy_ocr_update_language_code: Dict[str, str]\nEasyOCR用の言語コード
         easy_ocr_language_list: List[Dict[str, str]]\nEasyOCR用言語情報一覧リスト
@@ -162,6 +166,7 @@ package "ウィンドウ関連のクラス" as WindowPackage{
         省略
         translate_thread_start() -> None\n翻訳処理を別スレッドで開始する処理
         translate_thread_end(values: dict) -> None\n翻訳処理のスレッド終了イベント処理
+        move_history_tmp_file(self, file_name: str) -> None\n一時保存ファイルを履歴ファイルに保存する処理
         toggle_auto_translation_event() -> None\n自動翻訳トグルボタン押下イベント処理
         translate_timing_thread_start() -> None\n自動翻訳のタイミングを取得するスレッドの開始処理
         image_change(file_name: str) -> None\n翻訳前後画像の変更処理
@@ -221,7 +226,7 @@ package "翻訳関連のクラス" as TranslationPackage{
 
     class "ScreenshotCapture\nスクリーンショット撮影機能関連のクラス" as ScreenshotCapture{
         get_screenshot(user_setting: "UserSetting") -> None\nスクリーンショットの撮影
-        save_screenshot(screenshot_image: "Image", file_name: str) -> str\nスクリーンショットの保存
+        save_screenshot(screenshot_image: "Image", file_name: str) -> str\nスクリーンショット画像の一時保存
     }
 
     class "TextTranslation\nテキスト翻訳機能関連のクラス" as TextTranslation{
@@ -236,11 +241,11 @@ package "翻訳関連のクラス" as TranslationPackage{
         remove_empty_text_data(font_size_list: List[int], text_after_list: List[str], text_region_list: Dict[str, int]) -> None\nフォントサイズが0である要素の削除
         fill_text_box_image(draw: "ImageDraw", text_region_list: Dict[str, int]) -> None\n画像内のテキストボックスを塗りつぶす処理
         draw_text_image(draw: "ImageDraw",font_path: str, text_after_list: List[str], text_region_list: Dict[str, int], font_size_list: List[int])\n画像にテキストを描画する処理
-        save_overlay_translation_image(overlay_translation_image: Image, file_name: str) -> str\nオーバーレイ翻訳画像の保存
+        save_overlay_translation_image(overlay_translation_image: Image, file_name: str) -> str\nオーバーレイ翻訳画像の一時保存
     }
 
     class "Translation\n翻訳機能関連のクラス" as Translation{
-        save_history() -> Dict\n翻訳前,結果を履歴に保存する
+        save_tmp_history() -> Dict\n翻訳前,結果画像を一時保存する
     }
 
     '集約（aggregation）

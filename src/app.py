@@ -68,6 +68,9 @@ class App:
         # 翻訳前、後画像の両方が存在しない履歴ファイルを削除
         Fn.delete_unique_history_file()
 
+        # 翻訳処理中に一時保存する画像ファイルを削除
+        Fn.delete_tmp_history_file()
+
         # AWS接続テストを行うなら
         if self.user_setting.get_setting("is_aws_access_check"):
             # AWSサービスにアクセス可能か確認する処理

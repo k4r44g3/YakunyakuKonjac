@@ -1,4 +1,3 @@
-
 @REM ファイル保存時に、エンコーディングを"Shift-JIS"にする
 
 @REM コマンドを表示しない
@@ -11,7 +10,6 @@ chcp 932 >nul
 call :main %* 4>>%0
 goto :eof
 :main
-
 
 @REM 仮想環境が有効でないなら
 if not defined VIRTUAL_ENV (

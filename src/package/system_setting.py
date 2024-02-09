@@ -14,7 +14,7 @@ class SystemSetting:
     package_path: str = os.path.dirname(__file__)  # パッケージディレクトリパス
 
     # ソースコードを格納するディレクトリ
-    src_path: str = os.path.normpath(os.path.join(package_path, ".."))  # 上位レベル参照の正規化
+    src_path: str = os.path.dirname(package_path)  # 親ディレクトリを取得
 
     # 設定ファイル保存先設定
     setting_directory_path: str = os.path.join(src_path, "config")  # ディレクトリパス
@@ -26,12 +26,14 @@ class SystemSetting:
     image_before_directory_path: str = os.path.join(history_directory_path, "image_before")  # ディレクトリパス
     # 翻訳後画像保存先設定
     image_after_directory_path: str = os.path.join(history_directory_path, "image_after")  # ディレクトリパス
+    # 翻訳中一時保存画像保存先設定
+    image_tmp_directory_path: str = os.path.join(history_directory_path, "image_tmp")  # ディレクトリパス
 
     # デバッグ用ディレクトリパス
     debug_directory_path: str = os.path.join(src_path, "debug_history")
 
     # プロジェクトのルートディレクトリ
-    project_path: str = os.path.normpath(os.path.join(src_path, ".."))  # 上位レベル参照の正規化
+    project_path: str = os.path.dirname(src_path)  # 親ディレクトリを取得
 
     # エラーログのディレクトリパス
     error_log_directory_path: str = os.path.join(project_path, "log")  # ディレクトリパス
@@ -80,7 +82,7 @@ class SystemSetting:
     tool_reset_setting_path: str = os.path.join(tool_path, "reset_setting.bat")
 
     # 仮想環境のルートディレクトリ
-    venv_path: str = os.path.normpath(os.path.join(project_path, ".."))  # 上位レベル参照の正規化
+    venv_path: str = os.path.dirname(project_path)  # 親ディレクトリを取得
 
     # AWSの認証情報や設定ファイルのディレクトリパス
     aws_setting_directory_path: str = os.path.join(venv_path, ".aws")

@@ -4,6 +4,8 @@ import sys  # システム関連
 # import random
 from typing import Any, Dict, List, Optional, Tuple, Union  # 型ヒント
 
+# from PIL import Image
+
 #! デバッグ用
 if __name__ == "__main__":
     src_path = os.path.join(os.path.dirname(__file__), "..", "..")  # パッケージディレクトリパス
@@ -23,8 +25,8 @@ from package.user_setting import UserSetting  # ユーザーが変更可能の�
 class Translation:
     """翻訳機能関連のクラス"""
 
-    def save_history() -> Dict[str, Union[bool, Optional[str]]]:
-        """翻訳前, 結果を履歴に保存する
+    def save_tmp_history() -> Dict[str, Union[bool, Optional[str]]]:
+        """翻訳前, 結果画像を一時保存する
 
         Returns:
             result(dict[file_name, is_error, error_name, error_text]) : 保存ファイル名とエラー情報の辞書
@@ -48,22 +50,25 @@ class Translation:
         # スクショ撮影機能
         screenshot_image = ScreenshotCapture.get_screenshot(user_setting)  # スクショ撮影
         ss_file_path = ScreenshotCapture.save_screenshot(screenshot_image, file_name)  # スクショ保存
-        # Fn.time_log("スクショ撮影")
 
         # ! デバック用
         # ss_file_path = Debug.ss_file_path  # スクショ画像パス
-        # ss_file_path = ScreenshotCapture.save_screenshot(ss_file_path, file_name)  # スクショ保存
         # ss_file_path = os.path.join(Debug.debug_directory_path, "test.png")  # スクショ画像パス
+        # スクショ画像を開く
+        # with Image.open(ss_file_path) as screenshot_image:
+        #     ss_file_path = ScreenshotCapture.save_screenshot(screenshot_image, file_name)  # スクショ保存
 
         # 文字認識機能
-        text_data_dict = CharacterRecognition.get_text_data_dict(
-            user_setting, ss_file_path
-        )  # 画像からテキスト情報を取得
+        # 画像からテキスト情報を取得
+        text_data_dict = CharacterRecognition.get_text_data_dict(user_setting, ss_file_path)
         text_before_list = text_data_dict["text_list"]  # 翻訳前テキストリストの取得
         text_region_list = text_data_dict["text_region_list"]  # テキスト範囲のリストの取得
         # Fn.time_log("文字取得")
 
         # ! デバック用
+        # test_int = random.randint(100, 1000 * 5)
+        # Fn.time_log(f"{file_name}, 認識, sleep:{test_int}")
+        # Fn.sleep(test_int)
         # text_before_list = Debug.text_before_list  # 翻訳前テキストリスト
         # text_region_list = Debug.text_region_list  # テキスト範囲のリスト
 
@@ -86,21 +91,21 @@ class Translation:
         # Fn.time_log("翻訳")
 
         # ! デバック用
-        # test_int = random.randint(100, 1000 * 10)
-        # Fn.time_log(f"{file_name}, sleep:{test_int}, start:{os.path.exists(ss_file_path)}")
+        # test_int = random.randint(100, 1000 * 5)
+        # Fn.time_log(f"{file_name}, 翻訳, sleep:{test_int}")
         # Fn.sleep(test_int)
-        # Fn.time_log(f"{file_name}, sleep:{test_int}, end:{os.path.exists(ss_file_path)}")
         # text_after_list = Debug.text_after_list  # 翻訳後テキストリスト
         # text_after_list = text_before_list  # 翻訳後テキストリスト
 
         # 翻訳画像作成機能
+        # 翻訳後画像作成
         overlay_translation_image = TranslationImage.get_overlay_translation_image(
             user_setting, ss_file_path, text_after_list, text_region_list
-        )  # 翻訳後画像作成
-
+        )
+        # 翻訳後画像保存
         overlay_translation_image_path = TranslationImage.save_overlay_translation_image(
             overlay_translation_image, file_name
-        )  # 翻訳後画像保存
+        )
 
         # Fn.time_log("画像作成")
 
@@ -122,4 +127,5 @@ if __name__ == "__main__":
     os.environ["AWS_CONFIG_FILE"] = SystemSetting.aws_config_file_path
     # AWSの認証情報ファイルのパスの設定
     os.environ["AWS_SHARED_CREDENTIALS_FILE"] = SystemSetting.aws_credentials_file_path
-    image_path = Translation.save_history()
+    # 翻訳前, 結果画像を一時保存する
+    image_path = Translation.save_tmp_history()
