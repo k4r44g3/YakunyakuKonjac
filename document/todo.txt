@@ -61,6 +61,8 @@ https://karupoimou.hatenablog.com/entry/20200427/1587975580
 
 
 
+
+
 C:\Users\student\Documents\test>set GitRepositoryUrl="https://github.com/k4r44g3/YakunyakuKonjac.git"
 
 C:\Users\student\Documents\test>git clone !GitRepositoryUrl!
@@ -72,4 +74,5 @@ batファイルの修正(仮想環境時以外)
 スレッド数の見直し
 インターネット未接続時
 翻訳処理の途中中断
-
+AWSサービスが有料であることを伝える
+requirements.txt
