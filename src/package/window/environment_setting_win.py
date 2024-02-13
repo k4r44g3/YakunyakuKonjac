@@ -27,7 +27,7 @@ class EnvironmentSettingWin(BaseWin):
     # OCRソフトの名前のリスト
     ocr_soft_list = ["AmazonTextract", "EasyOCR"]
 
-    # OCRソフトの名前のリスト
+    # 翻訳ソフトの名前のリスト
     translation_soft_list = ["AmazonTranslate", "GoogleTranslator"]
 
     def __init__(self):
@@ -66,6 +66,7 @@ class EnvironmentSettingWin(BaseWin):
                         group_id="ocr_radio",  # グループID
                         default=(ocr_soft == now_ocr_soft),  # デフォルトの設定
                         key=f"-{ocr_soft}-",  # 識別子
+                        size=(16, 1),  # サイズ
                         enable_events=True,  # イベントを取得する
                         # AWSサービスにアクセスできないかつ、AWSサービスならラジオボタンを無効化する
                         disabled=not now_can_access_aws_service and ocr_soft == "AmazonTextract",
@@ -84,6 +85,7 @@ class EnvironmentSettingWin(BaseWin):
                         group_id="translation_radio",  # グループID
                         default=(translation_soft == now_translation_soft),  # デフォルトの設定
                         key=f"-{translation_soft}-",  # 識別子
+                        size=(16, 1),  # サイズ
                         enable_events=True,  # イベントを取得する
                         # AWSサービスにアクセスできないかつ、AWSサービスならラジオボタンを無効化する
                         disabled=not now_can_access_aws_service and translation_soft == "AmazonTranslate",
@@ -91,8 +93,16 @@ class EnvironmentSettingWin(BaseWin):
                 ]
             )
 
+        # AWS料金テキスト
+        aws_cost_text = [
+            "AmazonTextract と AmazonTranslate の",
+            "利用料金は利用者のAWSアカウントに",
+            "直接請求されます。",
+        ]
+
         # レイアウト指定
         layout = [
+            [sg.Text("\n".join(aws_cost_text))],
             [
                 # 表示/非表示切り替え時に再表示が必要ない
                 sg.pin(
@@ -110,7 +120,7 @@ class EnvironmentSettingWin(BaseWin):
                 sg.pin(
                     # OCRがAmazonTextractの場合に表示するメッセージ
                     sg.Text(
-                        text="AmazonTextract は\n非ラテン文字の言語に\n対応していません。",
+                        text="AmazonTextract は非ラテン文字の言語に\n対応していません。",
                         key="-ocr_amazon_textract_message-",
                         # OCRがAmazonTextractの場合に表示する
                         visible=now_ocr_soft == "AmazonTextract",
@@ -128,16 +138,12 @@ class EnvironmentSettingWin(BaseWin):
             [
                 # AWS接続設定ボタン
                 sg.Button("AWS接続設定", key="-aws_config_button-", size=(16, 1)),
-            ],
-            [
                 # AWS接続テストボタン
                 sg.Button("AWS接続テスト", key="-check_access_aws_service-", size=(16, 1)),
             ],
             [
                 # 履歴削除ボタン
                 sg.Button("履歴削除", key="-delete_history-", size=(16, 1)),
-            ],
-            [
                 # 設定リセットボタン
                 sg.Button("設定リセット", key="-reset_setting-", size=(16, 1)),
             ],
