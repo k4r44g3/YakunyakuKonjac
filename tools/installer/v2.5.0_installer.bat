@@ -105,7 +105,7 @@ pip --default-timeout=100 install pyautogui
 pip --default-timeout=100 install PySimpleGUI
 
 @REM パッケージ一覧出力ファイルの作成
-pip freeze > requirements.txt
+@REM pip freeze > requirements.txt
 
 @REM 空のブランチをダウンロードする
 git clone -b empty --depth 1 %GitRepositoryUrl%

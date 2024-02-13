@@ -1,6 +1,5 @@
 venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
 │   pyvenv.cfg -  仮想環境の設定ファイル
-│   requirements.txt - プロジェクトで必要となるパッケージの情報を示すテキストファイル
 │
 ├─.aws - AWSの認証情報や設定ファイルが格納されるディレクトリ
 │       config - AWSの設定を保存するために使用するファイル
@@ -41,7 +40,10 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
     │   └─venv_backup - 仮想環境のバックアップファイルを格納するディレクトリ
     │       │   requirements.txt - プロジェクトで必要となるパッケージの情報を示すテキストファイル
     │       │
-    │       └─.vscode_backup - vscodeの設定のバックアップファイルが格納されるディレクトリ
+    │       ├─requirements - プロジェクトで必要となるパッケージの情報を示すテキストファイルが格納されるディレクトリ
+    │       │       py3.x_requirements.txt - Python3.xで必要となるパッケージの情報を示すテキストファイル
+    │       │
+    │       └─vscode_backup - vscodeの設定のバックアップファイルが格納されるディレクトリ
     │               settings.json - プロジェクトやフォルダーの一般的な設定を保存するファイル
     │
     ├─log - 設定情報を含むファイルを格納するディレクトリ
