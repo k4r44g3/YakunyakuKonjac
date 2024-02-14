@@ -12,7 +12,7 @@ setlocal enabledelayedexpansion
 @REM GitのリポジトリのURL
 set GitRepositoryUrl="https://github.com/k4r44g3/YakunyakuKonjac.git"
 @REM Gitのタグ名
-set TagName="v2.4.0"
+set TagName="v2.5.0"
 @REM リポジトリ名
 set DirectoryName="YakunyakuKonjac"
 
@@ -67,12 +67,8 @@ if %errorlevel% neq 0 (
 )
 
 
-@REM リポジトリのディレクトリが存在しないなら
-if not exist "%DirectoryName%" (
-    @REM 空のブランチをダウンロードする
-    git clone -b empty --depth 1 !GitRepositoryUrl!
 @REM リポジトリのディレクトリが存在するなら
-) else (
+if exist "%DirectoryName%" (
     msg * "既にインストール済みのディレクトリが検出されました。再インストールを行う場合は、"^
 
     "まずは手動で既存の '%DirectoryName%'ディレクトリを削除してください。"^
@@ -81,6 +77,9 @@ if not exist "%DirectoryName%" (
     pause
     exit
 )
+
+@REM requirementsのURL
+set RequirementsURL="https://raw.githubusercontent.com/k4r44g3/YakunyakuKonjac/main/document/venv_backup/requirements/py%PythonMajorVersion%.%PythonMinorVersion%_requirements.txt"
 
 @REM コマンドを表示する
 @echo on
@@ -91,24 +90,28 @@ cd venv_YakunyakuKonjac
 call Scripts\activate.bat
 
 @REM パッケージインストール タイムアウトを100秒に変更
+pip install -r %RequirementsURL% --verbose --default-timeout=100
 
-@REM AWS関連
-pip --default-timeout=100 install awscli
-pip --default-timeout=100 install boto3
-@REM OCR関連
-pip --default-timeout=100 install easyocr
-@REM 翻訳関連
-pip --default-timeout=100 install deep-translator
-@REM GUI関連
-pip --default-timeout=100 install keyboard
-pip --default-timeout=100 install pyautogui
-pip --default-timeout=100 install PySimpleGUI
+@REM エラーが発生したなら(終了コードが0以外なら)
+if %errorlevel% neq 0 (
+  msg * "パッケージのダウンロードに失敗しました。"^
 
-@REM パッケージ一覧出力ファイルの作成
-@REM pip freeze > requirements.txt
+  "エラーコード: %ERRORLEVEL%""
+  pause
+  exit
+)
 
 @REM 空のブランチをダウンロードする
-git clone -b empty --depth 1 %GitRepositoryUrl%
+git clone %GitRepositoryUrl% -b empty --depth 1
+
+@REM エラーが発生したなら(終了コードが0以外なら)
+if %errorlevel% neq 0 (
+  msg * "ソフトウェアのダウンロードに失敗しました。"^
+
+  "エラーコード: %ERRORLEVEL%""
+  pause
+  exit
+)
 
 @REM REM リポジトリのディレクトリに移動
 cd YakunyakuKonjac
@@ -116,14 +119,17 @@ cd YakunyakuKonjac
 @REM Git のバッファサイズを増やす
 git config --local http.postBuffer 52428800
 
+@REM HTTPのバージョンを設定する
+git config --local http.version HTTP/1.1
+
 @REM gitからクローン(指定したタグのコミットのみ)
-git fetch --depth 1 origin refs/tags/%TagName%
+git fetch origin refs/tags/%TagName% --depth 1
 
 @REM エラーが発生したなら(終了コードが0以外なら)
 if %errorlevel% neq 0 (
   msg * "ソフトウェアのダウンロードに失敗しました。"^
 
-  "インターネット接続を確認して再試行してください。"
+  "エラーコード: %ERRORLEVEL%""
   pause
   exit
 )

@@ -61,6 +61,9 @@ batファイル関連
     テキストファイルの内容を区切り文字でトークンに分解し繰り返し処理を使う(FOR)
     https://www.javadrive.jp/command/bat/index10.html
 
+    バッチファイルでの試行錯誤を回避するためのメモ－または人類には早すぎた言語
+    https://qiita.com/yz2cm/items/8058d503a1b84688af09
+
 
 GUI関連
     PySimpleGUI関連
