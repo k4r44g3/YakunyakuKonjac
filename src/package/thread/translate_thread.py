@@ -1,4 +1,5 @@
 import os  # ディレクトリ関連
+import time
 
 from package.error_log import ErrorLog  # エラーログに関するクラス
 from package.fn import Fn  # 自作関数クラス
@@ -14,21 +15,25 @@ class TranslateThread:
     @ErrorLog.decorator  # エラーログを取得するデコレータ
     def run():
         """翻訳処理"""
-
         # ウィンドウオブジェクトの取得
         window = GlobalStatus.win_instance.window
 
-        Fn.time_log("翻訳開始")
+        Fn.time_log("翻訳開始    現在時刻:")
+
+        start_time = time.time()  # 現在時刻（処理開始前）を取得
 
         # 翻訳前, 結果画像を一時保存する
         save_history_result = Translation.save_tmp_history()
+
+        end_time = time.time()  # 現在時刻（処理完了後）を取得
+        time_diff = end_time - start_time  # 処理完了後の時刻から処理開始前の時刻を減算する
 
         # 保存ファイル名の取得
         file_name = save_history_result["file_name"]
 
         # 保存処理でエラーが発生していないかつ、ウィンドウが開いているなら
         if not save_history_result["is_error"] and not (window.was_closed()):
-            Fn.time_log("翻訳終了")
+            Fn.time_log(f"翻訳終了    ファイル名: {file_name}    翻訳時間: {time_diff}    現在時刻:")
             key = "-translate_thread_end-"
             value = file_name
             # スレッドから、翻訳イベントを送信

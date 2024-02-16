@@ -99,7 +99,19 @@ class SystemSetting:
     # アプリケーションの名前
     app_name: str = "ヤクミャクコンジャック"
 
-    # 翻訳スレッドの最大数
+    # OCRソフトの名前のリスト
+    ocr_soft_list = ["AmazonTextract", "EasyOCR"]
+
+    # 翻訳ソフトの名前のリスト
+    translation_soft_list = ["AmazonTranslate", "GoogleTranslator"]
+
+    # ローカル上で動作するOCRソフトの名前のリスト
+    local_ocr_soft_list = ["EasyOCR"]
+
+    # ローカル上で動作する翻訳ソフトの名前のリスト
+    local_translation_soft_list = []
+
+    # 翻訳スレッドの最大数(リモートの場合のみ)
     translation_thread_max: int = 4
 
     # テキスト検出精度の最小許容値

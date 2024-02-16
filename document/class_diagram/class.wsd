@@ -53,6 +53,10 @@ package "全体に影響を与えるクラス" as GlobalPackage{
         image_file_extension: str = ".png"\n画像ファイル形式
         package_path: str\nパッケージディレクトリパス
         app_name: str = "ヤクミャクコンジャック"\nアプリ名
+        ocr_soft_list = ["AmazonTextract", "EasyOCR"]\nOCRソフトの名前のリスト
+        translation_soft_list = ["AmazonTranslate", "GoogleTranslator"]\n翻訳ソフトの名前のリスト
+        local_ocr_soft_list = ["EasyOCR"]\nローカル上で動作するOCRソフトの名前のリスト
+        local_translation_soft_list = []\nローカル上で動作する翻訳ソフトの名前のリスト
         translation_thread_max: int = 4\n翻訳スレッドの最大数
         ocr_min_confidence_score = 0.2\nテキスト検出精度の最小許容値
         language_list: List[Dict[str,str]]\n言語情報一覧リスト

@@ -50,8 +50,24 @@ class TranslationWin(BaseWin):
 
         # 現在の翻訳スレッド数
         self.thread_count = 0
-        # 翻訳スレッド数の最大数
-        self.thread_max = SystemSetting.translation_thread_max
+
+        # 現在のOCRソフトの取得
+        now_ocr_soft = self.user_setting.get_setting("ocr_soft")
+        # 現在の翻訳ソフトの取得
+        now_translation_soft = self.user_setting.get_setting("translation_soft")
+
+        # 現在のOCRソフトと翻訳ソフトが両方リモートで動作するなら
+        if (
+            now_ocr_soft not in SystemSetting.local_ocr_soft_list # 現在のOCRソフトがリモートで動作するなら
+            and now_translation_soft not in SystemSetting.local_translation_soft_list # 現在の翻訳ソフトがリモートで動作するなら
+        ):
+            # 翻訳スレッド数の最大数((リモートの場合のみ))
+            self.translation_thread_max = SystemSetting.translation_thread_max
+
+        # 現在のOCRソフトと翻訳ソフトのうちどちらかがリモートで動作しないなら
+        else:
+            # 翻訳スレッド数の最大数
+            self.translation_thread_max = 1
 
         # 自動翻訳のタイミングを取得するスレッド
         self.translate_timing_thread = None
@@ -514,7 +530,7 @@ class TranslationWin(BaseWin):
         if self.last_translation_time is None or current_time - self.last_translation_time >= 1:
 
             # 翻訳スレッド最大数を超えていないなら
-            if self.thread_count < self.thread_max:
+            if self.thread_count < self.translation_thread_max:
                 # 最後に翻訳処理した時間を更新
                 self.last_translation_time = current_time
                 # 翻訳スレッド数更新
@@ -543,7 +559,9 @@ class TranslationWin(BaseWin):
 
             # 翻訳スレッド最大数を超えているなら
             else:
-                Fn.time_log("スレッド数オーバー")
+                # 翻訳スレッド数の最大数が1より多いなら
+                if self.translation_thread_max > 1:
+                    Fn.time_log("翻訳処理スレッド数オーバー")
                 self.is_thread_over = True  # スレッド数がオーバーするかどうか
 
         # 最後に翻訳処理を行った時間から、1秒以上経過していないなら

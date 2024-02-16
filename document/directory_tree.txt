@@ -1,5 +1,6 @@
 venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
 │   pyvenv.cfg -  仮想環境の設定ファイル
+│   version.txt -  ソフトウェアのバージョンを記述したテキストファイル
 │
 ├─.aws - AWSの認証情報や設定ファイルが格納されるディレクトリ
 │       config - AWSの設定を保存するために使用するファイル

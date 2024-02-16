@@ -14,6 +14,7 @@ if __name__ == "__main__":
 from package.debug import Debug  # デバッグ用クラス
 from package.error_log import ErrorLog  # エラーログに関するクラス
 from package.fn import Fn  # 自作関数クラス
+from package.global_status import GlobalStatus  # グローバル変数保存用のクラス
 from package.system_setting import SystemSetting  # ユーザーが変更不可能の設定クラス
 from package.translation.character_recognition import CharacterRecognition  # 文字認識機能関連のクラス
 from package.translation.screenshot_capture import ScreenshotCapture  # スクリーンショット撮影機能関連のクラス
@@ -36,6 +37,9 @@ class Translation:
         """
         # Fn.time_log("翻訳開始")
 
+        # ウィンドウオブジェクトの取得
+        window = GlobalStatus.win_instance.window
+
         user_setting = UserSetting()  # ユーザ設定のインスタンス化
 
         # 保存ファイルのベース名(撮影日時)の取得
@@ -51,10 +55,12 @@ class Translation:
         screenshot_image = ScreenshotCapture.get_screenshot(user_setting)  # スクショ撮影
         ss_file_path = ScreenshotCapture.save_screenshot(screenshot_image, file_name)  # スクショ保存
 
+        # Fn.time_log(f"スクショ撮影 {file_name}")
+
         # ! デバック用
         # ss_file_path = Debug.ss_file_path  # スクショ画像パス
-        # ss_file_path = os.path.join(Debug.debug_directory_path, "test.png")  # スクショ画像パス
-        # スクショ画像を開く
+        # ss_file_path = os.path.join(Debug.debug_directory_path, "image_before.png")  # スクショ画像パス
+        # # スクショ画像を開く
         # with Image.open(ss_file_path) as screenshot_image:
         #     ss_file_path = ScreenshotCapture.save_screenshot(screenshot_image, file_name)  # スクショ保存
 
@@ -63,7 +69,15 @@ class Translation:
         text_data_dict = CharacterRecognition.get_text_data_dict(user_setting, ss_file_path)
         text_before_list = text_data_dict["text_list"]  # 翻訳前テキストリストの取得
         text_region_list = text_data_dict["text_region_list"]  # テキスト範囲のリストの取得
-        # Fn.time_log("文字取得")
+        # Fn.time_log(f"文字取得 {file_name}")
+
+        # 翻訳ウィンドウが閉じられているなら
+        if window.was_closed():
+            return {
+                "file_name": file_name,  # 保存ファイル名(撮影日時)
+                "is_error": False,  # エラーが発生したかどうか
+                "exception": None,  # エラークラス
+            }
 
         # ! デバック用
         # test_int = random.randint(100, 1000 * 5)
@@ -88,7 +102,7 @@ class Translation:
                 "exception": text_translation_result["exception"],  # エラークラス
             }
 
-        # Fn.time_log("翻訳")
+        # Fn.time_log(f"翻訳 {file_name}")
 
         # ! デバック用
         # test_int = random.randint(100, 1000 * 5)
@@ -107,7 +121,7 @@ class Translation:
             overlay_translation_image, file_name
         )
 
-        # Fn.time_log("画像作成")
+        # Fn.time_log(f"画像作成 {file_name}")
 
         # ! デバッグ用
         # overlay_translation_image.show()  # 画像表示

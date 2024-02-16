@@ -25,10 +25,10 @@ class EnvironmentSettingWin(BaseWin):
     """
 
     # OCRソフトの名前のリスト
-    ocr_soft_list = ["AmazonTextract", "EasyOCR"]
+    ocr_soft_list = SystemSetting.ocr_soft_list
 
     # 翻訳ソフトの名前のリスト
-    translation_soft_list = ["AmazonTranslate", "GoogleTranslator"]
+    translation_soft_list = SystemSetting.translation_soft_list
 
     def __init__(self):
         """コンストラクタ 初期設定"""
