@@ -39,6 +39,6 @@ https://karupoimou.hatenablog.com/entry/20200427/1587975580
     サブスレッドではオブジェクトのシリアライズ（プロセス間通信のためのデータのエンコード）中にエラーが発生する
 
 今後の予定
-    スレッド数の見直し
-    インターネット未接続時
-    翻訳処理の途中中断
+    翻訳ソフト追加
+        https://pypi.org/project/argostranslate/
+        https://deep-translator.readthedocs.io/en/latest/usage.html#mymemory-translator

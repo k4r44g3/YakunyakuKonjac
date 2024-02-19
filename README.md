@@ -8,12 +8,12 @@
 
 ## 要件
 - OS: Windows
-- Python: 3.8以上
+- Python: 3.8以上、3.12以下
 - 必要なディスク容量: 約2GB
 
 ## インストール方法
 1. 下記のリンクから`installer.bat`をダウンロードしてください。<br>
-[インストーラーのダウンロード(v2.6.1)](https://github.com/k4r44g3/YakunyakuKonjac/releases/download/v2.6.1/v2.6.1_installer.bat)
+[インストーラーのダウンロード(v2.6.2)](https://github.com/k4r44g3/YakunyakuKonjac/releases/download/v2.6.2/v2.6.2_installer.bat)
 2. ダウンロード後、`installer.bat`を実行してインストールを開始してください。
 
 ### 注意事項
