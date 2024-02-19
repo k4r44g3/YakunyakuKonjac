@@ -18,6 +18,7 @@ venv_YakunyakuKonjac - 仮想環境のルートディレクトリ
 ├─share - 仮想環境に関連する共有リソースが格納されるディレクトリ
 └─YakunyakuKonjac - 仮想環境内でのプロジェクトのルートディレクトリ
     │   .gitignore - Gitの無視設定ファイル
+    │   LICENSE - ライセンスファイル
     │   README.md - プロジェクトの説明を記述したMarkdownファイル
     │
     ├─.github - GitHub関連のファイルを格納するディレクトリ
